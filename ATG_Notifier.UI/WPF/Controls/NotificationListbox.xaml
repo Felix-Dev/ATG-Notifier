@@ -1,0 +1,274 @@
+﻿<UserControl x:Class="ATG_Notifier.WPF.NotificationListbox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ATG_Notifier.WPF"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d" 
+             xmlns:behaviors="clr-namespace:ATG_Notifier.UI.WPF"
+             xmlns:attachedProperties="clr-namespace:ATG_Notifier.UI.WPF"
+             xmlns:converters="clr-namespace:ATG_Notifier.Utilities.Converters"
+             d:DesignHeight="310" d:DesignWidth="64">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="MenuNotification.WCB.Foreground" Color="#FFA9A9A9" />
+            <SolidColorBrush x:Key="MenuNotification.WCB.MouseOver.Foreground" Color="#FFFF0000" />
+            <SolidColorBrush x:Key="MenuNotification.WCB.Pressed.Foreground" Color="#FFA00000" />
+
+            <SolidColorBrush x:Key="MenuNotification.Border" Color="LightGray" />
+
+            <SolidColorBrush x:Key="MenuNotification.Alert.Foreground" Color="Red" />
+            <SolidColorBrush x:Key="MenuNotification.Title.Foreground" Color="DarkGray" />
+            <SolidColorBrush x:Key="MenuNotification.Body.Foreground" Color="DarkGray" />
+
+            <SolidColorBrush x:Key="MenuNotification.WCB.Background" Color="Transparent" />
+
+            <Style x:Key="Button_Style_MenuNotificationWCB" TargetType="{x:Type Button}">
+                <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Height" Value="22" />
+                <Setter Property="MaxHeight" Value="22" />
+                <Setter Property="Width" Value="22" />
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Background" Value="{StaticResource MenuNotification.WCB.Background}" />
+                <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.Foreground}" />
+                <Setter Property="ToolTipService.ShowDuration" Value="2000" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.MouseOver.Foreground}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.Pressed.Foreground}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
+            <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da"/>
+            <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
+            <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
+            <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
+            <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
+
+            <converters:DateTimeToStringConverter x:Key="DateTimeConverter"/>
+
+            <Style x:Key="ListBoxItem_MenuNotification" TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="{StaticResource MenuNotification.Border}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="Focusable" Value="True" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="behaviors:FocusBehavior.LostFocusCommand" Value="{Binding LostFocusCommand}" />
+                <Setter Property="behaviors:ClickBehavior.DoubleClickCommand" Value="{Binding OpenSourceCommand}" />
+                <Setter Property="behaviors:KeyPressBehavior.KeyPressedCommand" Value="{Binding OpenSourceCommand}"/>
+                <Setter Property="behaviors:KeyPressBehavior.Key" Value="Enter" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Border_ItemBorder" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}" 
+                                >
+                                <Border x:Name="Border_Focus" 
+                                        BorderThickness="0"
+                                        Padding="1">
+                                    <Border.BorderBrush>
+                                        <DrawingBrush Viewport="0,0,2,2" ViewportUnits="Absolute" TileMode="Tile">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource Focus.Border}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Border.BorderBrush>
+
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Border_ItemBorder" Property="Background" Value="{StaticResource Item.MouseOver.Background}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Border_ItemBorder" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Border_ItemBorder" Property="Background" Value="{StaticResource Item.SelectedActive.Background}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="TextElement.Foreground" TargetName="Border_ItemBorder" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="Border_Focus" Property="BorderThickness" Value="1" />
+                                    <Setter TargetName="Border_Focus" Property="Padding" Value="0" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <!--<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>-->
+            <!--<EventSetter Event="KeyDown" Handler="ListBoxItem_KeyDown" />
+            <EventSetter Event="LostFocus" Handler="ListBoxItem_LostFocus" />-->
+            </Style>
+
+            <DataTemplate x:Key="DataTemplates.MenuNotification">
+                <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                      HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="{Binding DesiredSize.Width, ElementName=Label_Date}"/>
+                        <ColumnDefinition Width="26"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="Label_New" Grid.Row="0" Grid.Column="1"
+                           Foreground="{DynamicResource MenuNotification.Alert.Foreground}" 
+                           FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"
+                           Margin="0,6,0,0"
+                           Text="NEW!" 
+                           />
+                    <Button x:Name="CloseButton" Grid.Row="0" Grid.Column="3"
+                        HorizontalAlignment="Right"
+                        Margin="0,3,3,0"
+                        Style="{StaticResource Button_Style_MenuNotificationWCB}" 
+                        Command="{Binding CloseCommand}"
+                        Content="❌"
+                            PreviewMouseDown="CloseButton_PreviewMouseDown"
+                        />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                           Foreground="{DynamicResource MenuNotification.Title.Foreground}"   
+                           Margin="0,-1,0,0"
+                           FontFamily="Segoe UI" FontSize="13" FontWeight="Bold"
+                           Text="{Binding Title}"
+                           />
+                    <TextBox x:Name="ChapterTitleTextBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBox_TextBlockSelection}"
+                             Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
+                             FontFamily="Segoe UI" FontSize="14"
+                             Text="{Binding Body}" TextWrapping="Wrap"
+                             Margin="0,0,0,5"
+                             PreviewMouseDoubleClick="ChapterTitleTextBox_PreviewMouseDoubleClick"
+                           />
+                    <Label x:Name="Label_Date" 
+                       Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"
+                       Foreground="Black" 
+                       Margin="-10,0,9,5" Padding="0,0,0,0"
+                       FontFamily="Segoe UI" FontSize="11"                                      
+                       HorizontalAlignment="Right" VerticalAlignment="Bottom"                   
+                       Content="{Binding ArrivalTime, Converter={StaticResource DateTimeConverter}}"             
+                       />
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsRead}" Value="True">
+                        <Setter TargetName="Label_New" Property="Visibility" Value="Hidden" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <CollectionViewSource 
+              Source="{Binding Notifications}"   
+              x:Key="NotificationsSortView" 
+            >
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="ArrivalTime" Direction="Descending" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+
+            <ItemsPanelTemplate x:Key="Template">
+                <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Top"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        />
+            </ItemsPanelTemplate>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.Resources>
+            <ControlTemplate x:Key="ReservedSpaceScroller" TargetType="ContentControl">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              x:Name="scroll">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ContentPresenter Margin="0,0,5,0"/>
+                        <Border x:Name="placeholder"
+                                Grid.Column="1"
+                                Width="14"
+                                />
+
+                    </Grid>
+                </ScrollViewer>
+                <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding ComputedVerticalScrollBarVisibility, ElementName=scroll}" Value="Visible">
+                        <Setter TargetName="placeholder" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Grid.Resources>
+
+        <ContentControl Template="{StaticResource ReservedSpaceScroller}">
+            <ListBox Width="312"                                                             
+                     Background="Transparent"
+                     Padding="0,0,0,0"
+                     Margin="-1, -1, 0,0"
+                     ItemTemplate="{StaticResource DataTemplates.MenuNotification}"
+                     ItemContainerStyle="{StaticResource ListBoxItem_MenuNotification}"
+                     ItemsPanel="{StaticResource Template}"
+                     ItemsSource="{Binding Source={StaticResource NotificationsSortView}}"
+                     SelectionMode="Extended"              
+                     BorderThickness="0"
+                     HorizontalAlignment="Left"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.CanContentScroll="False"/>
+        </ContentControl>
+    </Grid>
+</UserControl>
