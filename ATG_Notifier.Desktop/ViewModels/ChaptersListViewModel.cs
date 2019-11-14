@@ -26,6 +26,7 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.chapterProfileService = chapterProfileService ?? throw new ArgumentNullException(nameof(chapterProfileService));
             this.updateService = updateService ?? throw new ArgumentNullException(nameof(updateService));
 
+            this.ClearListCommand = new RelayCommand(OnClearAsync);
             this.DeleteChapterProfileCommand = new RelayCommand<ChapterProfileViewModel>(OnChapterProfileRemoveAsync);
             this.OpenChapterCommand = new RelayCommand<ChapterProfileViewModel>(OnOpenChapter);
             this.ReadChapterCommand = new RelayCommand<ChapterProfileViewModel>(OnChapterProfileReadAsync);
@@ -42,6 +43,8 @@ namespace ATG_Notifier.Desktop.ViewModels
         public ICommand OpenChapterCommand { get; }
 
         public ICommand ReadChapterCommand { get; }
+
+        public ICommand ClearListCommand { get; }
 
         public IList<ChapterProfileViewModel> ChapterProfiles { get; private set; }
 
@@ -62,7 +65,7 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
         }
 
-        public async Task ClearAsync()
+        public async void OnClearAsync()
         {
             await this.chapterProfileService.DeleteChapterProfileRangeAsync(this.ChapterProfiles.Select(viewModel => viewModel.ChapterProfileModel).ToList());
 

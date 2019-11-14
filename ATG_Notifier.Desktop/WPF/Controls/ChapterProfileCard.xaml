@@ -84,8 +84,7 @@
                    Foreground="{DynamicResource MenuNotification.Alert.Foreground}" 
                    FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"
                    Margin="0,6,0,0"
-                   Text="NEW!" 
-                   >
+                   Text="NEW!">
             <TextBlock.Style>
                 <Style>
                     <Style.Triggers>
@@ -102,8 +101,8 @@
                 Margin="0,3,3,0"
                 Style="{StaticResource Button_Style_MenuNotificationWCB}" 
                 Content="❌"
-                PreviewMouseDown="CloseButton_PreviewMouseDown"
-                />
+                ToolTip="Delete"
+                PreviewMouseDown="CloseButton_PreviewMouseDown"/>
         <TextBox x:Name="ChapterTitleTextBox" 
                  Grid.Row="1" Grid.Column="1" 
                  Margin="0,-3,0,0"
@@ -113,14 +112,12 @@
                  HorizontalAlignment="Left"
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
                  TextWrapping="Wrap"
-                 PreviewMouseDoubleClick="ChapterTitleTextBox_PreviewMouseDoubleClick"
-                 />
+                 PreviewMouseDoubleClick="ChapterTitleTextBox_PreviewMouseDoubleClick"/>
         <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                Margin="0,0,0,1"
                Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
                FontFamily="Segoe UI" FontSize="11"                                      
-               HorizontalAlignment="Left" VerticalAlignment="Center" 
-               >
+               HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                     <Binding Path="WordCount"/>

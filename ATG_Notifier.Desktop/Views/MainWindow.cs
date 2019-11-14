@@ -294,34 +294,5 @@ namespace ATG_Notifier.Desktop.Views
         }
 
         #endregion // System-Tray Icon
-
-        private void ButtonClearList_MouseEnter(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-
-            //btn.BackColor = Color.LightGray;
-            btn.FlatAppearance.BorderColor = Color.Gray;
-
-            btn.ForeColor = Color.Red;
-        }
-
-        private void ButtonClearList_MouseLeave(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-
-            //btn.BackColor = Color.White;
-            btn.FlatAppearance.BorderColor = Color.LightGray;
-
-            btn.ForeColor = Color.Black;
-        }
-
-        private async void ButtonClearList_MouseClick(object sender, MouseEventArgs e)
-        {
-            Button btn = (Button)sender;
-
-            btn.FlatAppearance.BorderSize = 1;
-
-            await this.chaptersListViewModel.ClearAsync();
-        }
     }
 }

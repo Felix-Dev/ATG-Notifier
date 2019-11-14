@@ -21,11 +21,8 @@ namespace ATG_Notifier.Desktop.Services
 {
     public class UpdateService : IUpdateService
     {
-        private const int UpdateInterval = 1 * 30 * 1000;
-        private const int UpdateIntervalDebug = 1 * 30 * 1000;
-
 #if DEBUG
-        private const int RawSourcePollingInterval = 1 * 10 * 1000;
+        private const int RawSourcePollingInterval = 1 * 2 * 1000;
 #else
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif
@@ -36,7 +33,6 @@ namespace ATG_Notifier.Desktop.Services
         private readonly RawSourceChecker rawSourceChecker; 
 
         private readonly ToastNotificationManager notifier = ToastNotificationManager.Instance;
-       // private readonly NotificationsController notificationsController = NotificationsController.Instance;
 
         private readonly object timerLock = new object();
         private Timer periodicTimerRawSource = null;
@@ -200,93 +196,6 @@ namespace ATG_Notifier.Desktop.Services
                 {
                     periodicTimerRawSource.Change(RawSourcePollingInterval, Timeout.Infinite);
                 }
-            }
-        }
-
-        private async void DoJob()
-        {
-            try
-            {
-                while (!finishJob)
-                {
-#if DEBUG2
-                    ChapterProfileModel chapterProfileModel = new ChapterProfileModel()
-                    {
-                        Number = 1600,
-                        Title = "一指破界",
-                        NumberAndTitleFallbackString = "Fallback String",
-                        Url = "http://book.zongheng.com/chapter/408586/58484757.html",
-                        WordCount = 3218,
-                        ReleaseTime = DateTime.Now,
-                        AppArrivalTime = DateTime.Now
-                    };
-
-                    notificationsController.Add(chapterProfileModel);
-                    AppFeedbackManager.FlashApplicationTaskbarButton();
-                    jobRoundFinished.Set();
-
-                    if (!Settings.Instance.DoNotDisturb)
-                    {
-                        notifier.Show("ATG Chapter Update! (Debug)", new ChapterProfileViewModel(chapterProfileModel));
-                    }
-
-#else
-                    ChapterSourceCheckResult checkResult = null;
-                    try
-                    {
-                        checkResult = await rawSourceChecker.GetUpdateAsync(Settings.Instance.CurrentChapterId);
-                    }
-                    catch (SourceCheckerOperationFailedException ex)
-                    {
-                        /* In case there was a Network error, wait 20 seconds for a retry. */
-                        logService.Log(LogType.Error, $"Checking for a raw source chapter update failed!\nException: {ex.InnerException}\nTechnical details: {ex.InnerException.Message}");
-                    }
-
-                    if (checkResult != null)
-                    {
-                        this.saveguardSema.WaitOne();
-
-                        // Store the [number and title] of the new chapter.
-                        Settings.Instance.CurrentChapterId = checkResult.ChapterId;
-
-                        ChapterProfileModel chapterProfileModel = checkResult.ChapterProfileModel;
-
-                        //TODO: enable once removed the ATG_Notifier.Model project
-                        //notificationsController.Add(chapterProfileModel);
-
-                        AppFeedbackManager.FlashApplicationTaskbarButton();
-
-                        //jobRoundFinished.Set();
-
-                        if (!Settings.Instance.DoNotDisturb)
-                        {
-                            notifier.Show("ATG Chapter Update!", new ChapterProfileViewModel(chapterProfileModel));
-                        }
-
-                        this.saveguardSema.Release();
-                    }
-#endif
-
-#if DEBUG
-                    Thread.Sleep(UpdateIntervalDebug);
-#else
-                    /* Wait for 30 seconds until the next update check. */
-                    //Thread.Sleep(UpdateInterval);
-#endif
-                }
-            }
-            catch (ThreadInterruptedException)
-            {
-                /* Terminate the worker thread (which is the current thread). */
-                //this.saveguardSema.Release();
-
-                //workThread.Abort();
-                logService.Log(LogType.Debug, "The update service was requested to terminate. Terminating now...");
-            }
-            catch (ThreadAbortException)
-            {
-                logService.Log(LogType.Info, "The update service was requested to terminate. Terminating now...");
-                Thread.ResetAbort();
             }
         }
     }

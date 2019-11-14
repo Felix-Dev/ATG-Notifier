@@ -59,11 +59,10 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
                             <Border x:Name="Border_ItemBorder" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                Background="{TemplateBinding Background}" 
-                                Padding="{TemplateBinding Padding}" 
-                                >
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    Background="{TemplateBinding Background}" 
+                                    Padding="{TemplateBinding Padding}">
                                 <Border x:Name="Border_Focus" 
                                         BorderThickness="0"
                                         Padding="1">
@@ -135,32 +134,96 @@
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
             </ItemsPanelTemplate>
 
+            <Style x:Key="WarningFillButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="BorderBrush" Value="LightGray" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="0" 
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Margin="{TemplateBinding Margin}">
+                                <Grid>
+                                    <ContentControl x:Name="MyContentPresenter" 
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    Content="{TemplateBinding Content}" 
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                    Margin="{TemplateBinding Padding}" 
+                                                    IsTabStop="False"/>
+                                </Grid>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="Red" />
+                                    <Setter Property="BorderBrush" Value="Red" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="#FF961313" />
+                                    <Setter Property="BorderBrush" Value="#FF961313" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch"
           Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <TextBlock Text="No new updates"
+        <Border BorderThickness="0,0,0,1"
+                BorderBrush="LightGray">
+            <StackPanel Grid.Row="0" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Stretch"
+                        Margin="7,2,7,2">
+                <Button Content="Clear List"
+                        FontFamily="Segoe UI" FontSize="13"
+                        Padding="5,2,5,2"
+                        Style="{StaticResource WarningFillButtonStyle}"
+                        Command="{Binding ClearListCommand}"
+                    />
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="1" 
+                   Text="No new updates"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    TextAlignment="Center"
                    FontFamily="Segoe UI" FontSize="20"
                    Foreground="Black"
                    Visibility="{Binding ChapterProfiles.Count, Converter={StaticResource NoChapterUpdateLableVisibilityConverter}}" />
 
-        <ListBox x:Name="ChapterProfileList"     
+        <ListBox x:Name="ChapterProfileList"  
+                 Grid.Row="1"
                  HorizontalAlignment="Stretch"
                  Background="Transparent"
                  Padding="0,0,0,0"
                  Margin="-1, -1, 0,0"
-                     
+                 KeyboardNavigation.DirectionalNavigation="Cycle"
                  ItemContainerStyle="{StaticResource ListBoxItem_MenuNotification}"
-                 ItemsPanel="{StaticResource NotificationListTemplate}"
+                 
                  ItemsSource="{Binding Source={StaticResource NotificationsSortView}}"
                  SelectionMode="Extended"              
                  BorderThickness="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.CanContentScroll="False"
+                 VirtualizingStackPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                 VirtualizingPanel.ScrollUnit="Pixel"
                  IsTabStop="False"
                  Tag="{Binding}">
             <ListBox.ItemTemplate>
