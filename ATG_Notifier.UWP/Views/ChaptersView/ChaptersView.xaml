@@ -1,0 +1,169 @@
+﻿<Page
+    x:Class="ATG_Notifier.UWP.Views.ChaptersView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ATG_Notifier.UWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:ATG_Notifier.UWP.Controls"
+    xmlns:viewModels="using:ATG_Notifier.ViewModels.ViewModels"
+    xmlns:sys="using:System"
+    mc:Ignorable="d"
+    KeyDown="Page_KeyDown"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Enabled"
+    >
+    <Page.Resources>
+        <ResourceDictionary>
+            <XamlUICommand x:Key="UpdateCommand"
+                           Label="Update check" Description="Check for new Updates"
+                           Command="{x:Bind ViewModel.UpdateCommand}"
+                           AccessKey="R">
+                <XamlUICommand.IconSource>
+                    <FontIconSource FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;"/>
+                </XamlUICommand.IconSource>
+            </XamlUICommand>
+
+            <XamlUICommand x:Key="SortCommand"
+                           Label="Sort" Description="Sort options"
+                           Command="{x:Bind ViewModel.ChapterListViewModel.SortCommand}">
+                <XamlUICommand.IconSource>
+                    <FontIconSource FontFamily="Segoe MDL2 Assets" Glyph="&#xE8CB;"/>
+                </XamlUICommand.IconSource>
+            </XamlUICommand>
+
+            <XamlUICommand x:Key="FilterCommand"
+                           Label="Filter" Description="Filter options"
+                           Command="{x:Bind ViewModel.ChapterListViewModel.FilterCommand}">
+                <XamlUICommand.IconSource>
+                    <FontIconSource FontFamily="Segoe MDL2 Assets" Glyph="&#xE71C;"/>
+                </XamlUICommand.IconSource>
+            </XamlUICommand>
+
+            <XamlUICommand x:Key="ClearCommand"
+                           Label="Clear" Description="Delete all Notifications"
+                           Command="{x:Bind ViewModel.ChapterListViewModel.ClearCommand}"
+                           AccessKey="C">
+                <XamlUICommand.IconSource>
+                    <SymbolIconSource Symbol="Delete" />
+                </XamlUICommand.IconSource>
+            </XamlUICommand>
+
+            <XamlUICommand x:Key="DeleteChapterCommand"
+                           Command="{x:Bind ViewModel.ChapterListViewModel.DeleteCommand}"/>
+
+            <XamlUICommand x:Key="LostFocusChapterCommand"
+                           Command="{x:Bind ViewModel.LostFocusChapterCommand}" />
+
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <Grid x:Name="CommandBarGrid" Grid.Row="0" Background="{ThemeResource TitleBarAcrylicBrush}"
+              Padding="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <!-- Expand Button column -->
+                <!--<ColumnDefinition Width="Auto" />-->
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <!-- AppBarButton resources-->
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Dark">
+                            <!--<SolidColorBrush x:Key="AppBarButtonRevealBorderBrush" Color="Transparent" />-->
+                            <!--<SolidColorBrush x:Key="AppBarButtonRevealBackgroundPointerOver" Color="#FF2F2F2F" />-->
+                            <SolidColorBrush x:Key="AppBarButton2RevealBackgroundPressed" Color="#FF4D4D4D" />
+                            <!--<SolidColorBrush x:Key="AppBarButtonRevealBorderBrushPointerOver" Color="Transparent" />-->
+                            <!--<SolidColorBrush x:Key="AppBarButton2RevealBorderBrushPressed" Color="#FFA0A0A0" />-->
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                </ResourceDictionary>
+            </Grid.Resources>
+
+            <controls:AppBarButtonControl x:Name="RefreshButton" 
+                                          Grid.Column="0"
+                                          Command="{StaticResource UpdateCommand}"/>
+            <StackPanel Grid.Column="2" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <controls:AppBarButtonControl x:Name="SortButton" 
+                                              Command="{StaticResource SortCommand}"/>
+                <controls:AppBarButtonControl x:Name="FilterButton" 
+                                              Command="{StaticResource FilterCommand}"/>
+            </StackPanel>
+
+            <controls:AppBarButtonControl x:Name="ClearButton" 
+                                          Grid.Column="4"
+                                          HorizontalAlignment="Right"
+                                          Command="{StaticResource ClearCommand}"/>
+        </Grid>
+        
+        <!-- Chapter list -->        
+        <controls:ChapterList x:Name="ChapterList" Grid.Row="1" 
+                              Margin="5,5,0,0"
+                              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                              ItemClickCommand="{x:Bind ViewModel.OpenChapterCommand}"
+                              LostFocusCommand="{StaticResource LostFocusChapterCommand}"
+                              ViewModel="{x:Bind ViewModel.ChapterListViewModel}"
+                              Visibility="{x:Bind ShowChapterList(ViewModel.ChapterListViewModel.IsEmpty), Mode=OneWay}">
+            <controls:ChapterList.ItemTemplate>
+                <DataTemplate x:DataType="viewModels:ChapterProfileViewModel">
+                    <controls:ChapterProfileCard ChapterProfileViewModel="{x:Bind}" 
+                                                 DeleteCommand="{StaticResource DeleteChapterCommand}" />
+                </DataTemplate>
+            </controls:ChapterList.ItemTemplate>
+        </controls:ChapterList>
+
+        <TextBlock Grid.Row="1" 
+                   Text="No new chapters" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="24"
+                   Visibility="{x:Bind ViewModel.ChapterListViewModel.IsEmpty, Mode=OneWay}"/>
+
+        <!-- Adaptive Window Size Triggers -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="450" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="MoreButton.Visibility" Value="Collapsed" />-->
+
+                        <Setter Target="RefreshButton.LabelPosition2" Value="Right" />
+                        <Setter Target="SortButton.LabelPosition2" Value="Right" />
+                        <Setter Target="FilterButton.LabelPosition2" Value="Right" />
+                        <Setter Target="ClearButton.LabelPosition2" Value="Right" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="MoreButton.Visibility" Value="Visible" />-->
+
+                        <Setter Target="RefreshButton.LabelPosition2" Value="Collapsed" />
+                        <Setter Target="SortButton.LabelPosition2" Value="Collapsed" />
+                        <Setter Target="FilterButton.LabelPosition2" Value="Collapsed" />
+                        <Setter Target="ClearButton.LabelPosition2" Value="Collapsed" />
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+
+</Page>

@@ -1,0 +1,304 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:ATG_Notifier.UWP.Controls">
+
+    <x:Double x:Key="AppBar2ThemeCompactHeight">40</x:Double>
+
+    <!-- Icon Margins-->
+    <Thickness x:Key="AppBarButton2ContentViewboxMargin">12,10,0,10</Thickness>
+    <Thickness x:Key="AppBarButton2ContentViewboxCompactMargin">5,12,5,12</Thickness>
+    <Thickness x:Key="AppBarButton2ContentViewboxLabelBelowMargin">0,6,0,4</Thickness>
+
+    <!-- TextLabel Margins -->
+    <Thickness x:Key="AppBarButton2TextLabelOnRightMargin">8,11,12,13</Thickness>
+    <Thickness x:Key="AppBarButton2TextLabelBelowMargin">8,2,8,2</Thickness>
+
+    <Thickness x:Key="AppBarButton2OverflowTextTouchMargin">0,9,0,12</Thickness>
+    <Thickness x:Key="AppBarButton2TextLabelMargin">2,0,2,8</Thickness>
+    <Thickness x:Key="AppBarButton2OverflowTextLabelPadding">0,5,0,8</Thickness>
+
+    <Thickness x:Key="AppBarToggleButton2OverflowTextTouchMargin">0,9,0,12</Thickness>
+    <Thickness x:Key="AppBarToggleButton2OverflowCheckTouchMargin">12,10,12,10</Thickness>
+    <x:Double x:Key="AppBar2ThemeMinHeight">56</x:Double>
+    <x:Double x:Key="AppBarButton2ContentHeight">16</x:Double>
+    <Thickness x:Key="AppBarButton2ContentViewboxCollapsedMargin">0,12,0,4</Thickness>
+    <Thickness x:Key="AppBarToggleButton2TextLabelMargin">2,0,2,8</Thickness>
+    <Thickness x:Key="AppBarToggleButton2OverflowCheckMargin">12,4,12,4</Thickness>
+    <Thickness x:Key="AppBarToggleButton2OverflowTextLabelPadding">0,5,0,8</Thickness>
+
+    <StaticResource x:Key="AppBarButton2KeyboardAcceleratorTextForeground" ResourceKey="SystemControlForegroundBaseMediumBrush" />
+    <StaticResource x:Key="AppBarButton2KeyboardAcceleratorTextForegroundPointerOver" ResourceKey="SystemControlHighlightAltBaseMediumBrush" />
+    <StaticResource x:Key="AppBarButton2KeyboardAcceleratorTextForegroundPressed" ResourceKey="SystemControlHighlightAltBaseMediumBrush" />
+    <StaticResource x:Key="AppBarButton2KeyboardAcceleratorTextForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+
+    <!-- Reveal brush resources -->
+    <StaticResource x:Key="AppBarEllipsisButto2nRevealBackground" ResourceKey="SystemControlTransparentRevealBackgroundBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBackgroundPointerOver" ResourceKey="SystemControlHighlightListLowRevealBackgroundBrush" />
+    <RevealBackgroundBrush x:Key="SystemControlHighlightListMediumRevealBackgroundBrush" TargetTheme="Light" Color="{StaticResource SystemRevealListMediumColor}" FallbackColor="{StaticResource SystemListMediumColor}" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBackgroundPressed" ResourceKey="SystemControlHighlightListMediumRevealBackgroundBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBackgroundDisabled" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBorderBrush" ResourceKey="SystemControlBackgroundTransparentRevealBorderBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBorderBrushPointerOver" ResourceKey="SystemControlBackgroundTransparentRevealBorderBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBorderBrushPressed" ResourceKey="SystemControlBackgroundTransparentRevealBorderBrush" />
+    <StaticResource x:Key="AppBarEllipsisButton2RevealBorderBrushDisabled" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBackground" ResourceKey="SystemControlTransparentRevealBackgroundBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBackgroundPointerOver" ResourceKey="SystemControlHighlightListLowRevealBackgroundBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBackgroundPressed" ResourceKey="SystemControlHighlightListMediumRevealListLowBackgroundBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBackgroundDisabled" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBorderBrush" ResourceKey="SystemControlBackgroundTransparentRevealBorderBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBorderBrushPointerOver" ResourceKey="SystemControlTransparentRevealListLowBorderBrush" />
+    <RevealBorderBrush x:Key="SystemControlTransparentRevealListLowBorderBrush" TargetTheme="Light" Color="{StaticResource SystemRevealListLowColor}" FallbackColor="Transparent" />
+    <StaticResource x:Key="AppBarButton2RevealBorderBrushPressed" ResourceKey="SystemControlTransparentRevealListLowBorderBrush" />
+    <StaticResource x:Key="AppBarButton2RevealBorderBrushDisabled" ResourceKey="SystemControlTransparentBrush" />
+
+    <!-- AppBarButton2 brushed -->
+    <StaticResource x:Key="AppBarButton2Background" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2BackgroundPointerOver" ResourceKey="SystemControlHighlightListLowBrush" />
+    <StaticResource x:Key="AppBarButton2BackgroundPressed" ResourceKey="SystemControlHighlightListMediumBrush" />
+    <StaticResource x:Key="AppBarButton2BackgroundDisabled" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2Foreground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+    <StaticResource x:Key="AppBarButton2ForegroundPointerOver" ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+    <StaticResource x:Key="AppBarButton2ForegroundPressed" ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+    <StaticResource x:Key="AppBarButton2ForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+    <StaticResource x:Key="AppBarButton2BorderBrush" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2BorderBrushPointerOver" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2BorderBrushPressed" ResourceKey="SystemControlTransparentBrush" />
+    <StaticResource x:Key="AppBarButton2BorderBrushDisabled" ResourceKey="SystemControlTransparentBrush" />
+
+    <Thickness x:Key="AppBarEllipsisButton2RevealBorderThemeThickness">1</Thickness>
+    <Thickness x:Key="AppBarButton2RevealBorderThemeThickness">1</Thickness>
+
+    <x:Double x:Key="AppBarButton2Width">68</x:Double>
+    <x:Double x:Key="AppBarButton2LabelOnRightWidth">NaN</x:Double>
+    <x:Double x:Key="AppBarButtonLabelBelowWidth">68</x:Double>
+    <x:Double x:Key="AppBarButton2LabelCollapsedWidth">42</x:Double>
+
+    <!-- expand button dimensions -->
+    <x:Double x:Key="AppBarExpandButtonThemeHeight">24</x:Double>
+    <x:Double x:Key="AppBarExpandButtonThemeWidth">48</x:Double>
+
+    <Style TargetType="controls:AppBarButtonControl">
+        <Setter Property="Background" Value="{ThemeResource AppBarButton2RevealBackground}"/>
+        <Setter Property="Foreground" Value="{ThemeResource AppBarButton2Foreground}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource AppBarButton2RevealBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{ThemeResource AppBarButton2RevealBorderThemeThickness}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Width" Value="{StaticResource AppBarButton2Width}"/>
+        <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+        <Setter Property="AllowFocusOnInteraction" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:AppBarButtonControl">
+                    <Grid x:Name="Root" Background="{TemplateBinding Background}" 
+                          CornerRadius="{TemplateBinding CornerRadius}" MinWidth="{TemplateBinding MinWidth}" 
+                          Margin="1,0" MaxWidth="{TemplateBinding MaxWidth}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ApplicationViewStates">
+                                <VisualState x:Name="LabelOnRight">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentViewbox" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarButton2ContentViewboxMargin}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="MinHeight">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBar2ThemeCompactHeight}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="(Grid.Row)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="TextAlignment">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Left"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarButton2TextLabelOnRightMargin}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="LabelBelow">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentViewbox" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButton2ContentViewboxLabelBelowMargin}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="MinHeight">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBar2ThemeCompactHeight}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="(Grid.Row)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="TextAlignment">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Center"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarButton2TextLabelBelowMargin}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="LabelCollapsed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="MinHeight">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarThemeCompactHeight}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentViewbox" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarButtonContentViewboxCompactMargin}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <!--<Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="OverflowTextLabel"/>
+                                    </Storyboard>-->
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver"/>
+                                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButton2RevealBackgroundPointerOver}"/>
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource AppBarButton2RevealBorderBrushPointerOver}"/>
+                                        <Setter Target="Content.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}"/>
+                                        <Setter Target="TextLabel.Foreground" Value="{ThemeResource AppBarButton2ForegroundPointerOver}"/>
+                                        <!--<Setter Target="OverflowTextLabel.Foreground" Value="{ThemeResource AppBarButton2ForegroundPointerOver}"/>-->
+                                    </VisualState.Setters>
+                                    <!--<Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="OverflowTextLabel"/>
+                                    </Storyboard>-->
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
+                                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButton2RevealBackgroundPressed}"/>
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource AppBarButton2RevealBorderBrushPressed}"/>
+                                        <Setter Target="Content.Foreground" Value="{ThemeResource AppBarButton2ForegroundPressed}"/>
+                                        <Setter Target="TextLabel.Foreground" Value="{ThemeResource AppBarButton2ForegroundPressed}"/>
+                                        <!--<Setter Target="OverflowTextLabel.Foreground" Value="{ThemeResource AppBarButton2ForegroundPressed}"/>-->
+                                    </VisualState.Setters>
+                                    <!--<Storyboard>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="OverflowTextLabel"/>
+                                    </Storyboard>-->
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButtonRevealBackgroundDisabled}"/>
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource AppBarButtonRevealBorderBrushDisabled}"/>
+                                        <Setter Target="Content.Foreground" Value="{ThemeResource AppBarButtonForegroundDisabled}"/>
+                                        <Setter Target="TextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundDisabled}"/>
+                                        <Setter Target="OverflowTextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundDisabled}"/>
+                                        <Setter Target="KeyboardAcceleratorTextLabel.Foreground" Value="{ThemeResource AppBarButtonKeyboardAcceleratorTextForegroundDisabled}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <!--<VisualState x:Name="OverflowNormal">
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentRoot"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="OverflowPointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPointerOver}"/>
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource AppBarButtonRevealBorderBrushPointerOver}"/>
+                                        <Setter Target="Content.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}"/>
+                                        <Setter Target="TextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}"/>
+                                        <Setter Target="OverflowTextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}"/>
+                                        <Setter Target="KeyboardAcceleratorTextLabel.Foreground" Value="{ThemeResource AppBarButtonKeyboardAcceleratorTextForegroundPointerOver}"/>
+                                    </VisualState.Setters>
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentRoot"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="OverflowPressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPressed}"/>
+                                        <Setter Target="Border.BorderBrush" Value="{ThemeResource AppBarButtonRevealBorderBrushPressed}"/>
+                                        <Setter Target="Content.Foreground" Value="{ThemeResource AppBarButtonForegroundPressed}"/>
+                                        <Setter Target="TextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundPressed}"/>
+                                        <Setter Target="OverflowTextLabel.Foreground" Value="{ThemeResource AppBarButtonForegroundPressed}"/>
+                                        <Setter Target="KeyboardAcceleratorTextLabel.Foreground" Value="{ThemeResource AppBarButtonKeyboardAcceleratorTextForegroundPressed}"/>
+                                    </VisualState.Setters>
+                                    <Storyboard>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentRoot"/>
+                                    </Storyboard>
+                                </VisualState>-->
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="InputModeStates">
+                                <VisualState x:Name="InputModeDefault"/>
+                                <VisualState x:Name="TouchInputMode">
+                                    <!--<VisualState.Setters>
+                                        <Setter Target="OverflowTextLabel.Padding" Value="{ThemeResource AppBarButtonOverflowTextTouchMargin}"/>
+                                    </VisualState.Setters>-->
+                                </VisualState>
+                                <VisualState x:Name="GameControllerInputMode">
+                                    <!--<VisualState.Setters>
+                                        <Setter Target="OverflowTextLabel.Padding" Value="{ThemeResource AppBarButtonOverflowTextTouchMargin}"/>
+                                    </VisualState.Setters>-->
+                                </VisualState>
+                            </VisualStateGroup>
+                            <!--<VisualStateGroup x:Name="KeyboardAcceleratorTextVisibility">
+                                <VisualState x:Name="KeyboardAcceleratorTextCollapsed"/>
+                                <VisualState x:Name="KeyboardAcceleratorTextVisible">
+                                    <VisualState.Setters>
+                                        <Setter Target="KeyboardAcceleratorTextLabel.Visibility" Value="Visible"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>-->
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="ContentRoot" MinHeight="{ThemeResource AppBar2ThemeMinHeight}" Margin="-1,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Viewbox x:Name="ContentViewbox" 
+                                     AutomationProperties.AccessibilityView="Raw" 
+                                     HorizontalAlignment="Stretch" 
+                                     Height="{ThemeResource AppBarButton2ContentHeight}" 
+                                     Margin="{ThemeResource AppBarButton2ContentViewboxCollapsedMargin}">
+                                <ContentPresenter x:Name="Content" 
+                                                  Content="{TemplateBinding Icon}" 
+                                                  Foreground="{TemplateBinding Foreground}"/>
+                            </Viewbox>
+                            <TextBlock x:Name="TextLabel" 
+                                       AutomationProperties.AccessibilityView="Raw" 
+                                       FontFamily="{TemplateBinding FontFamily}" 
+                                       Foreground="{TemplateBinding Foreground}" 
+                                       FontSize="12" 
+                                       Margin="{ThemeResource AppBarButton2TextLabelMargin}" 
+                                       Grid.Row="1" Grid.Column="0"
+                                       Text="{TemplateBinding Label}" 
+                                       TextWrapping="Wrap" 
+                                       TextAlignment="Center"/>
+                            <TextBlock x:Name="KeyboardAcceleratorTextLabel" AutomationProperties.AccessibilityView="Raw" 
+                                       Grid.Column="1" 
+                                       Foreground="{ThemeResource AppBarButton2KeyboardAcceleratorTextForeground}" 
+                                       HorizontalAlignment="Right" 
+                                       MinWidth="{Binding TemplateSettings.KeyboardAcceleratorTextMinWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                       Margin="24,0,12,0" Style="{ThemeResource CaptionTextBlockStyle}" 
+                                       Text="{TemplateBinding KeyboardAcceleratorTextOverride}" 
+                                       VerticalAlignment="Center" Visibility="Collapsed"/>
+                            <Border x:Name="Border" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    CornerRadius="{TemplateBinding CornerRadius}" 
+                                    Grid.RowSpan="2" Grid.ColumnSpan="2" 
+                                    Margin="1,0" 
+                                    />
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
