@@ -62,18 +62,6 @@ namespace ATG_Notifier.Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool TurnOnDisplay {
-            get {
-                return ((bool)(this["TurnOnDisplay"]));
-            }
-            set {
-                this["TurnOnDisplay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DisableOnFullscreen {
             get {
                 return ((bool)(this["DisableOnFullscreen"]));
@@ -104,6 +92,40 @@ namespace ATG_Notifier.Desktop.Properties {
             }
             set {
                 this["NotificationDisplayPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::ATG_Notifier.Desktop.Models.WindowSetting WindowSetting {
+            get {
+                return ((global::ATG_Notifier.Desktop.Models.WindowSetting)(this["WindowSetting"]));
+            }
+            set {
+                this["WindowSetting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsUpdateServiceRunning {
+            get {
+                return ((bool)(this["IsUpdateServiceRunning"]));
+            }
+            set {
+                this["IsUpdateServiceRunning"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::ATG_Notifier.Desktop.Models.MostRecentChapterInfo MostRecentChapterInfo {
+            get {
+                return ((global::ATG_Notifier.Desktop.Models.MostRecentChapterInfo)(this["MostRecentChapterInfo"]));
+            }
+            set {
+                this["MostRecentChapterInfo"] = value;
             }
         }
     }

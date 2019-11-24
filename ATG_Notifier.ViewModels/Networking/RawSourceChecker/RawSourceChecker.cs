@@ -35,7 +35,7 @@ namespace ATG_Notifier.ViewModels.Networking
             string data;
             try
             {
-                data = await webService.DownloadRawContentAsync(ATGRawSourcePollingUrl, 2);
+                data = await webService.DownloadRawContentAsync(ATGRawSourcePollingUrl, 0);
             }
             catch (Exception ex) when (ex is AggregateException || ex is WebException || ex is HttpRequestException || ex is InvalidOperationException
                                        || ex is TaskCanceledException)

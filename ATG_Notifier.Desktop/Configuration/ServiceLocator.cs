@@ -1,4 +1,5 @@
-﻿using ATG_Notifier.Desktop.Services;
+﻿using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
-    public class ServiceLocator : IDisposable
+    internal class ServiceLocator : IDisposable
     {
         private static readonly Lazy<ServiceLocator> lazy = new Lazy<ServiceLocator>(() => new ServiceLocator());
 
@@ -22,12 +23,17 @@ namespace ATG_Notifier.Desktop.Configuration
         {
             //serviceCollection.AddSingleton<ISettingsService, SettingsService>();
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
-            serviceCollection.AddSingleton<ILogService, LogService>();
+            serviceCollection.AddSingleton<ILogService>(new LogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
 
-            serviceCollection.AddSingleton<ChaptersListViewModel>();
+            serviceCollection.AddSingleton<DialogService>();
+
+            serviceCollection.AddSingleton<SettingsViewModel>();
+
+            serviceCollection.AddSingleton<ChapterProfilesListViewModel>();
+            serviceCollection.AddSingleton<ChapterProfilesViewModel>();
 
             rootServiceProvider = serviceCollection.BuildServiceProvider();
         }

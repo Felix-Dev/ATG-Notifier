@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Helpers
 {
-    public static class CommonHelpers
+    internal static class CommonHelpers
     {
         public static void RunOnUIThread(Action action)
         {
@@ -23,6 +19,24 @@ namespace ATG_Notifier.Desktop.Helpers
             else
             {
                 action.Invoke();
+            }
+        }
+
+        public static T RunOnUIThread<T>(Func<T> action)
+        {
+            if (action is null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (Program.MainWindow?.InvokeRequired == true)
+            {
+
+                return (T)Program.MainWindow.Invoke(action);
+            }
+            else
+            {
+                return action.Invoke();
             }
         }
     }

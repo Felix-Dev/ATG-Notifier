@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Utilities.UI
 {
-    public enum FadeTimerStatus
+    internal enum FadeTimerStatus
     {
         Busy = -1,
         Ok = 0

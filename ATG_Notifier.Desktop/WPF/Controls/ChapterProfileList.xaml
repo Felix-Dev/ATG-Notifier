@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="ATG_Notifier.Desktop.WPF.Controls.ChapterProfileList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:behaviors="clr-namespace:ATG_Notifier.Desktop.WPF.Behaviors"
+             xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             x:ClassModifier="internal"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <!--#region Brushes -->
+
+        <SolidColorBrush x:Key="ListBoxItemBorderBrushFocus" Color="Black" />
+
+        <SolidColorBrush x:Key="ListBoxItemBorderBrush" Color="LightGray" />
+
+        <SolidColorBrush x:Key="ListBoxItemBackgroundMouseOver" Color="#FFF0F0F0"/>
+        <SolidColorBrush x:Key="ListBoxItemBackgroundFocus" Color="#FFF0F0F0"/>
+
+        <!--#endregion-->
+        
+        <Style x:Key="ChapterProfileListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBoxItemBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Focusable" Value="True" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="behaviors:FocusBehavior.LostFocusCommand" Value="{Binding Path=Tag.ReadChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="behaviors:FocusBehavior.LostFocusCommandParameter" Value="{Binding}" />
+            <Setter Property="behaviors:PreviewClickBehavior.ClickCommand" Value="{Binding Path=Tag.OpenChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="behaviors:PreviewClickBehavior.ClickCommandParameter" Value="{Binding}" />
+            <Setter Property="behaviors:KeyDownBehavior.KeyDownCommand" Value="{Binding Path=Tag.OpenChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="behaviors:KeyDownBehavior.KeyDownCommandParameter" Value="{Binding}"/>
+            <Setter Property="behaviors:KeyDownBehavior.Key" Value="Enter" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Border_ItemBorder" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}">
+                            <Border x:Name="Border_Focus" 
+                                    BorderThickness="0"
+                                    Padding="1">
+                                <Border.BorderBrush>
+                                    <DrawingBrush Viewport="0,0,2,2" ViewportUnits="Absolute" TileMode="Tile">
+                                        <DrawingBrush.Drawing>
+                                            <DrawingGroup>
+                                                <GeometryDrawing Brush="{StaticResource ListBoxItemBorderBrushFocus}">
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry Rect="0,0,50,50" />
+                                                            <RectangleGeometry Rect="50,50,50,50" />
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+                                            </DrawingGroup>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Border.BorderBrush>
+
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border_ItemBorder" Property="Background" Value="{StaticResource ListBoxItemBackgroundMouseOver}"/>
+                            </Trigger>
+                            <!--<MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Border_ItemBorder" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border_ItemBorder" Property="Background" Value="{StaticResource Item.SelectedActive.Background}"/>
+                            </MultiTrigger>-->
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border_Focus" Property="BorderThickness" Value="1" />
+                                <Setter TargetName="Border_Focus" Property="Padding" Value="0" />
+                                <Setter TargetName="Border_ItemBorder" Property="Background" Value="{StaticResource ListBoxItemBackgroundFocus}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <CollectionViewSource x:Key="NotificationsSortView"
+                                  Source="{Binding Items}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="ArrivalTime" Direction="Descending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+
+    </UserControl.Resources>
+    
+    <ListBox x:Name="ChapterList"  
+             Grid.Row="1"
+             HorizontalAlignment="Stretch"
+             Background="Transparent"
+             Margin="0,-1,0,0"
+             KeyboardNavigation.DirectionalNavigation="Cycle"
+             ItemContainerStyle="{StaticResource ChapterProfileListBoxItemStyle}"
+             ItemsSource="{Binding Source={StaticResource NotificationsSortView}}"
+             SelectionMode="Single"
+             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+             SelectionChanged="OnChapterListSelectionChanged"
+             BorderThickness="0"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+             VirtualizingStackPanel.IsVirtualizing="True"
+             VirtualizingPanel.VirtualizationMode="Recycling"
+             VirtualizingPanel.ScrollUnit="Pixel"
+             Focusable="False"
+             IsTabStop="False"
+             Tag="{Binding}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <controls:ChapterProfileCard ChapterProfileViewModel="{Binding}" 
+                                             DeleteCommand="{Binding Path=Tag.DeleteCommand, ElementName=ChapterList}"/>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

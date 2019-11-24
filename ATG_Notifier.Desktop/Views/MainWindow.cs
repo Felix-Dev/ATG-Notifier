@@ -1,24 +1,33 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
-using ATG_Notifier.Desktop.Model;
+using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.Utilities.Bindings;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Controls;
 using ATG_Notifier.ViewModels.Services;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    public partial class MainWindow : Form
+    internal partial class MainWindow : Form
     {
+        private const int SurfaceAreaMinWidth = 100;
+        private const int SurfaceAreaMinHeight = 100;
+
         private readonly static ILogService logService = ServiceLocator.Current.GetService<ILogService>();
 
         private readonly IUpdateService updateService = ServiceLocator.Current.GetService<IUpdateService>();
 
-        private readonly ChaptersListViewModel chaptersListViewModel;
+        private readonly SettingsViewModel appSettings;
+
+        private readonly ChapterProfilesViewModel chapterProfilesViewModel;
 
         public MainWindow()
         {
@@ -31,14 +40,78 @@ namespace ATG_Notifier.Desktop.Views
 #if DEBUG
             this.notifyIcon.Text += " (Debug)";
 #endif
+            this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
-            this.chaptersListViewModel = ServiceLocator.Current.GetService<ChaptersListViewModel>();
-            this.chaptersListViewModel.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
+            RestorePreviousWindowsPosition();
 
-            this.wpfHost.Child = new NotificationListbox(chaptersListViewModel);
+            //this.chaptersListViewModel = ServiceLocator.Current.GetService<ChapterProfilesListViewModel>();
+            //this.chaptersListViewModel.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
+
+            this.chapterProfilesViewModel = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
+            this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
+
+            this.wpfHost.Child = new ChapterProfilesView(this.chapterProfilesViewModel);
             this.wpfHost.Visible = true;
 
             SetupBindings();    
+        }
+
+        public new void BringToFront()
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                this.WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                Activate();
+            }
+        }
+
+        private void RestorePreviousWindowsPosition()
+        {          
+            if (!(this.appSettings.WindowSetting is WindowSetting prevWindowSetting)
+                || !(Screen.PrimaryScreen?.Bounds is Rectangle screenClientArea))
+            {
+                return;
+            }
+
+            if (prevWindowSetting.X >= screenClientArea.Width 
+                || prevWindowSetting.Y < -8 || prevWindowSetting.Y >= screenClientArea.Height)
+            {
+                return;
+            }
+
+            if (prevWindowSetting.Width < this.MinimumSize.Width || prevWindowSetting.Height < this.MinimumSize.Height)
+            {
+                return;
+            }
+
+            if (prevWindowSetting.X < 0 && prevWindowSetting.X + prevWindowSetting.Width < SurfaceAreaMinWidth)
+            {
+                return;
+            }
+
+            if (screenClientArea.Width - prevWindowSetting.X < SurfaceAreaMinWidth)
+            {
+                return;
+            }
+
+            if (screenClientArea.Height - prevWindowSetting.Y < SurfaceAreaMinHeight)
+            {
+                return;
+            }
+
+            this.Location = new Point(prevWindowSetting.X, prevWindowSetting.Y);
+
+            this.Width = prevWindowSetting.Width;
+            this.Height = prevWindowSetting.Height;
+        }
+
+        private void SaveWindowPosition()
+        {
+            this.appSettings.WindowSetting = new WindowSetting(this.Location.X, this.Location.Y, this.Width, this.Height);
         }
 
         private void SetupBindings()
@@ -51,40 +124,56 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItemNotificationPositionTopLeft.DataBindings.Add(binding);
         }
 
+        /// <summary>
+        /// Handles our custom window messages such as jumplist commands.
+        /// </summary>
+        /// <param name="msg">The window message to handle.</param>
         protected override void WndProc(ref Message msg)
         {
-            // if the coming message has the same number as our registered message
+            // terminate the application when we receive our custom exit message.
             if (msg.Msg == WindowsMessageHelper.TaskCloseArg)
             {
-                // terminate the application
                 Application.Exit();
             }
+            // bring the current instance to the foreground when we receive out custom show-instance message.
             else if (msg.Msg == WindowsMessageHelper.WM_SHOWINSTANCE)
             {
                 BringToFront();
             }
             else
             {
+                // not one of our custom messages, pass it to the system so it can handle this message.
                 base.WndProc(ref msg);
             }
         }
 
+        /// <summary>
+        /// Loads the saved chapter profiles from the database and starts the update service.
+        /// </summary>
+        /// <param name="e">The event data.</param>
         protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            /* Load Notifications from database */
-            await this.chaptersListViewModel.LoadAsync();
+            // load chapter profiles from database 
+            await this.chapterProfilesViewModel.ListViewModel.LoadAsync();
 
-            updateService.Start();
+            if (this.appSettings.IsUpdateServiceRunning)
+            {
+                this.updateService.Start();
+            }   
         }
 
+        /// <summary>
+        /// Shows the app icon in the notification area and creates the app's taskbar jumplist.
+        /// </summary>
+        /// <param name="e">The event data.</param>
         protected override void OnShown(EventArgs e)
         {
-            /* Show program icon in Windows notification area. */
-            notifyIcon.Visible = true;
+            // show program icon in Windows notification area
+            this.notifyIcon.Visible = true;
 
-            /* create a new taskbar jump list for the main window */
+            // create a new taskbar jump list for the main window 
             JumplistManager.BuildJumplist(AppConfiguration.AppId, this.Handle);
 
             base.OnShown(e);
@@ -100,6 +189,8 @@ namespace ATG_Notifier.Desktop.Views
                 e.Cancel = true;
             }
 
+            SaveWindowPosition();
+
             base.OnFormClosing(e);
         }
 
@@ -110,48 +201,38 @@ namespace ATG_Notifier.Desktop.Views
             Exit();
         }
 
-        private new void BringToFront()
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-            else
-            {
-                this.Activate();
-            }
-        }
-
         private void Exit()
         {
-            this.updateService.Stop();
+            if (this.appSettings.IsUpdateServiceRunning)
+            {
+                this.updateService.Stop();
+            }
+            
+            this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
 
-            this.chaptersListViewModel.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
-
-            /* Remove icon from Windows notification area. */
-            notifyIcon.Visible = false;
-            notifyIcon.Dispose();
+            // remove icon from Windows notification area
+            this.notifyIcon.Visible = false;
+            this.notifyIcon.Dispose();
 
             //Environment.Exit(0);
             Application.Exit();
         }
 
+        /// <summary>
+        /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
+        /// unread chapter profiles in the app changes.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data. Contains the new unread-chapter-profiles count.</param>
         private void OnChapterProfilesUnreadCountChanged(object sender, ChapterProfilesUnreadCountChangedEventArgs e)
-        {
-            this.UpdateBadgeCounter(e.UnreadCount);
-        }
-
-        private void UpdateBadgeCounter(int counter)
         {
             CommonHelpers.RunOnUIThread(() =>
             {
-                DrawNotifyIconBadge(counter);
+                UpdateBadgeCounter(e.UnreadCount);
             });
-
         }
 
-        private void DrawNotifyIconBadge(int counter)
+        private void UpdateBadgeCounter(int counter)
         {
             Graphics canvas;
             Bitmap iconBitmap = new Bitmap(this.notifyIcon.Icon.Width, this.notifyIcon.Icon.Height);
@@ -162,11 +243,8 @@ namespace ATG_Notifier.Desktop.Views
 
             canvas.DrawIcon(Properties.Resources.logo_16_ld4_icon, 0, 0);
 
-            if (counter == 0)
-            {
-                //this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
-            }
-            else
+            // draw badge if counter is positive
+            if (counter > 0)
             {
                 canvas.FillEllipse(
                     new SolidBrush(Color.DarkRed),
@@ -178,11 +256,13 @@ namespace ATG_Notifier.Desktop.Views
                     new RectangleF(5, 4, this.notifyIcon.Icon.Width - 6, this.notifyIcon.Icon.Width - 6)
                     );
 
-                if (counter < 9)
+                if (counter <= 9)
                 {
-                    StringFormat format = new StringFormat();
-                    format.Alignment = StringAlignment.Center;
-                    format.LineAlignment = StringAlignment.Center;
+                    StringFormat format = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
 
                     canvas.DrawString(
                         counter.ToString(),
@@ -228,22 +308,17 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnMenuItemPlayPopupSound_Click(object sender, EventArgs e)
         {
-            Settings.Instance.PlayPopupSound = !Settings.Instance.PlayPopupSound;
-        }
-
-        private void OnMenuItemTurnOnDisplay_Click(object sender, EventArgs e)
-        {
-            Settings.Instance.TurnOnDisplay = !Settings.Instance.TurnOnDisplay;
+            this.appSettings.PlayPopupSound = !this.appSettings.PlayPopupSound;
         }
 
         private void OnMenuItemDisableOnFullscreen_Click(object sender, EventArgs e)
         {
-            Settings.Instance.DisableOnFullscreen = !Settings.Instance.DisableOnFullscreen;
+            this.appSettings.DisableOnFullscreen = !this.appSettings.DisableOnFullscreen;
         }
 
         private void OnMenuItemDoNotDisturb_Click(object sender, EventArgs e)
         {
-            Settings.Instance.DoNotDisturb = !Settings.Instance.DoNotDisturb;
+            this.appSettings.DoNotDisturb = !this.appSettings.DoNotDisturb;
         }
 
         private void OnMenuItemExit_Click(object sender, EventArgs e)
@@ -262,23 +337,23 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnMenuItemNotificationPositionTopLeft_Click(object sender, EventArgs e)
         {
-            Settings.Instance.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopLeft;
+            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopLeft;
 
         }
 
         private void OnMenuItemNotificationPositionTopRight_Click(object sender, EventArgs e)
         {
-            Settings.Instance.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopRight;
+            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopRight;
         }
 
         private void OnMenuItemNotificationPositionBottomLeft_Click(object sender, EventArgs e)
         {
-            Settings.Instance.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomLeft;
+            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomLeft;
         }
 
         private void OnMenuItemNotificationPositionBottomRight_Click(object sender, EventArgs e)
         {
-            Settings.Instance.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomRight;
+            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomRight;
         }
 
         #endregion // MenuItem Handler

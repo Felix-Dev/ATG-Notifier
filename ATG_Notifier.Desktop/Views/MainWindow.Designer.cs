@@ -48,7 +48,6 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItemExit = new System.Windows.Forms.MenuItem();
             this.menuItemNotificationOptions = new System.Windows.Forms.MenuItem();
             this.menuItemPlaySound = new ATG_Notifier.Desktop.Utilities.Bindings.BindableMenuItem();
-            this.menuItemTurnOnDisplay = new ATG_Notifier.Desktop.Utilities.Bindings.BindableMenuItem();
             this.menuItemSeparator = new System.Windows.Forms.MenuItem();
             this.menuItemDisableOnFullscreen = new ATG_Notifier.Desktop.Utilities.Bindings.BindableMenuItem();
             this.menuItemDoNotDisturb = new ATG_Notifier.Desktop.Utilities.Bindings.BindableMenuItem();
@@ -60,11 +59,7 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItemNotificationPositionBottomRight = new ATG_Notifier.Desktop.Utilities.Bindings.BindableMenuItem();
             this.menuItem_Help = new System.Windows.Forms.MenuItem();
             this.menuItem_AboutNotifier = new System.Windows.Forms.MenuItem();
-            this.panelBackground = new System.Windows.Forms.Panel();
-            this.panelDisplayNotifications = new System.Windows.Forms.Panel();
             this.wpfHost = new System.Windows.Forms.Integration.ElementHost();
-            this.panelBackground.SuspendLayout();
-            this.panelDisplayNotifications.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -139,7 +134,6 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItemNotificationOptions.Index = 1;
             this.menuItemNotificationOptions.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemPlaySound,
-            this.menuItemTurnOnDisplay,
             this.menuItemSeparator,
             this.menuItemDisableOnFullscreen,
             this.menuItemDoNotDisturb,
@@ -154,40 +148,33 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItemPlaySound.Text = "Play Sound";
             this.menuItemPlaySound.Click += new System.EventHandler(this.OnMenuItemPlayPopupSound_Click);
             // 
-            // menuItemTurnOnDisplay
-            // 
-            this.menuItemTurnOnDisplay.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ATG_Notifier.Desktop.Properties.Settings.Default, "TurnOnDisplay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.menuItemTurnOnDisplay.Index = 1;
-            this.menuItemTurnOnDisplay.Text = "Turn On Display";
-            this.menuItemTurnOnDisplay.Click += new System.EventHandler(this.OnMenuItemTurnOnDisplay_Click);
-            // 
             // menuItemSeparator
             // 
-            this.menuItemSeparator.Index = 2;
+            this.menuItemSeparator.Index = 1;
             this.menuItemSeparator.Text = "-";
             // 
             // menuItemDisableOnFullscreen
             // 
             this.menuItemDisableOnFullscreen.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ATG_Notifier.Desktop.Properties.Settings.Default, "DisableOnFullscreen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.menuItemDisableOnFullscreen.Index = 3;
+            this.menuItemDisableOnFullscreen.Index = 2;
             this.menuItemDisableOnFullscreen.Text = "Disable On Fullscreen";
             this.menuItemDisableOnFullscreen.Click += new System.EventHandler(this.OnMenuItemDisableOnFullscreen_Click);
             // 
             // menuItemDoNotDisturb
             // 
             this.menuItemDoNotDisturb.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ATG_Notifier.Desktop.Properties.Settings.Default, "DoNotDisturb", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.menuItemDoNotDisturb.Index = 4;
+            this.menuItemDoNotDisturb.Index = 3;
             this.menuItemDoNotDisturb.Text = "Do Not Disturb";
             this.menuItemDoNotDisturb.Click += new System.EventHandler(this.OnMenuItemDoNotDisturb_Click);
             // 
             // menuItem1
             // 
-            this.menuItem1.Index = 5;
+            this.menuItem1.Index = 4;
             this.menuItem1.Text = "-";
             // 
             // menuItemNotificationPosition
             // 
-            this.menuItemNotificationPosition.Index = 6;
+            this.menuItemNotificationPosition.Index = 5;
             this.menuItemNotificationPosition.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemNotificationPositionTopLeft,
             this.menuItemNotificationPositionTopRight,
@@ -236,53 +223,28 @@ namespace ATG_Notifier.Desktop.Views
             this.menuItem_AboutNotifier.Text = "About Notifier";
             this.menuItem_AboutNotifier.Click += new System.EventHandler(this.OnMenuItem_AboutNotifier_Click);
             // 
-            // panelBackground
-            // 
-            this.panelBackground.AutoScroll = true;
-            this.panelBackground.BackColor = System.Drawing.Color.White;
-            this.panelBackground.Controls.Add(this.panelDisplayNotifications);
-            this.panelBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelBackground.Location = new System.Drawing.Point(0, 0);
-            this.panelBackground.Margin = new System.Windows.Forms.Padding(0);
-            this.panelBackground.Name = "panelBackground";
-            this.panelBackground.Size = new System.Drawing.Size(447, 207);
-            this.panelBackground.TabIndex = 2;
-            // 
-            // panelDisplayNotifications
-            // 
-            this.panelDisplayNotifications.AutoScroll = true;
-            this.panelDisplayNotifications.Controls.Add(this.wpfHost);
-            this.panelDisplayNotifications.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDisplayNotifications.Location = new System.Drawing.Point(0, 0);
-            this.panelDisplayNotifications.Margin = new System.Windows.Forms.Padding(0);
-            this.panelDisplayNotifications.Name = "panelDisplayNotifications";
-            this.panelDisplayNotifications.Size = new System.Drawing.Size(447, 207);
-            this.panelDisplayNotifications.TabIndex = 1;
-            // 
             // wpfHost
             // 
             this.wpfHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wpfHost.Location = new System.Drawing.Point(0, 0);
             this.wpfHost.Margin = new System.Windows.Forms.Padding(0);
             this.wpfHost.Name = "wpfHost";
-            this.wpfHost.Size = new System.Drawing.Size(447, 207);
-            this.wpfHost.TabIndex = 2;
+            this.wpfHost.Size = new System.Drawing.Size(364, 211);
+            this.wpfHost.TabIndex = 1;
             this.wpfHost.Child = null;
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(447, 207);
-            this.Controls.Add(this.panelBackground);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(364, 211);
+            this.Controls.Add(this.wpfHost);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MaximumSize = new System.Drawing.Size(465, 100000);
+            this.MaximumSize = new System.Drawing.Size(380, 81257);
             this.Menu = this.mainMenu;
-            this.MinimumSize = new System.Drawing.Size(300, 200);
+            this.MinimumSize = new System.Drawing.Size(250, 250);
             this.Name = "MainWindow";
-            this.panelBackground.ResumeLayout(false);
-            this.panelDisplayNotifications.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -328,13 +290,9 @@ namespace ATG_Notifier.Desktop.Views
 
         private MainMenu mainMenu;
         private MenuItem menuItemNotificationOptions;
-        private Panel panelBackground;
         private MenuItem separator2;
-        private Panel panelDisplayNotifications;
         private ElementHost wpfHost;
-        private ATG_Notifier.Desktop.WPF.Controls.NotificationListbox notificationListbox1;
         private BindableMenuItem menuItemPlaySound;
-        private BindableMenuItem menuItemTurnOnDisplay;
         private MenuItem menuItemSeparator;
         private BindableMenuItem menuItemDisableOnFullscreen;
         private BindableMenuItem menuItemDoNotDisturb;

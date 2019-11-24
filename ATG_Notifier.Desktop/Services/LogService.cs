@@ -1,7 +1,10 @@
 ﻿using ATG_Notifier.ViewModels.Services;
+using log4net;
+using log4net.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,30 +12,44 @@ namespace ATG_Notifier.Desktop.Services
 {
     internal class LogService : ILogService
     {
-        private static readonly log4net.ILog log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private const string filePathConfigEntry = "LogFileName";
+
+        private readonly ILog log;
+
+        public LogService(string filePath)
+        {
+            if (filePath is null)
+            {
+                throw new ArgumentNullException(nameof(filePath));
+            }
+
+            GlobalContext.Properties[filePathConfigEntry] = filePath;
+            XmlConfigurator.Configure();
+
+            this.log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        }
 
         public void Log(LogType type, string message)
         {
             switch (type)
             {
                 case LogType.Debug:
-                    log.Debug(message);
+                    this.log.Debug(message);
                     break;
                 case LogType.Info:
-                    log.Info(message);
+                    this.log.Info(message);
                     break;
                 case LogType.Warning:
-                    log.Warn(message);
+                    this.log.Warn(message);
                     break;
                 case LogType.Error:
-                    log.Error(message);
+                    this.log.Error(message);
                     break;
                 case LogType.Fatal:
-                    log.Fatal(message);
+                    this.log.Fatal(message);
                     break;
                 default:
-                    log.Error($"LogService: Unsupported LogLevel [{type}]!");
+                    this.log.Error($"LogService: Unsupported LogLevel [{type}]!");
                     break;
             }
         }

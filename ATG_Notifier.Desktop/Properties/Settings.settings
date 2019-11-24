@@ -11,9 +11,6 @@
     <Setting Name="PlayPopupSound" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="TurnOnDisplay" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="DisableOnFullscreen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -22,6 +19,15 @@
     </Setting>
     <Setting Name="NotificationDisplayPosition" Type="ATG_Notifier.Desktop.Views.ToastNotification.DisplayPosition" Scope="User">
       <Value Profile="(Default)">TopRight</Value>
+    </Setting>
+    <Setting Name="WindowSetting" Type="ATG_Notifier.Desktop.Models.WindowSetting" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IsUpdateServiceRunning" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MostRecentChapterInfo" Type="ATG_Notifier.Desktop.Models.MostRecentChapterInfo" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

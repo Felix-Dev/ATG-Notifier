@@ -1,14 +1,10 @@
 ﻿using Microsoft.WindowsAPICodePack.Taskbar;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Utilities
 {
-    public static class JumplistManager
+    internal static class JumplistManager
     {
         public const string ACTION_EXIT = "Exit";
 

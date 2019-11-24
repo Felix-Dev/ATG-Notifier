@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
-    public static class Startup
+    internal static class Startup
     {
         private static readonly ServiceCollection serviceCollection = new ServiceCollection();
 
@@ -21,9 +21,9 @@ namespace ATG_Notifier.Desktop.Configuration
             ServiceLocator.Configure(serviceCollection);
 
             // Needed because EF Core Sqlite Provider cannot create folders
-            if (!Directory.Exists(AppConfiguration.DatabaseDirectory))
+            if (!Directory.Exists(AppConfiguration.BaseDirectory))
             {
-                Directory.CreateDirectory(AppConfiguration.DatabaseDirectory);
+                Directory.CreateDirectory(AppConfiguration.BaseDirectory);
             }
         }
     }

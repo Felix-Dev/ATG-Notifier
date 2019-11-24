@@ -1,28 +1,19 @@
-﻿using ATG_Notifier.Desktop;
-using ATG_Notifier.Desktop.Model;
-using ATG_Notifier.Desktop.Utilities;
-using ATG_Notifier.ViewModels.Services;
-using HtmlAgilityPack;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using ATG_Notifier.Desktop.Services;
-using ATG_Notifier.ViewModels.Networking;
-using ATG_Notifier.ViewModels.ViewModels;
-using ATG_Notifier.Desktop.Controller;
+﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Services.Taskbar;
 using ATG_Notifier.ViewModels.Models;
+using ATG_Notifier.ViewModels.Networking;
+using ATG_Notifier.ViewModels.Services;
+using ATG_Notifier.ViewModels.ViewModels;
+using System;
+using System.Threading;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    public class UpdateService : IUpdateService
+    internal class UpdateService : IUpdateService
     {
 #if DEBUG
-        private const int RawSourcePollingInterval = 1 * 2 * 1000;
+        private const int RawSourcePollingInterval = 1 * 10 * 1000;
 #else
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif
@@ -41,7 +32,12 @@ namespace ATG_Notifier.Desktop.Services
         private readonly Thread workThread;
         private bool finishJob;
 
-        private readonly Semaphore saveguardSema = new Semaphore(1, 1);
+        private Random rand;
+        private int debugCount = 0;
+
+        private Semaphore saveguardSema;
+
+        private SettingsViewModel appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
         public UpdateService(IWebService webService, ILogService logService)
         {
@@ -56,7 +52,9 @@ namespace ATG_Notifier.Desktop.Services
             //workThread.Name = "worker"; // Assign worker thread a name for easier debugging.
 #endif
             /* Create the job-round Event Handler */
-            this.jobRoundFinished = new EventWaitHandle(true, EventResetMode.ManualReset);  
+            this.jobRoundFinished = new EventWaitHandle(true, EventResetMode.ManualReset);
+
+            this.rand = new Random();
         }
 
         public event EventHandler<ChapterUpdateEventArgs> ChapterUpdated;
@@ -78,6 +76,8 @@ namespace ATG_Notifier.Desktop.Services
                 return;
             }
 
+            this.saveguardSema = new Semaphore(1, 1);
+
             this.periodicTimerRawSource = new Timer(OnTimerEllapsed, null, 0, Timeout.Infinite);
         }
 
@@ -95,6 +95,7 @@ namespace ATG_Notifier.Desktop.Services
             logService.Log(LogType.Debug, "Attempting to terminate the update service...");
 
             this.saveguardSema.WaitOne();
+
             //jobRoundFinished.WaitOne();
 
             //finishJob = true;
@@ -112,9 +113,11 @@ namespace ATG_Notifier.Desktop.Services
 
             this.saveguardSema.Release();
 
-            /* Clean-up resources used by the event handler. */
-            //jobRoundFinished.Dispose();
+            // Clean-up resources used by the event handler.
             this.saveguardSema.Dispose();
+            this.saveguardSema = null;
+
+            //jobRoundFinished.Dispose();
         }
 
         private void StopTimer()
@@ -134,11 +137,11 @@ namespace ATG_Notifier.Desktop.Services
 #if DEBUG
             ChapterProfileModel chapterProfileModel = new ChapterProfileModel()
             {
-                Number = 1600,
-                Title = "一指破界",
+                Number = 1600 + debugCount++,
+                Title = "Hello World1234567",
                 NumberAndTitleFallbackString = "Fallback String",
                 Url = "http://book.zongheng.com/chapter/408586/58484757.html",
-                WordCount = 3218,
+                WordCount = this.rand.Next(2500, 4500),
                 ReleaseTime = DateTime.Now,
                 AppArrivalTime = DateTime.Now
             };
@@ -146,19 +149,24 @@ namespace ATG_Notifier.Desktop.Services
             var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
             ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
 
-            AppFeedbackManager.FlashApplicationTaskbarButton();
-            jobRoundFinished.Set();
+            this.appSettings.MostRecentChapterInfo = new MostRecentChapterInfo()
+            {
+                NumberAndTitle = chapterProfileViewModel.NumberAndTitleDisplayString,
+                ReleaseTime = chapterProfileViewModel.ReleaseTime,
+                WordCount = chapterProfileViewModel.WordCount,
+            };
 
-            if (!Settings.Instance.DoNotDisturb)
+            TaskbarManager.Current.FlashTaskbarButton();
+
+            if (!appSettings.DoNotDisturb)
             {
                 notifier.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
             }
-
 #else
             ChapterSourceCheckResult checkResult = null;
             try
             {
-                checkResult = await rawSourceChecker.GetUpdateAsync(Settings.Instance.CurrentChapterId);
+                checkResult = await rawSourceChecker.GetUpdateAsync(this.appSettings.CurrentChapterId);
             }
             catch (SourceCheckerOperationFailedException ex)
             {
@@ -170,18 +178,25 @@ namespace ATG_Notifier.Desktop.Services
                 this.saveguardSema.WaitOne();
 
                 // Store the [number and title] of the new chapter.
-                Settings.Instance.CurrentChapterId = checkResult.ChapterId;
+                this.appSettings.CurrentChapterId = checkResult.ChapterId;
 
                 ChapterProfileModel chapterProfileModel = checkResult.ChapterProfileModel;
 
                 var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
                 ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
 
-                AppFeedbackManager.FlashApplicationTaskbarButton();
+                this.appSettings.MostRecentChapterInfo = new MostRecentChapterInfo()
+                {
+                    NumberAndTitle = chapterProfileViewModel.NumberAndTitleDisplayString,
+                    ReleaseTime = chapterProfileViewModel.ReleaseTime,
+                    WordCount = chapterProfileViewModel.WordCount,
+                };
+
+                TaskbarManager.Current.FlashTaskbarButton();
 
                 //jobRoundFinished.Set();
 
-                if (!Settings.Instance.DoNotDisturb)
+                if (!appSettings.DoNotDisturb)
                 {
                     notifier.Show("ATG Chapter Update!", chapterProfileViewModel);
                 }
@@ -189,6 +204,10 @@ namespace ATG_Notifier.Desktop.Services
                 this.saveguardSema.Release();
             }
 #endif
+            // TODO: Crashing code below to text unexpected error handling:
+            //await Task.Delay(7000);
+
+            //string s = null; int i = s.Length;
 
             lock (this.timerLock)
             {

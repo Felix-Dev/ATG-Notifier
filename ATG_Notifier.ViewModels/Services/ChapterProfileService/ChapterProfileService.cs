@@ -43,7 +43,9 @@ namespace ATG_Notifier.ViewModels.Services
             long id = model.ChapterProfileId;
             using (var dataService = dataServiceFactory.CreateDataService())
             {
-                var chapterProfile = id > 0 ? await dataService.GetChapterProfileAsync(model.ChapterProfileId) : new ChapterProfile();
+                var chapterProfile = id > 0 
+                    ? await dataService.GetChapterProfileAsync(model.ChapterProfileId) 
+                    : new ChapterProfile();
                 if (chapterProfile != null)
                 {
                     UpdateChapterProfileFromModel(chapterProfile, model);
@@ -54,6 +56,43 @@ namespace ATG_Notifier.ViewModels.Services
 
                 return 0;
             }
+        }
+
+        public async Task<int> UpdateChapterProfilesAsync(IList<ChapterProfileModel> models)
+        {
+            if (models is null)
+            {
+                throw new ArgumentNullException(nameof(models));
+            }
+
+            using (var dataService = dataServiceFactory.CreateDataService())
+            {
+                IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
+
+                foreach (var chapterProfileModel in models)
+                {
+                    var chapterProfile = chapterProfileModel.ChapterProfileId > 0 
+                        ? await dataService.GetChapterProfileAsync(chapterProfileModel.ChapterProfileId) 
+                        : new ChapterProfile();
+
+                    if (chapterProfile != null)
+                    {
+                        UpdateChapterProfileFromModel(chapterProfile, chapterProfileModel);
+                        
+                    }
+
+                    chapterProfiles.Add(chapterProfile);
+                }
+
+                await dataService.UpdateChapterProfilesAsync(chapterProfiles.ToArray());
+
+                for (int i = 0; i < models.Count; i++)
+                {
+                    UpdateModelFromChapterProfile(models[i], chapterProfiles[i]);
+                }  
+            }
+
+            return 0;
         }
 
         public async Task<int> DeleteChapterProfileAsync(ChapterProfileModel model)

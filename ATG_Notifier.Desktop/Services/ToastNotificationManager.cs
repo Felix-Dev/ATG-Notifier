@@ -1,17 +1,19 @@
-﻿using ATG_Notifier.Desktop.Model;
+﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Helpers;
+using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.View;
+using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace ATG_Notifier.Desktop.Controller
+namespace ATG_Notifier.Desktop.Services
 {
-    public class ToastNotificationManager
+    internal class ToastNotificationManager
     {
         private const int MaxDisplayedPopups = 3;
 
@@ -20,6 +22,8 @@ namespace ATG_Notifier.Desktop.Controller
         private readonly Semaphore notificationSema;
 
         private readonly int[] displaySlots;
+
+        private readonly SettingsViewModel appSettings;
 
         #region Creation
 
@@ -33,22 +37,24 @@ namespace ATG_Notifier.Desktop.Controller
             displaySlots = new int[diffPositions];
 
             notificationSema = new Semaphore(MaxDisplayedPopups, MaxDisplayedPopups);
+
+            this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
         }
 
         #endregion // Creation        
 
-        public void Show(string title, ChapterProfileViewModel chapterProfileVM) 
+        public void Show(string title, ChapterProfileViewModel chapterProfileViewModel) 
         {
-            if (chapterProfileVM is null)
+            if (chapterProfileViewModel is null)
             {
-                throw new ArgumentNullException(nameof(chapterProfileVM));
+                throw new ArgumentNullException(nameof(chapterProfileViewModel));
             }
 
             string nTitle = title ?? "";
 
-            if (!Settings.Instance.DisableOnFullscreen)
+            if (!this.appSettings.DisableOnFullscreen)
             {
-                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileVM));
+                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileViewModel));
                 return;
             }
 
@@ -56,13 +62,12 @@ namespace ATG_Notifier.Desktop.Controller
             if (result == (int)HRESULT.S_OK 
                 && state == QUERY_USER_NOTIFICATION_STATE.AcceptsNotifications)
             {
-                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileVM));
+                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileViewModel));
             }
         }
 
-        private void ShowCore(string title, ChapterProfileViewModel chapterProfileVM)
+        private async void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
         {
-            DialogResult result;
             int displaySlot;
 
             /* 
@@ -72,7 +77,7 @@ namespace ATG_Notifier.Desktop.Controller
              */
             notificationSema.WaitOne();
 
-            var position = Settings.Instance.NotificationDisplayPosition;
+            var position = this.appSettings.NotificationDisplayPosition;
 
             /*
              * Multiple threads can try to obtain an <available slot> simultanenously, so we
@@ -83,10 +88,18 @@ namespace ATG_Notifier.Desktop.Controller
                 displaySlot = ReserveDisplaySlot(position);
             }
 
-            using (ToastNotificationView notif = new ToastNotificationView(chapterProfileVM, title, displaySlot, position))
+            UserInteraction userInteraction;
+            using (ToastNotificationView toast = new ToastNotificationView(chapterProfileViewModel, title, displaySlot, position))
             {
-                notif.Shown += OnNotificationShown;
-                result = notif.ShowDialog();
+                toast.Shown += OnNotificationShown;
+
+                userInteraction = toast.ShowDialog();
+            }
+
+            if (userInteraction == UserInteraction.Click)
+            {
+                ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
+                CommonHelpers.RunOnUIThread(() => Program.MainWindow.BringToFront());
             }
 
             ReleaseDisplaySlot(position, displaySlot);
@@ -95,14 +108,9 @@ namespace ATG_Notifier.Desktop.Controller
 
         private void OnNotificationShown(object sender, EventArgs e)
         {
-            if (Settings.Instance.TurnOnDisplay)
+            if (this.appSettings.PlayPopupSound)
             {
-                Utility.DisplayTurnOn();
-            }
-
-            if (Settings.Instance.PlayPopupSound)
-            {
-                Utility.PlaySound(Desktop.Properties.Resources.Windows_Notify_Messaging);
+                Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
             }
         }
 

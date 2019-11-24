@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using ATG_Notifier.Desktop.Native.Win32;
+﻿using ATG_Notifier.Desktop.Native.Win32;
+using System;
 
 namespace ATG_Notifier.Desktop.Utilities
 {
-    public class WindowsMessageHelper
+    internal class WindowsMessageHelper
     {
         public static int TaskCloseArg;
         public static readonly int WM_SHOWINSTANCE;

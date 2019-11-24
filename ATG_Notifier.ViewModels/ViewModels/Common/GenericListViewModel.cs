@@ -1,13 +1,10 @@
 ﻿using ATG_Notifier.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ATG_Notifier.UWP.ViewModels
+namespace ATG_Notifier.ViewModels.ViewModels
 {
     public class GenericListViewModel<TModel> : ObservableObject
         where TModel : ObservableObject
@@ -41,21 +38,26 @@ namespace ATG_Notifier.UWP.ViewModels
 
         public void Add(TModel model)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             OnAdd(model);
         }
 
         public void Remove(TModel model)
-        {
-            OnRemove(model);
-        }
-
-        protected virtual void OnAdd(TModel model)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
+            OnRemove(model);
+        }
+
+        protected virtual void OnAdd(TModel model)
+        {
             Items.Add(model);
 
             if (this.Items.Count == 1)
@@ -66,11 +68,6 @@ namespace ATG_Notifier.UWP.ViewModels
 
         protected virtual void OnRemove(TModel model)
         {
-            if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
             bool status = this.Items.Remove(model);
 
             if (status && this.Items.Count == 0)

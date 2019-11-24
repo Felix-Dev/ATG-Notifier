@@ -44,6 +44,30 @@ namespace ATG_Notifier.Data.Services
             return res;
         }
 
+        public async Task<int> UpdateChapterProfilesAsync(params ChapterProfile[] chapterProfiles)
+        {
+            if (chapterProfiles is null)
+            {
+                throw new ArgumentNullException(nameof(chapterProfiles));
+            }
+
+            foreach (var chapterProfile in chapterProfiles)
+            {
+                if (chapterProfile.ChapterProfileId > 0)
+                {
+                    this.dataSource.Entry(chapterProfile).State = EntityState.Modified;
+                }
+                else
+                {
+                    chapterProfile.ChapterProfileId = UIdGenerator.Next();
+                    this.dataSource.Entry(chapterProfile).State = EntityState.Added;
+                }
+            }
+
+            int res = await this.dataSource.SaveChangesAsync();
+            return res;
+        }
+
         public async Task<int> DeleteChapterProfilesAsync(params ChapterProfile[] chapterProfiles)
         {
             if (chapterProfiles is null)

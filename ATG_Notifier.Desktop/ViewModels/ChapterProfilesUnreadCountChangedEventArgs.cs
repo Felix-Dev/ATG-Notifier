@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
-    public class ChapterProfilesUnreadCountChangedEventArgs : EventArgs
+    internal class ChapterProfilesUnreadCountChangedEventArgs : EventArgs
     {
         public ChapterProfilesUnreadCountChangedEventArgs(int unreadCount)
         {

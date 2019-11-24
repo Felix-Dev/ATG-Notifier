@@ -138,6 +138,8 @@ namespace ATG_Notifier.Desktop.Services
 
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
+                    httpClient.Timeout = TimeSpan.FromSeconds(15);
+
                     using (var request = new HttpRequestMessage(new HttpMethod("GET"), uri))
                     {
                         request.Headers.TryAddWithoutValidation("Referer", "https://www.google.com");

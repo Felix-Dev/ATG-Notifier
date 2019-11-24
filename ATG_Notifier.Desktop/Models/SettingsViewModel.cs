@@ -1,20 +1,11 @@
 ﻿using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.ViewModels.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ATG_Notifier.Desktop.Model
+namespace ATG_Notifier.Desktop.Models
 {
-    public class Settings : ObservableObject
+    internal class SettingsViewModel : ObservableObject
     {
-        private static readonly Lazy<Settings> lazy = new Lazy<Settings>(() => new Settings());        
-
-        public static Settings Instance => lazy.Value;
+        public SettingsViewModel() {}
 
         #region Properties
 
@@ -27,8 +18,20 @@ namespace ATG_Notifier.Desktop.Model
                 {
                     Properties.Settings.Default.DisableOnFullscreen = value;
                     NotifyPropertyChanged();
+                }  
+            }
+        }
+
+        public bool IsUpdateServiceRunning
+        {
+            get => Properties.Settings.Default.IsUpdateServiceRunning;
+            set
+            {
+                if (value != Properties.Settings.Default.IsUpdateServiceRunning)
+                {
+                    Properties.Settings.Default.IsUpdateServiceRunning = value;
+                    NotifyPropertyChanged();
                 }
-                
             }
         }
 
@@ -70,19 +73,6 @@ namespace ATG_Notifier.Desktop.Model
             }
         }
 
-        public bool TurnOnDisplay
-        {
-            get => Properties.Settings.Default.TurnOnDisplay;
-            set
-            {
-                if (value != Properties.Settings.Default.TurnOnDisplay)
-                {
-                    Properties.Settings.Default.TurnOnDisplay = value;
-                    NotifyPropertyChanged();
-                }                
-            }
-        }
-
         public DisplayPosition NotificationDisplayPosition
         {
             get => Properties.Settings.Default.NotificationDisplayPosition;
@@ -96,13 +86,26 @@ namespace ATG_Notifier.Desktop.Model
             }
         }
 
+        public WindowSetting WindowSetting
+        {
+            get => Properties.Settings.Default.WindowSetting;
+            set => Properties.Settings.Default.WindowSetting = value;
+        }
+
+        public MostRecentChapterInfo MostRecentChapterInfo
+        {
+            get => Properties.Settings.Default.MostRecentChapterInfo;
+            set
+            {
+                if (value != Properties.Settings.Default.MostRecentChapterInfo)
+                {
+                    Properties.Settings.Default.MostRecentChapterInfo = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         #endregion // Properties
-
-        #region Creation
-
-        private Settings() { }
-
-        #endregion // Creation
 
         #region Public Methods
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    public class DataServiceFactory : IDataServiceFactory
+    internal class DataServiceFactory : IDataServiceFactory
     {
         public IDataService CreateDataService()
         {

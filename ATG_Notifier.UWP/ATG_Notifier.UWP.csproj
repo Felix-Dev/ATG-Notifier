@@ -163,7 +163,6 @@
     <Compile Include="ViewModels\ChapterList\ShowSelectedChapterEventArgs.cs" />
     <Compile Include="ViewModels\Chapters\ChaptersArguments.cs" />
     <Compile Include="ViewModels\Chapters\ChaptersViewModel.cs" />
-    <Compile Include="ViewModels\GenericListViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\AppShell.xaml.cs">

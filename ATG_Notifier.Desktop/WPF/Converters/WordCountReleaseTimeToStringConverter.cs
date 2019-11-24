@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace ATG_Notifier.Desktop.WPF.Converters
 {
-    public class WordCountReleaseTimeToStringConverter : IMultiValueConverter
+    internal class WordCountReleaseTimeToStringConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

@@ -39,7 +39,7 @@
             this.menuNotificationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonCancel = new System.Windows.Forms.Button();
             this.panelNotificationContent = new System.Windows.Forms.Panel();
-            this.TextBox_Chapter = new System.Windows.Forms.TextBox();
+            this.ChapterNumberAndTitleTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.menuNotificationBindingSource)).BeginInit();
             this.panelNotificationContent.SuspendLayout();
             this.SuspendLayout();
@@ -49,10 +49,9 @@
             this.labelTitle.AutoSize = true;
             this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTitle.ForeColor = System.Drawing.Color.White;
-            this.labelTitle.Location = new System.Drawing.Point(16, 20);
-            this.labelTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTitle.Location = new System.Drawing.Point(12, 16);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(74, 28);
+            this.labelTitle.Size = new System.Drawing.Size(61, 21);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Debug";
             this.labelTitle.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
@@ -69,13 +68,13 @@
             this.buttonCancel.FlatAppearance.BorderSize = 0;
             this.buttonCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(49)))), ((int)(((byte)(109)))), ((int)(((byte)(210)))));
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCancel.Font = new System.Drawing.Font("Segoe UI Symbol", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.buttonCancel.Location = new System.Drawing.Point(364, 0);
+            this.buttonCancel.Font = new System.Drawing.Font("Segoe UI Symbol", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.buttonCancel.Location = new System.Drawing.Point(273, 0);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(0);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(44, 41);
+            this.buttonCancel.Size = new System.Drawing.Size(33, 33);
             this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "❌";
+            this.buttonCancel.Text = "✖";
             this.buttonCancel.UseCompatibleTextRendering = true;
             this.buttonCancel.UseVisualStyleBackColor = false;
             this.buttonCancel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnCancelButtonMouseClick);
@@ -83,57 +82,53 @@
             // panelNotificationContent
             // 
             this.panelNotificationContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(74)))), ((int)(((byte)(178)))));
-            this.panelNotificationContent.Controls.Add(this.TextBox_Chapter);
+            this.panelNotificationContent.Controls.Add(this.ChapterNumberAndTitleTextBox);
             this.panelNotificationContent.Controls.Add(this.buttonCancel);
             this.panelNotificationContent.Controls.Add(this.labelTitle);
             this.panelNotificationContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelNotificationContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelNotificationContent.ForeColor = System.Drawing.Color.White;
-            this.panelNotificationContent.Location = new System.Drawing.Point(3, 2);
-            this.panelNotificationContent.Margin = new System.Windows.Forms.Padding(4);
+            this.panelNotificationContent.Location = new System.Drawing.Point(2, 2);
             this.panelNotificationContent.Name = "panelNotificationContent";
-            this.panelNotificationContent.Size = new System.Drawing.Size(407, 97);
+            this.panelNotificationContent.Size = new System.Drawing.Size(306, 78);
             this.panelNotificationContent.TabIndex = 0;
             this.panelNotificationContent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             // 
-            // TextBox_Chapter
+            // ChapterNumberAndTitleTextBox
             // 
-            this.TextBox_Chapter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(74)))), ((int)(((byte)(178)))));
-            this.TextBox_Chapter.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TextBox_Chapter.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TextBox_Chapter.ForeColor = System.Drawing.Color.White;
-            this.TextBox_Chapter.Location = new System.Drawing.Point(16, 57);
-            this.TextBox_Chapter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.TextBox_Chapter.Name = "TextBox_Chapter";
-            this.TextBox_Chapter.ReadOnly = true;
-            this.TextBox_Chapter.Size = new System.Drawing.Size(383, 27);
-            this.TextBox_Chapter.TabIndex = 3;
-            this.TextBox_Chapter.TabStop = false;
-            this.TextBox_Chapter.Text = "Placeholder";
-            this.TextBox_Chapter.WordWrap = false;
-            this.TextBox_Chapter.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBox_Chapter_MouseDoubleClick);
+            this.ChapterNumberAndTitleTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(74)))), ((int)(((byte)(178)))));
+            this.ChapterNumberAndTitleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ChapterNumberAndTitleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChapterNumberAndTitleTextBox.ForeColor = System.Drawing.Color.White;
+            this.ChapterNumberAndTitleTextBox.Location = new System.Drawing.Point(12, 46);
+            this.ChapterNumberAndTitleTextBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.ChapterNumberAndTitleTextBox.MaximumSize = new System.Drawing.Size(287, 22);
+            this.ChapterNumberAndTitleTextBox.Name = "ChapterNumberAndTitleTextBox";
+            this.ChapterNumberAndTitleTextBox.ReadOnly = true;
+            this.ChapterNumberAndTitleTextBox.Size = new System.Drawing.Size(88, 22);
+            this.ChapterNumberAndTitleTextBox.TabIndex = 3;
+            this.ChapterNumberAndTitleTextBox.TabStop = false;
+            this.ChapterNumberAndTitleTextBox.Text = "Placeholder";
+            this.ChapterNumberAndTitleTextBox.WordWrap = false;
+            this.ChapterNumberAndTitleTextBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.OnChapterNumberAndTitleTextBoxMouseDoubleClick);
             // 
             // ToastNotificationView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(107)))), ((int)(((byte)(190)))));
-            this.ClientSize = new System.Drawing.Size(413, 101);
+            this.ClientSize = new System.Drawing.Size(310, 82);
             this.Controls.Add(this.panelNotificationContent);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(413, 101);
+            this.MinimumSize = new System.Drawing.Size(310, 82);
             this.Name = "ToastNotificationView";
-            this.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Padding = new System.Windows.Forms.Padding(2);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.TopMost = true;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.menuNotificationBindingSource)).EndInit();
             this.panelNotificationContent.ResumeLayout(false);
             this.panelNotificationContent.PerformLayout();
@@ -148,6 +143,6 @@
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.BindingSource menuNotificationBindingSource;
-        private System.Windows.Forms.TextBox TextBox_Chapter;
+        private System.Windows.Forms.TextBox ChapterNumberAndTitleTextBox;
     }
 }

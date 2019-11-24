@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!--#region Brushes -->
@@ -30,27 +31,26 @@
             <!--#endregion-->
             
             <!--#region Converters -->
+            
             <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
             
             <!--#endregion-->
 
-            <Style x:Key="Button_Style_MenuNotificationWCB" TargetType="{x:Type Button}">
+            <Style x:Key="Button_Style_MenuNotificationWCB" TargetType="Button">
                 <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="IsTabStop" Value="False" />
                 <Setter Property="Height" Value="22" />
                 <Setter Property="MaxHeight" Value="22" />
                 <Setter Property="Width" Value="22" />
-                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                <Setter Property="FontSize" Value="12"/>
+
                 <Setter Property="Background" Value="{StaticResource MenuNotification.WCB.Background}" />
                 <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.Foreground}" />
-                <Setter Property="ToolTipService.ShowDuration" Value="2000" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"
+                                                  Focusable="False"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -67,23 +67,24 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                      HorizontalAlignment="Stretch">
+    <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+          HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="13"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="26"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Label_New" 
+        <!-- Unread chapter indicator -->
+        <TextBlock x:Name="NewTextBlock" 
                    Grid.Row="0" Grid.Column="1"
                    Foreground="{DynamicResource MenuNotification.Alert.Foreground}" 
-                   FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"
-                   Margin="0,6,0,0"
+                   FontSize="11" FontWeight="Bold"
+                   Margin="0,8,0,0"
                    Text="NEW!">
             <TextBlock.Style>
                 <Style>
@@ -95,29 +96,39 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <!-- Delete chapter profile button -->
         <Button x:Name="CloseButton" 
-                Grid.Row="0" Grid.Column="3"
+                Grid.Row="0" Grid.Column="2"
                 HorizontalAlignment="Right"
                 Margin="0,3,3,0"
                 Style="{StaticResource Button_Style_MenuNotificationWCB}" 
-                Content="❌"
+                Content="✖"
+                FontFamily="Segoe UI Symbol" FontSize="15"
                 ToolTip="Delete"
-                PreviewMouseDown="CloseButton_PreviewMouseDown"/>
-        <TextBox x:Name="ChapterTitleTextBox" 
-                 Grid.Row="1" Grid.Column="1" 
-                 Margin="0,-3,0,0"
+                ToolTipService.InitialShowDelay="1000"
+                ToolTipService.ShowDuration="2000"
+                IsTabStop="False"
+                Click="OnCloseButtonClick"
+                PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
+        <!-- Chapter number and title textbox -->
+        <TextBox x:Name="ChapterNumberAndTitleTextBox"
+                 Grid.Row="1" Grid.Column="1"
+                 Margin="0,0,3,0" Padding="0"
                  Style="{StaticResource TextBox_TextBlockSelection}"
                  Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
-                 FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
-                 HorizontalAlignment="Left"
+                 FontSize="14" FontWeight="Bold"
+                 HorizontalAlignment="Stretch"
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
                  TextWrapping="Wrap"
-                 PreviewMouseDoubleClick="ChapterTitleTextBox_PreviewMouseDoubleClick"/>
+                 Focusable="True"
+                 IsTabStop="False"
+                 MouseDoubleClick="OnChapterTitleTextBoxPreviewMouseDoubleClick"/>
+        <!-- Chapter word count and release time textblock -->
         <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-               Margin="0,0,0,1"
-               Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
-               FontFamily="Segoe UI" FontSize="11"                                      
-               HorizontalAlignment="Left" VerticalAlignment="Center">
+                   Margin="0,0,3,1"
+                   Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
+                   FontSize="11"                                      
+                   HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                     <Binding Path="WordCount"/>

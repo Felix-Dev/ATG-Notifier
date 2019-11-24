@@ -20,7 +20,7 @@
                            Command="{x:Bind ViewModel.UpdateCommand}"
                            AccessKey="R">
                 <XamlUICommand.IconSource>
-                    <FontIconSource FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;"/>
+                    <FontIconSource FontFamily="Segoe MDL2 Assets" Glyph="&#xE930;" />
                 </XamlUICommand.IconSource>
             </XamlUICommand>
 

@@ -1,5 +1,8 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
-using ATG_Notifier.Desktop.Model;
+using ATG_Notifier.Desktop.Helpers;
+using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Services;
+using ATG_Notifier.Desktop.Services.Taskbar;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Services;
@@ -12,16 +15,15 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop
 {
-    public static class Program
+    internal static class Program
     {
-        /// <summary>The minimum runtime of the notifier to be eligible for a restart. In seconds.</summary>
-        private const int MinimumRuntimeForRestart = 60;
-
         public static MainWindow MainWindow { get; private set; }
 
         private static ILogService logService;
 
-        private static Stopwatch runtimeStopwatch;
+        private static DialogService dialogService;
+
+        private static SettingsViewModel appSettings;
 
         [STAThread]
         static void Main(string[] args)
@@ -39,16 +41,20 @@ namespace ATG_Notifier.Desktop
                     Startup.Configure();
 
                     AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-
                     Application.ApplicationExit += OnApplicationExit;
 
-                    logService = ServiceLocator.Current.GetService<ILogService>();
-
+                    logService = ServiceLocator.Current.GetService<ILogService>();                   
 
                     MainWindow = new MainWindow()
                     {
                         WindowState = FormWindowState.Normal
                     };
+
+                    dialogService = ServiceLocator.Current.GetService<DialogService>();
+                    dialogService.MainForm = MainWindow;
+                    dialogService.DialogShown += OnDialogShown;
+
+                    appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
                     /* Check if the notifier was started by the watchdog */
                     if (args.Length > 0)
@@ -61,9 +67,6 @@ namespace ATG_Notifier.Desktop
                             MainWindow.WindowState = FormWindowState.Minimized;
                         }
                     }
-
-                    runtimeStopwatch = new Stopwatch();
-                    runtimeStopwatch.Start();
 
                     Application.Run(MainWindow);
                 }
@@ -110,16 +113,39 @@ namespace ATG_Notifier.Desktop
         {
             logService.Log(LogType.Fatal, (e.ExceptionObject as Exception).ToString() + "\r\n" + (e.ExceptionObject as Exception).Message);
 
-            runtimeStopwatch.Stop();
-            if (runtimeStopwatch.Elapsed.CompareTo(TimeSpan.FromSeconds(MinimumRuntimeForRestart)) >= 0)
+            CommonHelpers.RunOnUIThread(() =>
             {
-                PerformRecovery();
-                Application.Exit();
+                if (!Program.MainWindow.Visible)
+                {
+                    Program.MainWindow.Visible = true;
+                }
+            });
+
+            TaskbarManager.Current.SetErrorTaskbarButton();
+
+            string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
+            DialogResult result = dialogService.ShowDialog("critical error", "Critical Error", message, MessageDialogButton.YesNo, MessageDialogIcon.Error, "Do you want to open the folder to the log file?", out bool openLogFile);
+
+            if (openLogFile)
+            {
+                Process.Start(AppConfiguration.LogfileDirectory);
+            }
+
+            if (result == DialogResult.Yes)
+            {
+                Application.Restart();
             }
             else
             {
-                logService.Log(LogType.Info, $"The notifier crashed less than {MinimumRuntimeForRestart} seconds after its start. No restart will be performed.");
                 Application.Exit();
+            }
+        }
+
+        private static void OnDialogShown(object sender, DialogShownEventArgs e)
+        {
+            if (e.Id == "critical error")
+            {
+                TaskbarManager.Current.ClearErrorTaskbarButton();
             }
         }
 
@@ -149,13 +175,34 @@ namespace ATG_Notifier.Desktop
             }
         }
 
+        private static void Restart()
+        {
+            /*  Start watchdog which restarts the notifier. */
+            var asm = Assembly.GetExecutingAssembly();
+
+            var proc = Process.GetCurrentProcess();
+
+            Process wd = new Process();
+
+            wd.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(asm.Location), @"Restarter\Restarter.exe");
+            wd.StartInfo.Arguments = proc.Id + ";" + asm.Location;
+            wd.StartInfo.UseShellExecute = false;
+            wd.StartInfo.CreateNoWindow = true;
+
+            bool started = wd.Start();
+            if (!started)
+            {
+                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
+            }
+        }
+
         /// <summary>
         /// Save data (user settings).
         /// </summary>
         private static void SaveData()
         {
             /* Save user settings. */
-            Settings.Instance.Save();
+            appSettings.Save();
         }
     }
 }

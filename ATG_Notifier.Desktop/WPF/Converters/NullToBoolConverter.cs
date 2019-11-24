@@ -4,27 +4,21 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 
 namespace ATG_Notifier.Desktop.WPF.Converters
 {
-    public class CountToVisibilityConverter : IValueConverter
+    internal class NullToBoolConverter : IValueConverter
     {
-        public Visibility ZeroCountVisibility { get; set; } = Visibility.Collapsed;
+        public bool NullValue { get; set; }
 
-        public Visibility PositiveCountVisibility { get; set; } = Visibility.Visible;
+        public bool NonNullValue { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int count)
-            {
-                return count > 0
-                    ? PositiveCountVisibility
-                    : ZeroCountVisibility;
-            }
-
-            return ZeroCountVisibility;
+            return value is null
+                ? NullValue
+                : NonNullValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

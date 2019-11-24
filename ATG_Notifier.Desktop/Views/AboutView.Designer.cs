@@ -28,48 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button_OK = new System.Windows.Forms.Button();
-            this.label_Version = new System.Windows.Forms.Label();
+            this.wpfElementHost = new System.Windows.Forms.Integration.ElementHost();
             this.SuspendLayout();
             // 
-            // button_OK
+            // wpfElementHost
             // 
-            this.button_OK.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button_OK.CausesValidation = false;
-            this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button_OK.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_OK.Location = new System.Drawing.Point(98, 38);
-            this.button_OK.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.button_OK.Name = "button_OK";
-            this.button_OK.Size = new System.Drawing.Size(75, 29);
-            this.button_OK.TabIndex = 1;
-            this.button_OK.Text = "OK";
-            this.button_OK.UseVisualStyleBackColor = true;
-            // 
-            // label_Version
-            // 
-            this.label_Version.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label_Version.AutoSize = true;
-            this.label_Version.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Version.Location = new System.Drawing.Point(64, 9);
-            this.label_Version.Name = "label_Version";
-            this.label_Version.Size = new System.Drawing.Size(155, 23);
-            this.label_Version.TabIndex = 0;
-            this.label_Version.Text = "VersionPlaceholder";
-            this.label_Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.wpfElementHost.AutoSize = true;
+            this.wpfElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wpfElementHost.Location = new System.Drawing.Point(0, 0);
+            this.wpfElementHost.Name = "wpfElementHost";
+            this.wpfElementHost.Size = new System.Drawing.Size(208, 61);
+            this.wpfElementHost.TabIndex = 0;
+            this.wpfElementHost.Text = "elementHost1";
+            this.wpfElementHost.Child = null;
             // 
             // AboutView
             // 
-            this.AcceptButton = this.button_OK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.CancelButton = this.button_OK;
             this.CausesValidation = false;
-            this.ClientSize = new System.Drawing.Size(278, 75);
-            this.Controls.Add(this.label_Version);
-            this.Controls.Add(this.button_OK);
+            this.ClientSize = new System.Drawing.Size(208, 61);
+            this.Controls.Add(this.wpfElementHost);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutView";
@@ -83,7 +67,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button button_OK;
-        private System.Windows.Forms.Label label_Version;
+
+        private System.Windows.Forms.Integration.ElementHost wpfElementHost;
     }
 }

@@ -8,10 +8,8 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.View
 {
-    public partial class ToastNotificationView : Form
+    internal partial class ToastNotificationView : Form
     {
-        private FadeTimer fadeTimer;
-
         private const int DISPLAY_START_POSITION_Y = 10;
 
         /// <summary>Space between two consecutive notifications.</summary>
@@ -19,7 +17,11 @@ namespace ATG_Notifier.Desktop.View
 
         private readonly MouseMoveMessageFilter mouseMessageFilter;
 
-        /* Do not interrupt the user work by stealing the focus when popping up. */
+        private FadeTimer fadeTimer;
+
+        private UserInteraction userInteraction = UserInteraction.None;
+
+        // Do not interrupt the user work by stealing the focus when popping up.
         protected override bool ShowWithoutActivation => true;
 
         public ToastNotificationView(ChapterProfileViewModel chapterProfileVM, string title, int slot, DisplayPosition position)
@@ -45,12 +47,156 @@ namespace ATG_Notifier.Desktop.View
             {
                 TargetForm = this
             };
+
             Application.AddMessageFilter(this.mouseMessageFilter);
 
             menuNotificationBindingSource.DataSource = chapterProfileVM;
         }
 
-        #region MouseMessageFilterClass
+        public new UserInteraction ShowDialog()
+        {
+            base.ShowDialog();
+            return this.userInteraction;
+        }
+
+        private delegate Screen del();
+
+        private void Init(int slot, DisplayPosition position)
+        {
+            SetupBindings();
+
+            this.Location = GetDisplayPosition(slot, position);
+
+            this.fadeTimer = new FadeTimer(this, 3500, 1500);
+        }
+
+        private void SetupBindings()
+        {
+            this.ChapterNumberAndTitleTextBox.DataBindings.Add(
+                new Binding(
+                    "Text", 
+                    this.menuNotificationBindingSource, 
+                    nameof(ChapterProfileViewModel.NumberAndTitleDisplayString)));
+        }
+
+        private Point GetDisplayPosition(int slot, DisplayPosition position)
+        {
+            Screen screen;
+            if (Program.MainWindow.InvokeRequired)
+            {
+                del GetScreen = () => Screen.FromControl(Program.MainWindow);
+                screen = (Screen)Program.MainWindow.Invoke(GetScreen);
+            }
+            else
+            {
+                screen = Screen.FromControl(Program.MainWindow);
+            }
+
+            screen = screen ?? Screen.PrimaryScreen;
+
+            int x = 0, y = 0;
+            switch (position)
+            {
+                case DisplayPosition.TopLeft:
+                    y = DISPLAY_START_POSITION_Y + slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
+                    break;
+                case DisplayPosition.TopRight:
+                    x = screen.Bounds.Right - this.Width;
+                    y = DISPLAY_START_POSITION_Y + slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
+                    break;
+                case DisplayPosition.BottomLeft:
+                    y = screen.Bounds.Bottom - DISPLAY_START_POSITION_Y - this.Size.Height - slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
+                    break;
+                case DisplayPosition.BottomRight:
+                    x = screen.Bounds.Right - this.Width;
+                    y = screen.Bounds.Bottom - DISPLAY_START_POSITION_Y - this.Size.Height - slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
+                    break;
+            }
+
+            return new Point(x, y);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            // Resize the chapter number and title textbox based on the width of its actual content.
+            Size size = TextRenderer.MeasureText(this.ChapterNumberAndTitleTextBox.Text, this.ChapterNumberAndTitleTextBox.Font);
+            this.ChapterNumberAndTitleTextBox.Width = size.Width;
+
+            this.TopMost = true;
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (!mouseMessageFilter.IsInBounds())
+            {
+                fadeTimer.FadeOutStart();
+                mouseMessageFilter.SetMouseBounds(false);
+            }
+            else
+            {
+                mouseMessageFilter.SetMouseBounds(true);
+            }
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            fadeTimer.Stop();
+
+            base.OnFormClosing(e);
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            Application.RemoveMessageFilter(this.mouseMessageFilter);
+
+            fadeTimer.Dispose();
+            fadeTimer = null;
+
+            base.OnFormClosed(e);
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            // On left-click: Set the user interaction as 'click'.
+            if (e.Button == MouseButtons.Left)
+            {
+                this.userInteraction = UserInteraction.Click;
+                this.DialogResult = DialogResult.OK;
+            }
+
+            base.OnMouseClick(e);
+        }
+
+        private void OnMouseClick(object sender, MouseEventArgs e)
+        {
+            // On left-click: Set the user interaction as 'click'.
+            if (e.Button == MouseButtons.Left)
+            {
+                this.userInteraction = UserInteraction.Click;
+                this.DialogResult = DialogResult.OK;
+            }
+        }
+
+        private void OnCancelButtonMouseClick(object sender, MouseEventArgs e)
+        {
+            // On left-click: Set the user interaction as 'close'.
+            if (e.Button == MouseButtons.Left)
+            {
+                this.userInteraction = UserInteraction.Close;
+                this.DialogResult = DialogResult.OK;
+            }
+        }
+
+        private void OnChapterNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.ChapterNumberAndTitleTextBox.SelectAll();
+        }
+
+        #region MouseMessageFilter
 
         private class MouseMoveMessageFilter : IMessageFilter
         {
@@ -68,13 +214,14 @@ namespace ATG_Notifier.Desktop.View
             private bool mouseInBounds = false;
 
             private ToastNotificationView targetForm;
-            public ToastNotificationView TargetForm 
+
+            public ToastNotificationView TargetForm
             {
-                get 
+                get
                 {
                     return targetForm;
                 }
-                set 
+                set
                 {
                     targetForm = value;
                 }
@@ -85,7 +232,7 @@ namespace ATG_Notifier.Desktop.View
                 switch (m.Msg)
                 {
                     case (int)MouseInput.WM_MOUSEMOVE:
-                    //case (int)MouseInput.WM_NCMOUSEMOVE:
+                        //case (int)MouseInput.WM_NCMOUSEMOVE:
                         CheckMouseBounds(true);
                         break;
                     //case (int)MouseInput.WM_NCMOUSELEAVE:
@@ -145,131 +292,6 @@ namespace ATG_Notifier.Desktop.View
             }
         }
 
-        #endregion
-
-        private delegate Screen del();
-
-        private void Init(int slot, DisplayPosition position)
-        {
-            SetupBindings();
-
-            this.Location = GetDisplayPosition(slot, position);
-
-            this.fadeTimer = new FadeTimer(this, 3500, 1500);
-        }
-
-        private void SetupBindings()
-        {
-            this.TextBox_Chapter.DataBindings.Add(
-                new Binding(
-                    "Text", 
-                    this.menuNotificationBindingSource, 
-                    nameof(ChapterProfileViewModel.NumberAndTitleDisplayString)));
-        }
-
-        private Point GetDisplayPosition(int slot, DisplayPosition position)
-        {
-            Screen screen;
-            if (Program.MainWindow.InvokeRequired)
-            {
-                del GetScreen = () => Screen.FromControl(Program.MainWindow);
-                screen = (Screen)Program.MainWindow.Invoke(GetScreen);
-            }
-            else
-            {
-                screen = Screen.FromControl(Program.MainWindow);
-            }
-
-            screen = screen ?? Screen.PrimaryScreen;
-
-            int x = 0, y = 0;
-            switch (position)
-            {
-                case DisplayPosition.TopLeft:
-                    y = DISPLAY_START_POSITION_Y + slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
-                    break;
-                case DisplayPosition.TopRight:
-                    x = screen.Bounds.Right - this.Width;
-                    y = DISPLAY_START_POSITION_Y + slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
-                    break;
-                case DisplayPosition.BottomLeft:
-                    y = screen.Bounds.Bottom - DISPLAY_START_POSITION_Y - this.Size.Height - slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
-                    break;
-                case DisplayPosition.BottomRight:
-                    x = screen.Bounds.Right - this.Width;
-                    y = screen.Bounds.Bottom - DISPLAY_START_POSITION_Y - this.Size.Height - slot * (this.Size.Height + INTER_NOTIFICATION_OFFSET_Y);
-                    break;
-            }
-
-            return new Point(x, y);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            this.TopMost = true;
-        }
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-
-            if (!mouseMessageFilter.IsInBounds())
-            {
-                fadeTimer.FadeOutStart();
-                mouseMessageFilter.SetMouseBounds(false);
-            }
-            else
-            {
-                mouseMessageFilter.SetMouseBounds(true);
-            }
-        }
-
-        private void OnMouseClick(object sender, MouseEventArgs e)
-        {
-            /* 
-             * On left-click: Open the obtained chapter URL in the default Internet Browser
-             * and close the notification.
-             */
-            if (e.Button == MouseButtons.Left)
-            {
-                var viewModel = (ChapterProfileViewModel)this.DataContext;
-                WebUtility.OpenWebsite(viewModel.Url);
-
-                this.DialogResult = DialogResult.OK;
-            }
-        }
-
-        private void OnCancelButtonMouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                fadeTimer.Stop();
-                fadeTimer.Dispose();
-
-                this.DialogResult = DialogResult.OK;
-            }
-        }
-
-        private void OnFormClosing(object sender, FormClosingEventArgs e)
-        {
-            fadeTimer.Stop();
-        }
-
-        private void OnFormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.RemoveMessageFilter(this.mouseMessageFilter);
-
-            fadeTimer.Dispose();
-            fadeTimer = null;
-        }
-
-        private void TextBox_Chapter_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            textBox.SelectAll();
-        }
+        #endregion // MouseMessageFilter
     }
 }

@@ -18,9 +18,6 @@ using ATG_Notifier.ViewModels.Helpers.Extensions;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
-    /// <summary>
-    /// Interaction logic for ChapterProfileCard.xaml
-    /// </summary>
     public partial class ChapterProfileCard : UserControl
     {
         #region ChapterProfileViewModel
@@ -54,19 +51,26 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             InitializeComponent();
         }
 
-        private void CloseButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void OnCloseButtonClick(object sender, RoutedEventArgs e)
         {
             DeleteCommand?.TryExecute(this.ChapterProfileViewModel);
 
             e.Handled = true;
         }
 
-        private void ChapterTitleTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnCloseButtonPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var textBox = (TextBox)sender;
+            if (e.Key == Key.Enter)
+            {
+                DeleteCommand?.TryExecute(this.ChapterProfileViewModel);
 
-            textBox.SelectAll();
+                e.Handled = true;
+            }   
+        }
 
+        private void OnChapterTitleTextBoxPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.ChapterNumberAndTitleTextBox.SelectAll();
             e.Handled = true;
         }
     }

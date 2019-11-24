@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Utilities.UI
 {
-    public class FadeTimer : Timer
+    internal class FadeTimer : Timer
     {
         private const int FadeOpInterval = 55; // The timer interval in milliseconds
 
@@ -18,7 +18,7 @@ namespace ATG_Notifier.Desktop.Utilities.UI
 
         private double granularity;
 
-        private Form targetForm;
+        private readonly Form targetForm;
 
         private bool fadedOut = false;
         private bool started = false;

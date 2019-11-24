@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ATG_Notifier.Desktop.WPF.Controls.AboutControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="250"
+             x:ClassModifier="internal"
+             Background="#FFF0F0F0"
+             FontFamily="Segoe UI"
+             Padding="25,15,25,15"
+             SnapsToDevicePixels="True">
+    <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+        <TextBlock x:Name="VersionTextBlock" 
+                   TextAlignment="Center"
+                   FontSize="14"/>
+        <Button x:Name="OkButton"
+                Margin="0,10,0,0"
+                Padding="25,0,25,0"
+                Content="OK"
+                FontSize="12"
+                IsDefault="True"
+                IsCancel="True"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="OnOkButtonClick">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="#FF3C7FB1"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </StackPanel>
+</UserControl>
