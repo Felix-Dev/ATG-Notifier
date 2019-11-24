@@ -81,11 +81,11 @@ namespace ATG_Notifier.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        ///   Looks up a localized resource of type System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Windows_Notify_Messaging {
+        internal static System.IO.MemoryStream Windows_Notify_Messaging {
             get {
-                return ResourceManager.GetStream("Windows_Notify_Messaging", resourceCulture);
+                return (System.IO.MemoryStream)ResourceManager.GetObject("Windows_Notify_Messaging", resourceCulture);
             }
         }
     }

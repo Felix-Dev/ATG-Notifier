@@ -15,8 +15,11 @@ namespace ATG_Notifier.Desktop.Utilities
 
             var jumpList = JumpList.CreateJumpListForIndividualWindow(appId, windowHandle);
 
+            var path = Assembly.GetExecutingAssembly().Location;
+            path = path.Replace(".dll", ".exe");
+
             // defining the JumpListLink "Close"
-            JumpListLink userActionLink = new JumpListLink(Assembly.GetEntryAssembly().Location, ACTION_EXIT)
+            JumpListLink userActionLink = new JumpListLink(path, ACTION_EXIT)
             {
                 Arguments = ACTION_EXIT
             };

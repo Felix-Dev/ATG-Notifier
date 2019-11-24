@@ -2,11 +2,8 @@
 using log4net;
 using log4net.Config;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
@@ -24,7 +21,9 @@ namespace ATG_Notifier.Desktop.Services
             }
 
             GlobalContext.Properties[filePathConfigEntry] = filePath;
-            XmlConfigurator.Configure();
+
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
             this.log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         }
