@@ -12,7 +12,13 @@ namespace ATG_Notifier.Desktop.Utilities
                 throw new ArgumentException(nameof(url), "The specified url is not a valid HTTP URI scheme!");
             }
 
-            Process.Start(url);
+            var psi = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            };
+
+            Process.Start(psi);
         }
     }
 }

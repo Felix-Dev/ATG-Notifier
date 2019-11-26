@@ -128,17 +128,25 @@ namespace ATG_Notifier.Desktop
 
             if (openLogFile)
             {
-                Process.Start(AppConfiguration.LogfileDirectory);
+                var psi = new ProcessStartInfo
+                {
+                    FileName = AppConfiguration.LogfileDirectory,
+                    UseShellExecute = true
+                };
+
+                Process.Start(psi);
             }
 
-            if (result == DialogResult.Yes)
-            {
-                Application.Restart();
-            }
-            else
-            {
-                Application.Exit();
-            }
+            //if (result == DialogResult.Yes)
+            //{
+            //    Application.Restart();
+            //}
+            //else
+            //{
+            //    Application.Exit();
+            //}
+
+            Application.Exit();
         }
 
         private static void OnDialogShown(object sender, DialogShownEventArgs e)

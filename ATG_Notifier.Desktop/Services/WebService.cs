@@ -23,16 +23,6 @@ namespace ATG_Notifier.Desktop.Services
             this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
         }
 
-        public void OpenWebsite(string url)
-        {
-            if (url is null || (!url.StartsWith("http:") && !url.StartsWith("https:")))
-            {
-                throw new ArgumentException(nameof(url), "The specified url is not a valid HTTP URI scheme!");
-            }
-
-            Process.Start(url);
-        }
-
         public async Task<HtmlDocument> DownloadHtmlContentAsync(string url, int retryAttempts)
         {
             string chapterHtml = await DownloadRawContentAsync(url);
