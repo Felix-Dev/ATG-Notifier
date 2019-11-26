@@ -12,6 +12,7 @@
     <AssemblyName>ATG-Notifier</AssemblyName>
     <Authors />
     <RootNamespace>ATG_Notifier.Desktop</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   
   <PropertyGroup>
