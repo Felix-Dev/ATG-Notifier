@@ -23,7 +23,7 @@ namespace ATG_Notifier.Desktop.Configuration
         {
             //serviceCollection.AddSingleton<ISettingsService, SettingsService>();
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
-            serviceCollection.AddSingleton<ILogService>(new LogService(AppConfiguration.LogfilePath));
+            serviceCollection.AddSingleton<ILogService>(new SerilogLogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
