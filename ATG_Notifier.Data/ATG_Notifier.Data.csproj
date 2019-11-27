@@ -5,6 +5,7 @@
     <RootNamespace>ATG_Notifier.Data</RootNamespace>
     <AssemblyName>ATG-Notifier.Data</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release;DesktopPackage</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

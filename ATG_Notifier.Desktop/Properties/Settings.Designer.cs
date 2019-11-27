@@ -97,9 +97,10 @@ namespace ATG_Notifier.Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::ATG_Notifier.Desktop.Models.WindowSetting WindowSetting {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WindowSetting {
             get {
-                return ((global::ATG_Notifier.Desktop.Models.WindowSetting)(this["WindowSetting"]));
+                return ((string)(this["WindowSetting"]));
             }
             set {
                 this["WindowSetting"] = value;
@@ -120,9 +121,10 @@ namespace ATG_Notifier.Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::ATG_Notifier.Desktop.Models.MostRecentChapterInfo MostRecentChapterInfo {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MostRecentChapterInfo {
             get {
-                return ((global::ATG_Notifier.Desktop.Models.MostRecentChapterInfo)(this["MostRecentChapterInfo"]));
+                return ((string)(this["MostRecentChapterInfo"]));
             }
             set {
                 this["MostRecentChapterInfo"] = value;

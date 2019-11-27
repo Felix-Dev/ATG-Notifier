@@ -7,12 +7,12 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="96d9e603-8728-422b-9ddd-111364a4a703"
+    Name="ATG-Notifier.Desktop"
     Publisher="CN=Felix"
-    Version="1.0.0.0" />
+    Version="1.4.0.0" />
 
   <Properties>
-    <DisplayName>ATG_Notifier.DesktopPackage</DisplayName>
+    <DisplayName>ATG-Notifier.Desktop</DisplayName>
     <PublisherDisplayName>Felix</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="ATG_Notifier.DesktopPackage"
-        Description="ATG_Notifier.DesktopPackage"
+        DisplayName="ATG-Notifier.Desktop"
+        Description="ATG Notifier for Windows 10 Desktop"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">

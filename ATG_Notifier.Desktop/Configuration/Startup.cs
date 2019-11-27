@@ -18,6 +18,8 @@ namespace ATG_Notifier.Desktop.Configuration
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+
             ServiceLocator.Configure(serviceCollection);
 
             // Needed because EF Core Sqlite Provider cannot create folders

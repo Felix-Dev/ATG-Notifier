@@ -37,7 +37,7 @@
             this.wpfElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wpfElementHost.Location = new System.Drawing.Point(0, 0);
             this.wpfElementHost.Name = "wpfElementHost";
-            this.wpfElementHost.Size = new System.Drawing.Size(208, 61);
+            //this.wpfElementHost.Size = new System.Drawing.Size(208, 61);
             this.wpfElementHost.TabIndex = 0;
             this.wpfElementHost.Text = "elementHost1";
             this.wpfElementHost.Child = null;
@@ -45,7 +45,7 @@
             // AboutView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));

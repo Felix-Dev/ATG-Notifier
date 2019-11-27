@@ -3,7 +3,6 @@ using System.Configuration;
 
 namespace ATG_Notifier.Desktop.Models
 {
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     internal class MostRecentChapterInfo
     {
         public MostRecentChapterInfo() {}

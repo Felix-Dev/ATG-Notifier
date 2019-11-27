@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>DesktopBridge</AssemblyName>
+    <Configurations>Debug;Release;DesktopPackage</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@
     partial class ToastNotificationView
     {
         /// <summary>
-        /// Erforderliche Designervariable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
@@ -14,9 +14,9 @@
         }
 
         /// <summary>
-        /// Verwendete Ressourcen bereinigen.
+        /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -26,11 +26,11 @@
             base.Dispose(disposing);
         }
 
-        #region Vom Windows Form-Designer generierter Code
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// Erforderliche Methode für die Designerunterstützung.
-        /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -102,7 +102,6 @@
             this.ChapterNumberAndTitleTextBox.ForeColor = System.Drawing.Color.White;
             this.ChapterNumberAndTitleTextBox.Location = new System.Drawing.Point(12, 46);
             this.ChapterNumberAndTitleTextBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.ChapterNumberAndTitleTextBox.MaximumSize = new System.Drawing.Size(287, 22);
             this.ChapterNumberAndTitleTextBox.Name = "ChapterNumberAndTitleTextBox";
             this.ChapterNumberAndTitleTextBox.ReadOnly = true;
             this.ChapterNumberAndTitleTextBox.Size = new System.Drawing.Size(88, 22);

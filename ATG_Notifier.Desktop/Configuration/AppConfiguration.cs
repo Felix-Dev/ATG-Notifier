@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
@@ -22,16 +24,21 @@ namespace ATG_Notifier.Desktop.Configuration
         public const string AppId = "ATG-Notifier";
 
         /// <summary>The current app version. </summary>
-        public const string AppVersion = "1.4.0.0";
+        public static readonly string AppVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
 
         /// <summary>The database's file name.</summary>
         private static readonly string fullDatabaseName = $"{databaseName}.{databaseVersion}.db";
 
+#if DESKTOPPACKAGE
+        /// <summary>The path to the directory all app files will be written to.</summary>
+        public static string BaseDirectory { get; } = ApplicationData.Current.LocalFolder.Path;
+#else
         /// <summary>The path to the directory all app files will be written to.</summary>
         public static string BaseDirectory { get; } =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                + @"\ATG_Notifier\");
+                + $@"\{AppId}\");
+#endif
 
         /// <summary>The path to the database file.</summary>
         public static string DatabasePath { get; } = Path.Combine(BaseDirectory, fullDatabaseName);

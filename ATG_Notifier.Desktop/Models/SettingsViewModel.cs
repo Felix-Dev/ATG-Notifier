@@ -1,5 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.ViewModels.Infrastructure;
+using System;
 
 namespace ATG_Notifier.Desktop.Models
 {
@@ -88,18 +89,79 @@ namespace ATG_Notifier.Desktop.Models
 
         public WindowSetting WindowSetting
         {
-            get => Properties.Settings.Default.WindowSetting;
-            set => Properties.Settings.Default.WindowSetting = value;
+            get
+            {
+                var data = Properties.Settings.Default.WindowSetting.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                if (data.Length < 4)
+                {
+                    return null;
+                }
+
+                if (!int.TryParse(data[0], out int x) || !int.TryParse(data[1], out int y)
+                    || !int.TryParse(data[2], out int width) || !int.TryParse(data[3], out int height))
+                {
+                    return null;
+                }
+
+                return new WindowSetting(x, y, width, height);
+
+            }
+            set
+            {
+                if (value != null)
+                {
+                    Properties.Settings.Default.WindowSetting = $"{value.X};{value.Y};{value.Width};{value.Height}";
+                }
+                else
+                {
+                    Properties.Settings.Default.WindowSetting = "";
+                }
+            }
         }
 
         public MostRecentChapterInfo MostRecentChapterInfo
         {
-            get => Properties.Settings.Default.MostRecentChapterInfo;
+            get
+            {
+                var data = Properties.Settings.Default.MostRecentChapterInfo.Split(";;", StringSplitOptions.RemoveEmptyEntries);
+                if (data.Length < 2)
+                {
+                    return null;
+                }
+
+                var info = new MostRecentChapterInfo()
+                {
+                    NumberAndTitle = data[0]
+                };
+
+                if (int.TryParse(data[1], out int wordCount))
+                {
+                    info.WordCount = wordCount;
+                }
+
+                if (data.Length <= 3 && DateTime.TryParse(data[2], out DateTime releaseTime))
+                {
+                    info.ReleaseTime = releaseTime;
+                }
+
+                return info;
+
+            }
             set
             {
-                if (value != Properties.Settings.Default.MostRecentChapterInfo)
+                string sMostRecentChapterInfo;
+                if (value != null)
                 {
-                    Properties.Settings.Default.MostRecentChapterInfo = value;
+                    sMostRecentChapterInfo = $"{value.NumberAndTitle};;{value.WordCount};;{(value.ReleaseTime.HasValue ? value.ReleaseTime.Value.ToString() : "")}";
+                }
+                else
+                {
+                    sMostRecentChapterInfo = "";
+                }
+
+                if (sMostRecentChapterInfo != Properties.Settings.Default.MostRecentChapterInfo)
+                {
+                    Properties.Settings.Default.MostRecentChapterInfo = sMostRecentChapterInfo;
                     NotifyPropertyChanged();
                 }
             }

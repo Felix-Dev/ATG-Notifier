@@ -20,13 +20,13 @@
     <Setting Name="NotificationDisplayPosition" Type="ATG_Notifier.Desktop.Views.ToastNotification.DisplayPosition" Scope="User">
       <Value Profile="(Default)">TopRight</Value>
     </Setting>
-    <Setting Name="WindowSetting" Type="ATG_Notifier.Desktop.Models.WindowSetting" Scope="User">
+    <Setting Name="WindowSetting" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="IsUpdateServiceRunning" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MostRecentChapterInfo" Type="ATG_Notifier.Desktop.Models.MostRecentChapterInfo" Scope="User">
+    <Setting Name="MostRecentChapterInfo" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

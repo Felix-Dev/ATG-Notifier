@@ -7,6 +7,7 @@
     <AssemblyName>Restarter</AssemblyName>
     <ApplicationIcon />
     <StartupObject />
+    <Configurations>Debug;Release;DesktopPackage</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
