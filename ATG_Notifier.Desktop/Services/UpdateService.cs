@@ -7,6 +7,7 @@ using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {

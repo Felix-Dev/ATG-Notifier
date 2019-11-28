@@ -1,74 +1,69 @@
-﻿using System;
+﻿using ATG_Notifier.Restarter.Native.Win32;
+using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Xml;
 
 namespace ATG_Notifier.Restarter
 {
-    class Program
+    internal class Program
     {
-        private static readonly log4net.ILog log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         [STAThread]
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
-            XmlDocument log4netConfig = new XmlDocument();
-            log4netConfig.Load(File.OpenRead("log4net.config"));
-
-            var repo = log4net.LogManager.CreateRepository(
-                Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
-
-            log4net.Config.XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
-
-            if (args.Length == 1)
+            if (args.Length >= 1)
             {
-                //string[] commArgs = Environment.GetCommandLineArgs()[1].Split(';');
-                string[] commArgs = args[0].Split(';');
+                Console.WriteLine($"Started restarter with argument: {args[0]}");
 
-                if (int.TryParse(commArgs[0], out int procId))
+                string[] argumentData = args[0].Split(';', StringSplitOptions.RemoveEmptyEntries);
+                if (argumentData.Length < 2)
+                {
+                    Console.WriteLine("Error: Restarter was not supplied with the relevant data needed to perform the Notifier restart!");
+                }
+                else if (!int.TryParse(argumentData[0], out int procId))
+                {
+                    Console.WriteLine("Error: First argument is NOT a process ID!");
+                }
+                else
                 {
                     Process notifProcess = null;
-
                     try
                     {
                         notifProcess = Process.GetProcessById(procId);
                     }
                     catch (ArgumentException)
                     {
-                        log.Info("ATG_Notifier process is no longer running");
+                        Console.WriteLine("Info: Notifier has already been terminated.");
                     }
 
-                    // Wait for calling ATG_Notifier process to exit
+                    Console.Write($"Waiting for the Notifier to close...");
+
+                    // Wait for calling Notifier process to exit
                     notifProcess?.WaitForExit();
 
-                    Process newNotif = new Process();
-                    newNotif.StartInfo.FileName = commArgs[1];
-                    newNotif.StartInfo.Arguments = "restarter;";
+                    Console.WriteLine("OK!");
 
-                    bool started = newNotif.Start();
-                    if (!started)
+                    Console.Write("Attempting to restart the Notifier...");
+
+                    var appActivationManager = new ApplicationActivationManager();
+                    var result = appActivationManager.ActivateApplication($"{argumentData[1]}!App", "Requested Restart", ActivateOptions.None, out _);
+                    if (result.ToInt32() == 0)
                     {
-                        log.Error("ERROR: ATG_Notifier Process couldn't be started!\n" +
-                            $"Attempted to start process {commArgs[1]}");
+                        Console.WriteLine("OK!");
+
+                        return;
                     }
                     else
                     {
-                        log.Info("OK: ATG_Notifier Process could be started!");
+                        Console.WriteLine($"Failed with error {result.ToInt32().ToString()}!");
                     }
                 }
-                
-                else
-                {
-                    log.Error("Error: First argument is NOT a process ID");
-                }
             }
-
             else
             {
-                log.Error("Error: Arguments mismatch!");
+                Console.WriteLine("Error: Restarter was not supplied with the relevant data needed to perform the Notifier restart!");
             }
+
+            Console.Write("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }

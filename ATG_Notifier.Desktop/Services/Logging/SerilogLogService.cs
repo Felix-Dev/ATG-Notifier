@@ -1,23 +1,21 @@
 ﻿using ATG_Notifier.ViewModels.Services;
 using Serilog;
 using Serilog.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ATG_Notifier.Desktop.Services
 {
     internal class SerilogLogService : ILogService
     {
+        private const int FileSizeLimit = 2 * 1024 * 1024; // 2 MB
+        private const int NumConcurrentLogFiles = 2;
+
         private readonly Logger logger;
 
         public SerilogLogService(string filePath)
         {
             this.logger = new LoggerConfiguration()
-                .WriteTo.File(filePath, fileSizeLimitBytes: 2 * 1024 * 1024, retainedFileCountLimit: 2, rollOnFileSizeLimit: true)
+                .WriteTo.File(filePath, fileSizeLimitBytes: FileSizeLimit, retainedFileCountLimit: NumConcurrentLogFiles, rollOnFileSizeLimit: true)
                 .CreateLogger();
-
-            this.logger.Information("Created logger....");
         }
 
         public void Log(LogType type, string message)

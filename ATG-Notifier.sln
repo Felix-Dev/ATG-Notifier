@@ -54,8 +54,8 @@ Global
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|ARM.Build.0 = DesktopPackage|Any CPU
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|Any CPU
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|ARM64.Build.0 = DesktopPackage|Any CPU
-		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x64.ActiveCfg = DesktopPackage|x64
-		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x64.Build.0 = DesktopPackage|x64
+		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x64.ActiveCfg = Release|x64
+		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x64.Build.0 = Release|x64
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x86.ActiveCfg = DesktopPackage|Any CPU
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.DesktopPackage|x86.Build.0 = DesktopPackage|Any CPU
 		{82566CED-5368-413B-8D2C-7165D64E13DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -84,8 +84,8 @@ Global
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|ARM.Build.0 = DesktopPackage|Any CPU
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|Any CPU
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|ARM64.Build.0 = DesktopPackage|Any CPU
-		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x64.ActiveCfg = DesktopPackage|x64
-		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x64.Build.0 = DesktopPackage|x64
+		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x64.ActiveCfg = Release|x64
+		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x64.Build.0 = Release|x64
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x86.ActiveCfg = DesktopPackage|Any CPU
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.DesktopPackage|x86.Build.0 = DesktopPackage|Any CPU
 		{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -117,8 +117,8 @@ Global
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|ARM64
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|ARM64.Build.0 = DesktopPackage|ARM64
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|ARM64.Deploy.0 = DesktopPackage|ARM64
-		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x64.ActiveCfg = DesktopPackage|x64
-		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x64.Build.0 = DesktopPackage|x64
+		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x64.ActiveCfg = Release|x64
+		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x64.Build.0 = Release|x64
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x86.ActiveCfg = DesktopPackage|x86
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x86.Build.0 = DesktopPackage|x86
 		{1589CB71-CA8E-4961-ACF2-85F294616796}.DesktopPackage|x86.Deploy.0 = DesktopPackage|x86
@@ -151,8 +151,8 @@ Global
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|ARM.Build.0 = DesktopPackage|Any CPU
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|Any CPU
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|ARM64.Build.0 = DesktopPackage|Any CPU
-		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x64.ActiveCfg = DesktopPackage|Any CPU
-		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x64.Build.0 = DesktopPackage|Any CPU
+		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x64.ActiveCfg = Release|Any CPU
+		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x64.Build.0 = Release|Any CPU
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x86.ActiveCfg = DesktopPackage|Any CPU
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.DesktopPackage|x86.Build.0 = DesktopPackage|Any CPU
 		{C81D14D0-63AE-4EB4-B943-B09766618803}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -189,9 +189,9 @@ Global
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|ARM64
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|ARM64.Build.0 = DesktopPackage|ARM64
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|ARM64.Deploy.0 = DesktopPackage|ARM64
-		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.ActiveCfg = DesktopPackage|x64
-		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.Build.0 = DesktopPackage|x64
-		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.Deploy.0 = DesktopPackage|x64
+		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.ActiveCfg = Release|x64
+		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.Build.0 = Release|x64
+		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x64.Deploy.0 = Release|x64
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x86.ActiveCfg = DesktopPackage|x86
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x86.Build.0 = DesktopPackage|x86
 		{ACCA2A02-37A0-44D7-8126-D7142B21F1AC}.DesktopPackage|x86.Deploy.0 = DesktopPackage|x86
@@ -226,8 +226,8 @@ Global
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|ARM.Build.0 = DesktopPackage|Any CPU
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|ARM64.ActiveCfg = DesktopPackage|Any CPU
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|ARM64.Build.0 = DesktopPackage|Any CPU
-		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x64.ActiveCfg = DesktopPackage|x64
-		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x64.Build.0 = DesktopPackage|x64
+		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x64.ActiveCfg = Release|x64
+		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x64.Build.0 = Release|x64
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x86.ActiveCfg = DesktopPackage|x86
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.DesktopPackage|x86.Build.0 = DesktopPackage|x86
 		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -18,9 +18,13 @@
   <PropertyGroup>
     <ApplicationIcon>testLogo.ico</ApplicationIcon>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
+    <DefineConstants>TRACE;DesktopPackage</DefineConstants>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -81,10 +85,6 @@
     </None>
     <None Update="WPF\Themes\ToolTip.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </None>
-
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
     <None Include="ATG_Notifier.UI.Properties.Settings.datasource" />

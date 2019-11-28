@@ -173,8 +173,13 @@ namespace ATG_Notifier.Desktop.Views
             // show program icon in Windows notification area
             this.notifyIcon.Visible = true;
 
+#if DesktopPackage2
+            JumplistManager.BuildJumplistAsync();
+#else
+
             // create a new taskbar jump list for the main window 
             JumplistManager.BuildJumplist(AppConfiguration.AppId, this.Handle);
+#endif
 
             base.OnShown(e);
         }
@@ -304,7 +309,7 @@ namespace ATG_Notifier.Desktop.Views
             this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
         }
 
-        #region MenuItem Handler
+#region MenuItem Handler
 
         private void OnMenuItemPlayPopupSound_Click(object sender, EventArgs e)
         {
@@ -356,9 +361,9 @@ namespace ATG_Notifier.Desktop.Views
             this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomRight;
         }
 
-        #endregion // MenuItem Handler
+#endregion // MenuItem Handler
 
-        #region System-Tray Icon
+#region System-Tray Icon
 
         private void NotificationIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -368,6 +373,6 @@ namespace ATG_Notifier.Desktop.Views
             }
         }
 
-        #endregion // System-Tray Icon
+#endregion // System-Tray Icon
     }
 }

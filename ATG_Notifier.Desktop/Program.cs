@@ -66,6 +66,11 @@ namespace ATG_Notifier.Desktop
                             logService.Log(LogType.Info, "Notifier was restarted by the Notifier restarter.");
                             MainWindow.WindowState = FormWindowState.Minimized;
                         }
+
+                        if (args[0] == "ACTION_EXIT")
+                        {
+                            Application.Run(MainWindow);
+                        }
                     }
 
                     Application.Run(MainWindow);
@@ -137,16 +142,14 @@ namespace ATG_Notifier.Desktop
                 Process.Start(psi);
             }
 
-            //if (result == DialogResult.Yes)
-            //{
-            //    Application.Restart();
-            //}
-            //else
-            //{
-            //    Application.Exit();
-            //}
-
-            Application.Exit();
+            if (result == DialogResult.Yes)
+            {
+                RequestRestart();
+            }
+            else
+            {
+                Application.Exit();
+            }
         }
 
         private static void OnDialogShown(object sender, DialogShownEventArgs e)
@@ -156,6 +159,35 @@ namespace ATG_Notifier.Desktop
                 TaskbarManager.Current.ClearErrorTaskbarButton();
             }
         }
+
+#if DesktopPackage
+        private static void RequestRestart()
+        {
+            /*  Start watchdog which restarts the notifier. */
+            var installLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            var package = Windows.ApplicationModel.Package.Current;
+
+            string id = package.Id.FamilyName;
+            var proc = Process.GetCurrentProcess();
+
+            Process wd = new Process();
+            wd.StartInfo.FileName = Path.Combine(installLocation.Path, @"ATG_Notifier.Restarter\Restarter.exe");
+            wd.StartInfo.Arguments = $"{proc.Id};{id}";
+
+            bool started = wd.Start();
+            if (!started)
+            {
+                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
+            }
+
+            Application.Exit();
+        }
+#else
+        private static void RequestRestart()
+        {
+            Application.Restart();
+        }
+#endif
 
         private static void PerformRecovery()
         {
