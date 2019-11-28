@@ -173,7 +173,7 @@ namespace ATG_Notifier.Desktop.Views
             // show program icon in Windows notification area
             this.notifyIcon.Visible = true;
 
-#if DesktopPackage2
+#if DesktopPackage
             JumplistManager.BuildJumplistAsync();
 #else
 
@@ -214,6 +214,8 @@ namespace ATG_Notifier.Desktop.Views
             }
             
             this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
+
+            JumplistManager.ClearJumplist();
 
             // remove icon from Windows notification area
             this.notifyIcon.Visible = false;

@@ -1,7 +1,7 @@
 ﻿using Win32Taskbar = Microsoft.WindowsAPICodePack.Taskbar;
-using UWPTaskbar = Windows.UI.StartScreen;
 using System;
 using System.Reflection;
+using System.IO;
 
 namespace ATG_Notifier.Desktop.Utilities
 {
@@ -9,49 +9,66 @@ namespace ATG_Notifier.Desktop.Utilities
     {
         public const string ACTION_EXIT = "Exit";
 
+#if DesktopPackage
+        private static Windows.UI.StartScreen.JumpList appJumpList;
+
+        public static async void BuildJumplistAsync()
+        {
+            // Get the app's jump list.
+            JumplistManager.appJumpList = await Windows.UI.StartScreen.JumpList.LoadCurrentAsync();
+
+            // Disable the system-managed jump list group.
+            JumplistManager.appJumpList.SystemGroupKind = Windows.UI.StartScreen.JumpListSystemGroupKind.None;
+
+            // Remove any previously added custom jump list items.
+            JumplistManager.appJumpList.Items.Clear();
+
+            var taskItem = Windows.UI.StartScreen.JumpListItem.CreateWithArguments(
+                            ACTION_EXIT, "Exit");
+
+            taskItem.Logo = new Uri("ms-appx:///Images/logo_16_ld4_icon.png");
+
+            JumplistManager.appJumpList.Items.Add(taskItem);
+
+            // Save the changes to the app's jump list.
+            await JumplistManager.appJumpList.SaveAsync();
+        }
+#else
+        private static Microsoft.WindowsAPICodePack.Taskbar.JumpList appJumpList;
+
         public static void BuildJumplist(string appId, IntPtr windowHandle)
         {
             // Set the application specific id.
             Win32Taskbar.TaskbarManager.Instance.ApplicationId = appId;
 
-            var jumpList = Win32Taskbar.JumpList.CreateJumpListForIndividualWindow(appId, windowHandle);
+            JumplistManager.appJumpList = Win32Taskbar.JumpList.CreateJumpListForIndividualWindow(appId, windowHandle);
 
             var path = Assembly.GetExecutingAssembly().Location;
-            path = path.Replace(".dll", ".exe");
+
+            JumplistManager.appJumpList.ClearAllUserTasks();
 
             // defining the JumpListLink "Close"
-            Win32Taskbar.JumpListLink userActionLink = new Win32Taskbar.JumpListLink(path, ACTION_EXIT)
+            Microsoft.WindowsAPICodePack.Taskbar.JumpListLink userActionLink = new Win32Taskbar.JumpListLink(path, ACTION_EXIT)
             {
                 Arguments = ACTION_EXIT
             };
 
-            jumpList.AddUserTasks(userActionLink);
-            jumpList.Refresh();
+            JumplistManager.appJumpList.AddUserTasks(userActionLink);
+            JumplistManager.appJumpList.Refresh();
         }
+#endif
 
-        public static async void BuildJumplistAsync()
+        public static async void ClearJumplist()
         {
-            // Get the app's jump list.
-            var jumpList = await UWPTaskbar.JumpList.LoadCurrentAsync();
+#if DesktopPackage
+            JumplistManager.appJumpList?.Items.Clear();
 
-            // Disable the system-managed jump list group.
-            jumpList.SystemGroupKind = UWPTaskbar.JumpListSystemGroupKind.None;
+            await JumplistManager.appJumpList?.SaveAsync();
+#else
+            JumplistManager.appJumpList?.ClearAllUserTasks();
 
-            // Remove any previously added custom jump list items.
-            jumpList.Items.Clear();
-
-            // Save the changes to the app's jump list.
-            await jumpList.SaveAsync();
-
-            var taskItem = UWPTaskbar.JumpListItem.CreateWithArguments(
-                            ACTION_EXIT, "Exit");
-
-            taskItem.Logo = new Uri("ms-appx:///Images/logo_16_ld4_icon.png");
-
-            jumpList.Items.Add(taskItem);
-
-            // Save the changes to the app's jump list.
-            await jumpList.SaveAsync();
+            JumplistManager.appJumpList.Refresh();
+#endif
         }
     }
 }

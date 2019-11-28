@@ -16,7 +16,8 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationIcon>testLogo.ico</ApplicationIcon>
+    <ApplicationIcon></ApplicationIcon>
+    <Win32Resource />
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
