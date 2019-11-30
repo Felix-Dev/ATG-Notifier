@@ -43,7 +43,7 @@ namespace ATG_Notifier.Desktop
                     AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
                     Application.ApplicationExit += OnApplicationExit;
 
-                    logService = ServiceLocator.Current.GetService<ILogService>();                   
+                    logService = ServiceLocator.Current.GetService<ILogService>();
 
                     MainWindow = new MainWindow()
                     {
@@ -75,13 +75,12 @@ namespace ATG_Notifier.Desktop
 
                     Application.Run(MainWindow);
                 }
-
                 else
                 {
                     // Send argument to running window
                     HandleCmdLineArgs(args);
                 }
-            }                     
+            }
         }
 
         public static void HandleCmdLineArgs(string[] args)
@@ -90,8 +89,8 @@ namespace ATG_Notifier.Desktop
             {
                 switch (args[0])
                 {
-                    case JumplistManager.ACTION_EXIT:
-                        WindowsMessageHelper.SendMessage(AppConfiguration.AppId, WindowsMessageHelper.TaskCloseArg);
+                    case JumplistManager.ActionExit:
+                        WindowsMessageHelper.SendMessage(AppConfiguration.AppId, WindowsMessageHelper.WM_EXIT);
                         break;
                 }
             }

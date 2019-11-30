@@ -35,6 +35,19 @@ namespace ATG_Notifier.Desktop.Native.Win32
 
         #endregion // Window
 
+        #region Monitor Window
+
+        /// <devdoc>http://msdn.microsoft.com/en-us/library/dd144901%28v=VS.85%29.aspx</devdoc>
+        [DllImport("user32", EntryPoint = "GetMonitorInfoW", ExactSpelling = true, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetMonitorInfo([In] IntPtr hMonitor, [Out] MONITORINFO lpmi);
+
+        /// <devdoc>http://msdn.microsoft.com/en-us/library/dd145064%28v=VS.85%29.aspx</devdoc>
+        [DllImport("user32")]
+        internal static extern IntPtr MonitorFromWindow([In] IntPtr handle, [In] int flags);
+
+        #endregion // Monitor Window
+
         /// <devdoc>https://msdn.microsoft.com/en-us/library/bb762242(VS.85).aspx</devdoc>
         [DllImport("shell32.dll")]
         internal static extern int SHQueryUserNotificationState(out QUERY_USER_NOTIFICATION_STATE pquns);

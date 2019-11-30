@@ -16,7 +16,7 @@
         <TextBlock x:Name="VersionTextBlock" 
                    TextAlignment="Center"
                    FontSize="14"/>
-        <Button x:Name="OkButton"
+        <Button x:Name="ButtonOK"
                 Margin="0,10,0,0"
                 Padding="25,0,25,0"
                 Content="OK"
@@ -25,7 +25,7 @@
                 IsCancel="True"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Click="OnOkButtonClick">
+                Click="OnButtonOKClick">
             <Button.Style>
                 <Style TargetType="Button">
                     <Style.Triggers>

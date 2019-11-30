@@ -6,6 +6,7 @@
              xmlns:behaviors="clr-namespace:ATG_Notifier.Desktop.WPF.Behaviors"
              xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
              x:ClassModifier="internal"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -130,6 +131,11 @@
              Focusable="False"
              IsTabStop="False"
              Tag="{Binding}">
+        <!--<ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <wpftk:VirtualizingWrapPanel Orientation="Vertical" IsSpacingEnabled="False"/>
+            </ItemsPanelTemplate>            
+        </ListBox.ItemsPanel>-->
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <controls:ChapterProfileCard ChapterProfileViewModel="{Binding}" 

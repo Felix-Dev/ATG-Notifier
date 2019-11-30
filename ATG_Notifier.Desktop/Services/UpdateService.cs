@@ -159,7 +159,7 @@ namespace ATG_Notifier.Desktop.Services
 
             TaskbarManager.Current.FlashTaskbarButton();
 
-            if (!appSettings.DoNotDisturb)
+            if (!appSettings.IsInFocusMode)
             {
                 notifier.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
             }
@@ -197,7 +197,7 @@ namespace ATG_Notifier.Desktop.Services
 
                 //jobRoundFinished.Set();
 
-                if (!appSettings.DoNotDisturb)
+                if (!appSettings.IsInFocusMode)
                 {
                     notifier.Show("ATG Chapter Update!", chapterProfileViewModel);
                 }

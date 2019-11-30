@@ -52,7 +52,7 @@ namespace ATG_Notifier.Desktop.Services
 
             string nTitle = title ?? "";
 
-            if (!this.appSettings.DisableOnFullscreen)
+            if (!this.appSettings.IsDisabledOnFullscreen)
             {
                 Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileViewModel));
                 return;
@@ -108,7 +108,7 @@ namespace ATG_Notifier.Desktop.Services
 
         private void OnNotificationShown(object sender, EventArgs e)
         {
-            if (this.appSettings.PlayPopupSound)
+            if (this.appSettings.IsSoundEnabled)
             {
                 Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
             }

@@ -103,10 +103,10 @@ namespace ATG_Notifier.Desktop.Views
                 return;
             }
 
-            this.Location = new Point(prevWindowSetting.X, prevWindowSetting.Y);
+            this.Location = new Point((int)prevWindowSetting.X, (int)prevWindowSetting.Y);
 
-            this.Width = prevWindowSetting.Width;
-            this.Height = prevWindowSetting.Height;
+            this.Width = (int)prevWindowSetting.Width;
+            this.Height = (int)prevWindowSetting.Height;
         }
 
         private void SaveWindowPosition()
@@ -131,7 +131,7 @@ namespace ATG_Notifier.Desktop.Views
         protected override void WndProc(ref Message msg)
         {
             // terminate the application when we receive our custom exit message.
-            if (msg.Msg == WindowsMessageHelper.TaskCloseArg)
+            if (msg.Msg == WindowsMessageHelper.WM_EXIT)
             {
                 Application.Exit();
             }
@@ -173,7 +173,7 @@ namespace ATG_Notifier.Desktop.Views
             // show program icon in Windows notification area
             this.notifyIcon.Visible = true;
 
-#if DesktopPackage
+#if DesktopPackage2
             JumplistManager.BuildJumplistAsync();
 #else
 
@@ -315,17 +315,17 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnMenuItemPlayPopupSound_Click(object sender, EventArgs e)
         {
-            this.appSettings.PlayPopupSound = !this.appSettings.PlayPopupSound;
+            this.appSettings.IsSoundEnabled = !this.appSettings.IsSoundEnabled;
         }
 
         private void OnMenuItemDisableOnFullscreen_Click(object sender, EventArgs e)
         {
-            this.appSettings.DisableOnFullscreen = !this.appSettings.DisableOnFullscreen;
+            this.appSettings.IsDisabledOnFullscreen = !this.appSettings.IsDisabledOnFullscreen;
         }
 
         private void OnMenuItemDoNotDisturb_Click(object sender, EventArgs e)
         {
-            this.appSettings.DoNotDisturb = !this.appSettings.DoNotDisturb;
+            this.appSettings.IsInFocusMode = !this.appSettings.IsInFocusMode;
         }
 
         private void OnMenuItemExit_Click(object sender, EventArgs e)

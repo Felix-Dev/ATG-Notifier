@@ -10,7 +10,7 @@ namespace ATG_Notifier.Desktop.Models
 
         #region Properties
 
-        public bool DisableOnFullscreen
+        public bool IsDisabledOnFullscreen
         {
             get => Properties.Settings.Default.DisableOnFullscreen;
             set
@@ -36,19 +36,7 @@ namespace ATG_Notifier.Desktop.Models
             }
         }
 
-        public string CurrentChapterUrl
-        {
-            get => Properties.Settings.Default.CurrentChapterUrl;
-            set => Properties.Settings.Default.CurrentChapterUrl = value;
-        }
-
-        public string CurrentChapterId
-        {
-            get => Properties.Settings.Default.currentChapterId;
-            set => Properties.Settings.Default.currentChapterId = value;
-        }
-
-        public bool DoNotDisturb
+        public bool IsInFocusMode
         {
             get => Properties.Settings.Default.DoNotDisturb;
             set
@@ -57,11 +45,11 @@ namespace ATG_Notifier.Desktop.Models
                 {
                     Properties.Settings.Default.DoNotDisturb = value;
                     NotifyPropertyChanged();
-                }                
+                }
             }
         }
 
-        public bool PlayPopupSound
+        public bool IsSoundEnabled
         {
             get => Properties.Settings.Default.PlayPopupSound;
             set
@@ -70,8 +58,27 @@ namespace ATG_Notifier.Desktop.Models
                 {
                     Properties.Settings.Default.PlayPopupSound = value;
                     NotifyPropertyChanged();
-                }               
+                }
             }
+        }
+
+        public bool KeepRunningOnClose
+        {
+            get => Properties.Settings.Default.KeepRunningOnClose;
+            set
+            {
+                if (value != Properties.Settings.Default.KeepRunningOnClose)
+                {
+                    Properties.Settings.Default.KeepRunningOnClose = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string CurrentChapterId
+        {
+            get => Properties.Settings.Default.CurrentChapterId;
+            set => Properties.Settings.Default.CurrentChapterId = value;
         }
 
         public DisplayPosition NotificationDisplayPosition

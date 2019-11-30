@@ -37,18 +37,6 @@ namespace ATG_Notifier.Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CurrentChapterUrl {
-            get {
-                return ((string)(this["CurrentChapterUrl"]));
-            }
-            set {
-                this["CurrentChapterUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool PlayPopupSound {
             get {
@@ -74,12 +62,12 @@ namespace ATG_Notifier.Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentChapterId {
+        public string CurrentChapterId {
             get {
-                return ((string)(this["currentChapterId"]));
+                return ((string)(this["CurrentChapterId"]));
             }
             set {
-                this["currentChapterId"] = value;
+                this["CurrentChapterId"] = value;
             }
         }
         
@@ -128,6 +116,18 @@ namespace ATG_Notifier.Desktop.Properties {
             }
             set {
                 this["MostRecentChapterInfo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool KeepRunningOnClose {
+            get {
+                return ((bool)(this["KeepRunningOnClose"]));
+            }
+            set {
+                this["KeepRunningOnClose"] = value;
             }
         }
     }

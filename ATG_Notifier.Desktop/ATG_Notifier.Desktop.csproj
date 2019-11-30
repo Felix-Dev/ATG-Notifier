@@ -13,17 +13,23 @@
     <RootNamespace>ATG_Notifier.Desktop</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;DesktopPackage</Configurations>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationIcon></ApplicationIcon>
+    <ApplicationIcon>testLogo.ico</ApplicationIcon>
     <Win32Resource />
+    <StartupObject>ATG_Notifier.Desktop.App</StartupObject>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
     <DefineConstants>TRACE;DesktopPackage</DefineConstants>
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="Views\AboutView2.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
@@ -31,6 +37,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.14" />
+    <PackageReference Include="VirtualizingWrapPanel.NETCore" Version="1.4.0" />
     <PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
@@ -59,9 +66,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Views\MainWindow2.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </None>
     <None Update="WPF\Controls\AboutControl.xaml">
       <Generator>MSBuild:Compile</Generator>

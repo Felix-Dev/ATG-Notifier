@@ -57,7 +57,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             foreach (var model in chapterProfileModels)
             {
-                this.Add(new ChapterProfileViewModel(model));
+                CommonHelpers.RunOnUIThread(() => this.Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
 
                 if (!model.IsRead)
                 {

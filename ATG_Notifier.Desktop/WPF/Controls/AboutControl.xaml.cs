@@ -23,7 +23,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             this.VersionTextBlock.Text = $"Version: {version}";
         }
 
-        private void OnOkButtonClick(object sender, RoutedEventArgs e)
+        private void OnButtonOKClick(object sender, RoutedEventArgs e)
         {
             this.ownerForm.Close();
         }

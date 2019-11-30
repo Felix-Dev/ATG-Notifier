@@ -62,7 +62,7 @@ namespace ATG_Notifier.ViewModels.ViewModels
 
             if (this.Items.Count == 1)
             {
-                NotifyPropertyChanged(nameof(this.IsEmpty));
+                //NotifyPropertyChanged(nameof(this.IsEmpty));
             }
         }
 

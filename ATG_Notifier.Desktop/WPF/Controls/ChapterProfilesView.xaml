@@ -11,6 +11,7 @@
              d:DesignHeight="310" d:DesignWidth="120"
              HorizontalContentAlignment="Stretch"
              FontFamily="Segoe UI"
+             Loaded="OnLoaded"
              KeyDown="OnChapterProfilesViewKeyDown">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -387,7 +388,7 @@
         </Border>
 
         <TextBlock Grid.Row="1" 
-                   x:Name="Label"
+                   x:Name="NoChapterTextBlock"
                    Text="No new updates"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    TextAlignment="Center"

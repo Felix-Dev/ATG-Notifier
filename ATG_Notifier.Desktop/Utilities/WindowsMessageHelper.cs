@@ -5,12 +5,12 @@ namespace ATG_Notifier.Desktop.Utilities
 {
     internal class WindowsMessageHelper
     {
-        public static int TaskCloseArg;
+        public static int WM_EXIT;
         public static readonly int WM_SHOWINSTANCE;
 
         static WindowsMessageHelper()
         {
-            TaskCloseArg = NativeMethods.RegisterWindowMessage("ATG-Notifier.Close");
+            WM_EXIT = NativeMethods.RegisterWindowMessage("WM_EXIT");
             WM_SHOWINSTANCE = NativeMethods.RegisterWindowMessage("WM_SHOWINSTANCE");
         }
 

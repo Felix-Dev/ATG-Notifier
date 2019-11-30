@@ -2,14 +2,16 @@
 using System;
 using System.Reflection;
 using System.IO;
+using System.Windows.Shell;
+using System.Windows;
 
 namespace ATG_Notifier.Desktop.Utilities
 {
     internal static class JumplistManager
     {
-        public const string ACTION_EXIT = "Exit";
+        public const string ActionExit = "Exit";
 
-#if DesktopPackage
+#if DesktopPackage2
         private static Windows.UI.StartScreen.JumpList appJumpList;
 
         public static async void BuildJumplistAsync()
@@ -48,9 +50,9 @@ namespace ATG_Notifier.Desktop.Utilities
             JumplistManager.appJumpList.ClearAllUserTasks();
 
             // defining the JumpListLink "Close"
-            Microsoft.WindowsAPICodePack.Taskbar.JumpListLink userActionLink = new Win32Taskbar.JumpListLink(path, ACTION_EXIT)
+            Microsoft.WindowsAPICodePack.Taskbar.JumpListLink userActionLink = new Win32Taskbar.JumpListLink(path, ActionExit)
             {
-                Arguments = ACTION_EXIT
+                Arguments = ActionExit
             };
 
             JumplistManager.appJumpList.AddUserTasks(userActionLink);
@@ -60,7 +62,7 @@ namespace ATG_Notifier.Desktop.Utilities
 
         public static async void ClearJumplist()
         {
-#if DesktopPackage
+#if DesktopPackage2
             JumplistManager.appJumpList?.Items.Clear();
 
             await JumplistManager.appJumpList?.SaveAsync();
@@ -69,6 +71,43 @@ namespace ATG_Notifier.Desktop.Utilities
 
             JumplistManager.appJumpList.Refresh();
 #endif
+        }
+
+        public static void BuildJumplistWpf()
+        {
+            JumpTask task = new JumpTask
+            {
+                Title = "Exit",
+                Arguments = JumplistManager.ActionExit,
+                IconResourcePath = Assembly.GetEntryAssembly().CodeBase,
+                ApplicationPath = Assembly.GetEntryAssembly().CodeBase.Replace(".dll", ".exe"),
+            };
+
+            var jumpList = JumpList.GetJumpList(Application.Current);
+            if (jumpList == null)
+            {
+                jumpList = new JumpList();
+            }
+
+            jumpList.JumpItems.Clear();
+
+            jumpList.ShowFrequentCategory = false;
+            jumpList.ShowRecentCategory = false;
+
+            jumpList.JumpItems.Add(task);
+            
+            JumpList.SetJumpList(Application.Current, jumpList);
+        }
+
+        public static void ClearJumplistWpf()
+        {
+            var jumpList = JumpList.GetJumpList(Application.Current);
+            if (jumpList != null)
+            {
+                jumpList.JumpItems.Clear();
+
+                JumpList.SetJumpList(Application.Current, jumpList);
+            }
         }
     }
 }

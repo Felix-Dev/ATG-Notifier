@@ -81,16 +81,18 @@ namespace ATG_Notifier.Desktop.View
 
         private Point GetDisplayPosition(int slot, DisplayPosition position)
         {
-            Screen screen;
-            if (Program.MainWindow.InvokeRequired)
-            {
-                del GetScreen = () => Screen.FromControl(Program.MainWindow);
-                screen = (Screen)Program.MainWindow.Invoke(GetScreen);
-            }
-            else
-            {
-                screen = Screen.FromControl(Program.MainWindow);
-            }
+            Screen screen = null;
+            //if (Program.MainWindow.InvokeRequired)
+            //{
+            //    del GetScreen = () => Screen.FromControl(Program.MainWindow);
+            //    screen = (Screen)Program.MainWindow.Invoke(GetScreen);
+            //}
+            //else
+            //{
+            //    screen = Screen.FromControl(Program.MainWindow);
+            //}
+
+            //System.Windows.Application.Current.Dispatcher.Invoke(() => screen = System.Windows.Application.Current.MainWindow.)
 
             screen = screen ?? Screen.PrimaryScreen;
 

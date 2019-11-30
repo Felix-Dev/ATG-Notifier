@@ -1,6 +1,8 @@
-﻿using ATG_Notifier.Desktop.ViewModels;
+﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +14,13 @@ namespace ATG_Notifier.Desktop.WPF.Controls
         public ChapterProfilesView(ChapterProfilesViewModel viewModel)
         {
             this.DataContext = viewModel;
+
+            InitializeComponent();
+        }
+
+        public ChapterProfilesView()
+        {
+            this.DataContext = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
 
             InitializeComponent();
         }
@@ -55,6 +64,25 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             {
                 this.LatestChapterPopup.IsOpen = true;
             }
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = this.ViewModel.ListViewModel;
+
+            // load chapter profiles from database 
+            await Task.Run(() => vm.LoadAsync());
+
+            if (!this.ViewModel.ListViewModel.IsEmpty)
+            {
+                this.NoChapterTextBlock.Visibility = Visibility.Collapsed;
+                this.ChapterProfileList.Visibility = Visibility.Visible;
+            }
+
+            //if (this.appSettings.IsUpdateServiceRunning)
+            //{
+            //    this.updateService.Start();
+            //}
         }
     }
 }

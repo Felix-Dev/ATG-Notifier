@@ -34,6 +34,7 @@ namespace ATG_Notifier.Desktop.Configuration
 
             serviceCollection.AddSingleton<ChapterProfilesListViewModel>();
             serviceCollection.AddSingleton<ChapterProfilesViewModel>();
+            serviceCollection.AddSingleton<MainWindowViewModel>();
 
             rootServiceProvider = serviceCollection.BuildServiceProvider();
         }
