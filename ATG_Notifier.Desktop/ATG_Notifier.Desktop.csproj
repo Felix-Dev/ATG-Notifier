@@ -26,18 +26,25 @@
     <DefineConstants>TRACE;DesktopPackage</DefineConstants>
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <!--<PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>-->
+    <PublishedTrimmed>true</PublishedTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
   
   <ItemGroup>
-    <None Remove="Views\AboutView2.xaml" />
+    <None Remove="WPF\Controls\MainView.xaml" />
+    <None Remove="WPF\Themes\MenuItem.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.14" />
-    <PackageReference Include="VirtualizingWrapPanel.NETCore" Version="1.4.0" />
     <PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
@@ -72,12 +79,6 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Views\MainWindow2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="WPF\Controls\AboutControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
     </None>
     <None Update="WPF\Controls\ChapterProfileCard.xaml">
       <Generator>MSBuild:Compile</Generator>

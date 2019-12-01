@@ -1,4 +1,5 @@
-﻿using ATG_Notifier.Desktop.Configuration;
+﻿using ATG_Notifier.Desktop.Components;
+using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Utilities;
@@ -29,6 +30,8 @@ namespace ATG_Notifier.Desktop.Views
 
         private readonly ChapterProfilesViewModel chapterProfilesViewModel;
 
+        private NotificationIcon notificationIcon;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,10 +39,6 @@ namespace ATG_Notifier.Desktop.Views
             this.MaximumSize = new Size(Size.Width, Screen.GetWorkingArea(this).Height);
             this.Text = AppConfiguration.AppId;
 
-            this.notifyIcon.Icon = Properties.Resources.logo_16_ld4_icon;
-#if DEBUG
-            this.notifyIcon.Text += " (Debug)";
-#endif
             this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             RestorePreviousWindowsPosition();
@@ -50,10 +49,11 @@ namespace ATG_Notifier.Desktop.Views
             this.chapterProfilesViewModel = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
             this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
 
-            this.wpfHost.Child = new ChapterProfilesView(this.chapterProfilesViewModel);
+            this.wpfHost.Child = new MainView(this);
             this.wpfHost.Visible = true;
 
-            SetupBindings();    
+            Components.JumplistManager.BuildJumplist();
+            this.notificationIcon = new NotificationIcon(Properties.Resources.logo_16_ld4_icon, AppConfiguration.AppId);
         }
 
         public new void BringToFront()
@@ -111,17 +111,14 @@ namespace ATG_Notifier.Desktop.Views
 
         private void SaveWindowPosition()
         {
-            this.appSettings.WindowSetting = new WindowSetting(this.Location.X, this.Location.Y, this.Width, this.Height);
-        }
-
-        private void SetupBindings()
-        {
-            var binding = new Binding(nameof(BindableMenuItem.Checked), Properties.Settings.Default, nameof(Properties.Settings.NotificationDisplayPosition),
-                true,
-                DataSourceUpdateMode.OnPropertyChanged);
-            binding.Format += Binding_Format;
-
-            this.menuItemNotificationPositionTopLeft.DataBindings.Add(binding);
+            if (this.WindowState == FormWindowState.Minimized || this.WindowState == FormWindowState.Maximized)
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
+            }
+            else
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
+            }            
         }
 
         /// <summary>
@@ -133,7 +130,7 @@ namespace ATG_Notifier.Desktop.Views
             // terminate the application when we receive our custom exit message.
             if (msg.Msg == WindowsMessageHelper.WM_EXIT)
             {
-                Application.Exit();
+                System.Windows.Application.Current.Shutdown();
             }
             // bring the current instance to the foreground when we receive out custom show-instance message.
             else if (msg.Msg == WindowsMessageHelper.WM_SHOWINSTANCE)
@@ -171,25 +168,17 @@ namespace ATG_Notifier.Desktop.Views
         protected override void OnShown(EventArgs e)
         {
             // show program icon in Windows notification area
-            this.notifyIcon.Visible = true;
-
-#if DesktopPackage2
-            JumplistManager.BuildJumplistAsync();
-#else
-
-            // create a new taskbar jump list for the main window 
-            JumplistManager.BuildJumplist(AppConfiguration.AppId, this.Handle);
-#endif
+            this.notificationIcon.Show();
 
             base.OnShown(e);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing && this.appSettings.KeepRunningOnClose)
             {
                 this.WindowState = FormWindowState.Minimized;
-                this.Hide();
+                Hide();
 
                 e.Cancel = true;
             }
@@ -215,14 +204,16 @@ namespace ATG_Notifier.Desktop.Views
             
             this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
 
-            JumplistManager.ClearJumplist();
+            // clear jumplist from added custom entries
+            Components.JumplistManager.ClearJumplist();
 
             // remove icon from Windows notification area
-            this.notifyIcon.Visible = false;
-            this.notifyIcon.Dispose();
+            this.notificationIcon.Hide();
+            this.notificationIcon.Dispose();
+            this.notificationIcon = null;
 
             //Environment.Exit(0);
-            Application.Exit();
+            System.Windows.Application.Current.Shutdown();
         }
 
         /// <summary>
@@ -233,114 +224,10 @@ namespace ATG_Notifier.Desktop.Views
         /// <param name="e">The event data. Contains the new unread-chapter-profiles count.</param>
         private void OnChapterProfilesUnreadCountChanged(object sender, ChapterProfilesUnreadCountChangedEventArgs e)
         {
-            CommonHelpers.RunOnUIThread(() =>
-            {
-                UpdateBadgeCounter(e.UnreadCount);
-            });
-        }
-
-        private void UpdateBadgeCounter(int counter)
-        {
-            Graphics canvas;
-            Bitmap iconBitmap = new Bitmap(this.notifyIcon.Icon.Width, this.notifyIcon.Icon.Height);
-            canvas = Graphics.FromImage(iconBitmap);
-
-            canvas.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //canvas.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-            canvas.DrawIcon(Properties.Resources.logo_16_ld4_icon, 0, 0);
-
-            // draw badge if counter is positive
-            if (counter > 0)
-            {
-                canvas.FillEllipse(
-                    new SolidBrush(Color.DarkRed),
-                    new RectangleF(5, 4, this.notifyIcon.Icon.Width - 6, this.notifyIcon.Icon.Width - 6)
-                    );
-
-                canvas.DrawEllipse(
-                    new Pen(Color.DarkGray),
-                    new RectangleF(5, 4, this.notifyIcon.Icon.Width - 6, this.notifyIcon.Icon.Width - 6)
-                    );
-
-                if (counter <= 9)
-                {
-                    StringFormat format = new StringFormat
-                    {
-                        Alignment = StringAlignment.Center,
-                        LineAlignment = StringAlignment.Center
-                    };
-
-                    canvas.DrawString(
-                        counter.ToString(),
-                        new Font("Calibri", 7),
-                        new SolidBrush(Color.White),
-                        new RectangleF(5.7f, 5, this.notifyIcon.Icon.Width - 7, this.notifyIcon.Icon.Height - 5),
-                        format
-                    );
-                }
-                else
-                {
-                    StringFormat format = new StringFormat
-                    {
-                        Alignment = StringAlignment.Near
-                    };
-
-                    canvas.DrawString(
-                        "9",
-                        new Font("Calibri", 7),
-                        new SolidBrush(Color.White),
-                        new RectangleF(5.5f, 4f, this.notifyIcon.Icon.Width - 7, this.notifyIcon.Icon.Height - 5),
-                        format
-                    );
-
-                    //format.Alignment = System.Drawing.StringAlignment.Near;
-                    format.LineAlignment = StringAlignment.Center;
-
-                    canvas.DrawString(
-                        "+",
-                        new Font("Calibri", 6),
-                        new SolidBrush(Color.White),
-                        new RectangleF(9.5f, 4.5f, this.notifyIcon.Icon.Width - 7, this.notifyIcon.Icon.Height - 5),
-                        format
-                    );
-
-                }
-            }
-
-            this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
+            this.notificationIcon.UpdateBadge(e.UnreadCount);
         }
 
 #region MenuItem Handler
-
-        private void OnMenuItemPlayPopupSound_Click(object sender, EventArgs e)
-        {
-            this.appSettings.IsSoundEnabled = !this.appSettings.IsSoundEnabled;
-        }
-
-        private void OnMenuItemDisableOnFullscreen_Click(object sender, EventArgs e)
-        {
-            this.appSettings.IsDisabledOnFullscreen = !this.appSettings.IsDisabledOnFullscreen;
-        }
-
-        private void OnMenuItemDoNotDisturb_Click(object sender, EventArgs e)
-        {
-            this.appSettings.IsInFocusMode = !this.appSettings.IsInFocusMode;
-        }
-
-        private void OnMenuItemExit_Click(object sender, EventArgs e)
-        {
-            //_Exit();
-            Application.Exit();
-        }
-
-        private void OnMenuItem_AboutNotifier_Click(object sender, EventArgs e)
-        {
-            using (var aboutDialogue = new AboutView())
-            {
-                aboutDialogue.ShowDialog();
-            }
-        }
 
         private void OnMenuItemNotificationPositionTopLeft_Click(object sender, EventArgs e)
         {
@@ -364,17 +251,5 @@ namespace ATG_Notifier.Desktop.Views
         }
 
 #endregion // MenuItem Handler
-
-#region System-Tray Icon
-
-        private void NotificationIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                BringToFront();
-            }
-        }
-
-#endregion // System-Tray Icon
     }
 }

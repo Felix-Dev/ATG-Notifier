@@ -1,4 +1,5 @@
-﻿using ATG_Notifier.Desktop.Configuration;
+﻿using ATG_Notifier.Desktop.Components;
+using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Services;

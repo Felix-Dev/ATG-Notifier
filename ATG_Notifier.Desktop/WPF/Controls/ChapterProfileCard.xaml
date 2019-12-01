@@ -117,7 +117,7 @@
                  Style="{StaticResource TextBox_TextBlockSelection}"
                  Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
                  FontSize="14" FontWeight="Bold"
-                 HorizontalAlignment="Stretch"
+                 HorizontalAlignment="Left"
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
                  TextWrapping="Wrap"
                  Focusable="True"

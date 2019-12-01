@@ -11,6 +11,8 @@ namespace ATG_Notifier.Desktop.Views
     /// </summary>
     internal enum MessageDialogButton
     {
+        /// <summary>The message box displays an OK button.</summary>
+        OK = System.Windows.MessageBoxButton.OK,
         /// <summary>The message box displays Yes and No buttons.</summary>
         YesNo = System.Windows.MessageBoxButton.YesNo,
     }

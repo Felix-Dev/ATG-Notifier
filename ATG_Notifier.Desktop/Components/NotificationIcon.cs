@@ -1,14 +1,14 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Utilities.Bindings;
-using ATG_Notifier.Desktop.Views;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ATG_Notifier.Desktop.Services
+namespace ATG_Notifier.Desktop.Components
 {
     internal class NotificationIcon : IDisposable
     {
@@ -35,8 +35,7 @@ namespace ATG_Notifier.Desktop.Services
 
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow2;
-            mainWindow.BringToFront();
+            App.MainWindow.BringToFront();
         }
 
         public void Show()
@@ -53,7 +52,7 @@ namespace ATG_Notifier.Desktop.Services
         {
             if (!this.isDisposed)
             {
-                
+
                 this.notifyIcon.Dispose();
                 this.notifyIcon = null;
                 this.isDisposed = true;
@@ -128,7 +127,7 @@ namespace ATG_Notifier.Desktop.Services
                 }
             }
 
-            this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
+            CommonHelpers.RunOnUIThread(() => this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon()));
         }
 
         private ContextMenu GetContextMenu()

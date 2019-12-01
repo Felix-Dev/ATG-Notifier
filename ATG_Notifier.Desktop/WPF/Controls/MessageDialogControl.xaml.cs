@@ -13,8 +13,6 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 {
     internal partial class MessageDialogControl : UserControl
     {
-        private readonly MessageDialogIcon icon;
-        private string errorMessage;
         private readonly WinForms.Form owner;
 
         public MessageDialogControl()
@@ -30,8 +28,6 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         public MessageDialogControl(WinForms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string optionalActionText = null, bool initialOptionalActionState = false)
         {
-            this.icon = icon;
-            this.errorMessage = text;
             this.owner = owner;
 
             InitializeComponent();
@@ -53,20 +49,32 @@ namespace ATG_Notifier.Desktop.WPF.Controls
         {
             switch (button)
             {
+                case MessageDialogButton.OK:
+                    this.ButtonOK.Visibility = Visibility.Visible;
+                    this.ButtonYes.Visibility = Visibility.Collapsed;
+                    this.ButtonNo.Visibility = Visibility.Collapsed;
+                    break;
                 case MessageDialogButton.YesNo:
+                    this.ButtonOK.Visibility = Visibility.Collapsed;
                     this.ButtonYes.Visibility = Visibility.Visible;
                     this.ButtonNo.Visibility = Visibility.Visible;
                     break;
             }
         }
 
-        private void ButtonYesOnClick(object sender, RoutedEventArgs e)
+        private void OnButtonOKClick(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = WinForms.DialogResult.OK;
+            this.owner.Close();
+        }
+
+        private void OnButtonYesClick(object sender, RoutedEventArgs e)
         {
             this.DialogResult = WinForms.DialogResult.Yes;
             this.owner.Close();
         }
 
-        private void ButtonNoOnClick(object sender, RoutedEventArgs e)
+        private void OnButtonNoClick(object sender, RoutedEventArgs e)
         {
             this.DialogResult = WinForms.DialogResult.No;
             this.owner.Close();
@@ -98,10 +106,6 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             {
                 this.DialogIconImage.Source = imageSource;
                 this.DialogIconImage.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.DialogIconImage.Visibility = Visibility.Collapsed;
             }
         }
     }

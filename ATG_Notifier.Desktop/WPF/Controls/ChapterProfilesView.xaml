@@ -291,7 +291,7 @@
                             Orientation="Horizontal">
                     <!-- Update check status button -->
                     <ToggleButton Style="{StaticResource ToolbarUpdateCheckStatusToggleButtonStyle}"
-                                  TabIndex="0"
+                                  TabIndex="4"
                                   IsChecked="True"/>
                     
                     <!-- separator -->
@@ -300,7 +300,7 @@
                     
                     <!-- stop/resume update checks button -->
                     <ToggleButton Style="{StaticResource ToolbarUpdatesToggleButtonStyle}"
-                                  TabIndex="1"
+                                  TabIndex="5"
                                   Command="{Binding ChangeUpdateServiceStatusCommand}"
                                   IsEnabled="{Binding CanChangeUpdateServiceStatus}"
                                   IsChecked="{Binding AppSettings.IsUpdateServiceRunning, Mode=OneWay}"/>
@@ -317,7 +317,7 @@
                             ToolTip="Show latest chapter info"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="2"
+                            TabIndex="6"
                             Click="OnLatestChapterButtonClick"
                             IsEnabled="{Binding AppSettings.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}, Mode=OneWay}">
                         <Button.Content>
@@ -367,7 +367,7 @@
                             ToolTip="Set all Chapters as read"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="3"
+                            TabIndex="7"
                             Command="{Binding ListViewModel.SetListAsReadCommand}"/>
                 </StackPanel>
                 
@@ -381,7 +381,7 @@
                             ToolTip="Remove all Notifications"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="4"
+                            TabIndex="8"
                             Command="{Binding ListViewModel.ClearCommand}"/>
                 </StackPanel>
             </Grid>
@@ -394,13 +394,11 @@
                    TextAlignment="Center"
                    FontSize="20"
                    Foreground="Black"
-                   Visibility="{Binding ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
+                   Visibility="{Binding ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}, Mode=OneWay}" />
 
         <controls:ChapterProfileList x:Name="ChapterProfileList" 
                                      Grid.Row="1"
                                      DataContext="{Binding ListViewModel}"
-                                     ViewModel="{Binding}"
-                                     TabIndex="5"
-                                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"/>
+                                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}, Mode=OneWay}"/>
     </Grid>
 </UserControl>

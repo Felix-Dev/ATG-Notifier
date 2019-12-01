@@ -16,6 +16,7 @@ using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
+    // TODO: Perhaps add an IsLoaded Property the View can bind to?
     internal class ChapterProfilesListViewModel : GenericListViewModel<ChapterProfileViewModel>
     {
         private readonly IChapterProfileService chapterProfileService;

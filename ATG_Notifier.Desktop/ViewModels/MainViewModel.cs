@@ -9,9 +9,9 @@ using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
-    internal class MainWindowViewModel : ObservableObject
+    internal class MainViewModel : ObservableObject
     {
-        public MainWindowViewModel()
+        public MainViewModel()
         {
             this.ExitCommand = new RelayCommand(OnExit);
 

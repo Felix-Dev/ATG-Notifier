@@ -206,9 +206,9 @@ namespace ATG_Notifier.Desktop.Services
             }
 #endif
             // TODO: Crashing code below to text unexpected error handling:
-            //await Task.Delay(7000);
+            await Task.Delay(7000);
 
-            //string s = null; int i = s.Length;
+            string s = null; int i = s.Length;
 
             lock (this.timerLock)
             {

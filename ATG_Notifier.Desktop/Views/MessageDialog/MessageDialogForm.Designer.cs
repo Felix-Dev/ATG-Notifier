@@ -37,11 +37,9 @@
             this.wpfElementHost.BackColor = System.Drawing.SystemColors.Control;
             this.wpfElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wpfElementHost.Location = new System.Drawing.Point(0, 0);
-            this.wpfElementHost.MinimumSize = new System.Drawing.Size(200, 120);
             this.wpfElementHost.Name = "wpfElementHost";
             this.wpfElementHost.Size = new System.Drawing.Size(784, 361);
             this.wpfElementHost.TabIndex = 0;
-            this.wpfElementHost.Text = "elementHost1";
             this.wpfElementHost.Child = null;
             // 
             // MessageDialogForm
@@ -50,7 +48,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(784, 361);
             this.Controls.Add(this.wpfElementHost);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -59,7 +56,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Message Title";
             this.ResumeLayout(false);
             this.PerformLayout();
 

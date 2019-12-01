@@ -57,6 +57,14 @@ namespace ATG_Notifier.Desktop.Services
             this.activatedResetEvent.Set();
         }
 
+        public DialogResult ShowDialog(string message, string title)
+        {
+            using (var dialog = new MessageDialogForm(title, message, MessageDialogButton.OK))
+            { 
+                return dialog.ShowDialog();
+            }
+        }
+
         public DialogResult ShowDialog(string id, string title, string message, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, bool showWhenApplicationActive = true)
         {
             if (showWhenApplicationActive && this.MainForm != null)

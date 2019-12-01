@@ -11,13 +11,6 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 {
     internal partial class ChapterProfilesView : UserControl
     {
-        public ChapterProfilesView(ChapterProfilesViewModel viewModel)
-        {
-            this.DataContext = viewModel;
-
-            InitializeComponent();
-        }
-
         public ChapterProfilesView()
         {
             this.DataContext = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
@@ -75,8 +68,8 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
             if (!this.ViewModel.ListViewModel.IsEmpty)
             {
-                this.NoChapterTextBlock.Visibility = Visibility.Collapsed;
-                this.ChapterProfileList.Visibility = Visibility.Visible;
+                //this.NoChapterTextBlock.Visibility = Visibility.Collapsed;
+                //this.ChapterProfileList.Visibility = Visibility.Visible;
             }
 
             //if (this.appSettings.IsUpdateServiceRunning)
