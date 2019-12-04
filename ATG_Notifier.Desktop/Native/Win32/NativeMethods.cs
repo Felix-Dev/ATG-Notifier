@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,10 @@ namespace ATG_Notifier.Desktop.Native.Win32
         [DllImport("user32.dll")]
         internal static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
+        /// <devdoc>https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdpiforwindow</devdoc>
+        [DllImport("user32.dll")]
+        internal static extern int GetDpiForWindow(IntPtr hWnd);
+
         #endregion // Window
 
         #region Monitor Window
@@ -45,6 +50,10 @@ namespace ATG_Notifier.Desktop.Native.Win32
         /// <devdoc>http://msdn.microsoft.com/en-us/library/dd145064%28v=VS.85%29.aspx</devdoc>
         [DllImport("user32")]
         internal static extern IntPtr MonitorFromWindow([In] IntPtr handle, [In] int flags);
+
+        /// <devdoc>https://docs.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-getdpiformonitor</devdoc>
+        [DllImport("shcore.dll")]
+        internal static extern uint GetDpiForMonitor(IntPtr hmonitor, MonitorDpiType dpiType, out uint dpiX, out uint dpiY);
 
         #endregion // Monitor Window
 

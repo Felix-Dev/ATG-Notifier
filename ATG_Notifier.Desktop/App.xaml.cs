@@ -52,10 +52,10 @@ namespace ATG_Notifier.Desktop
 
                     logService = ServiceLocator.Current.GetService<ILogService>();
                     dialogService = ServiceLocator.Current.GetService<DialogService>();
+                    dialogService.DialogShown += OnDialogShown;
 
                     var app = new App();
                     app.InitializeComponent();
-
                     app.Run();
                 }
                 else
@@ -65,35 +65,62 @@ namespace ATG_Notifier.Desktop
             }
         }
 
-        private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            // Stop the update service
-            ServiceLocator.Current.GetService<IUpdateService>().Stop();
+            if (e.Args.Length > 0)
+            {
+                //ProcessCommandLine(e.Args);
+            }
 
-            JumplistManager.ClearJumplist();
+            base.OnStartup(e);
 
-            // Save user data
-            SaveData();
+            App.MainWindow = new MainWindow();
+            dialogService.MainForm = App.MainWindow;
+
+            JumplistManager.BuildJumplist();
+
+            App.MainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
 
+            SaveAndCleanup();
+        }
+
+        private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
+        {
+            SaveAndCleanup();
+
+            Environment.Exit(0);
+        }
+
+        private void SaveAndCleanup()
+        {
             // Stop the update service
             ServiceLocator.Current.GetService<IUpdateService>().Stop();
 
+            // clear jumplist from added custom entries
             JumplistManager.ClearJumplist();
 
-            App.MainWindow.Close();
-
             // Save user data
-            SaveData();
+            ServiceLocator.Current.GetService<SettingsViewModel>().Save();
+        }
+
+        private static void OnDialogShown(object sender, DialogShownEventArgs e)
+        {
+            if (e.Id == "critical error")
+            {
+                TaskbarManager.Current.ClearErrorTaskbarButton();
+            }
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             logService.Log(LogType.Fatal, (e.ExceptionObject as Exception).ToString() + "\r\n" + (e.ExceptionObject as Exception).Message);
+
+            ((App)(Application.Current)).SaveAndCleanup();
 
             CommonHelpers.RunOnUIThread(() =>
             {
@@ -125,33 +152,32 @@ namespace ATG_Notifier.Desktop
             }
             else
             {
-                Application.Current.Shutdown();
+                Environment.Exit(1);
             }
         }
+
         private static void RequestRestart()
         {
             int appType;
 
 #if DesktopPackage
             /*  Start watchdog which restarts the notifier. */
-            var installLocation = Package.Current.InstalledLocation.Path;
-            var package = Package.Current;
-
-            string id = package.Id.FamilyName;
+            string restarterPath = Path.Combine(Package.Current.InstalledLocation.Path, @"ATG_Notifier.Restarter\ATG_Notifier.Restarter.exe");
+            string notifierStartString = Package.Current.Id.FamilyName;
 
             appType = 1;
 #else
-            string location = Assembly.GetExecutingAssembly().Location;
-            string installLocation = Path.GetDirectoryName(location);
+            string notifierPath = Assembly.GetExecutingAssembly().Location;
+            string restarterPath = Path.Combine(Path.GetDirectoryName(notifierPath), @"Restarter\ATG_Notifier.Restarter.exe");
 
-            string id = location.Replace(".dll", ".exe");
+            string notifierStartString = notifierPath.Replace(".dll", ".exe");
             appType = 0;
 #endif
             var proc = Process.GetCurrentProcess();
 
             Process wd = new Process();
-            wd.StartInfo.FileName = Path.Combine(installLocation, @"ATG_Notifier.Restarter\Restarter.exe");
-            wd.StartInfo.Arguments = $"{proc.Id};{appType};{id}";
+            wd.StartInfo.FileName = restarterPath;
+            wd.StartInfo.Arguments = $"{proc.Id};{appType};{notifierStartString}";
 
             bool started = wd.Start();
             if (!started)
@@ -159,26 +185,10 @@ namespace ATG_Notifier.Desktop
                 logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
             }
 
-            Application.Current.Shutdown();
+            Environment.Exit(1);
         }
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            if (e.Args.Length > 0)
-            {
-                //ProcessCommandLine(e.Args);
-            }
-
-            base.OnStartup(e);
-
-            App.MainWindow = new MainWindow();
-            dialogService.MainForm = App.MainWindow;
-
-            App.MainWindow.Show();
-
-        }
-
-        private  static void HandleArguments(string[] args)
+        private static void HandleArguments(string[] args)
         {
             if (args.Length > 0)
             {
@@ -193,20 +203,8 @@ namespace ATG_Notifier.Desktop
             {
                 // send our Win32 message to make the currently running instance
                 // jump on top of all the other windows
-
-                MessageBox.Show("Test");
-
                 WindowsMessageHelper.SendMessage(AppConfiguration.AppId, WindowsMessageHelper.WM_SHOWINSTANCE);
             }
-        }
-
-        /// <summary>
-        /// Save data (user settings).
-        /// </summary>
-        private static void SaveData()
-        {
-            /* Save user settings. */
-            ServiceLocator.Current.GetService<SettingsViewModel>().Save();
         }
     }
 }

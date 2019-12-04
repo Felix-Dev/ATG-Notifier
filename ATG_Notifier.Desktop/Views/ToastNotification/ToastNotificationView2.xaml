@@ -1,0 +1,167 @@
+﻿<Window x:Class="ATG_Notifier.Desktop.Views.ToastNotificationView2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
+        x:ClassModifier="internal"
+        mc:Ignorable="d"
+        ShowActivated="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStyle="None"
+        WindowStartupLocation="Manual"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Title="ToastNotificationView" 
+        SnapsToDevicePixels="True"
+        RenderOptions.ClearTypeHint="Enabled"    
+        TextOptions.TextFormattingMode="Display"
+        d:DesignWidth="400" d:DesignHeight="200"
+        Height="85" Width="310"
+        MouseLeftButtonUp="OnMouseLeftButtonUp">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="ToastNotificationForeground" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="ToastNotificationBackground" Color="#FF094AB2" />
+            <SolidColorBrush x:Key="ToastNotificationBorderBrush" Color="#FF437CD8" />
+
+            <SolidColorBrush x:Key="CloseButtonForeground" Color="{Binding Color, Source={StaticResource ToastNotificationForeground}}" />
+
+            <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
+            <SolidColorBrush x:Key="CloseButtonBackgroundMouseOver" Color="#FF1858BE" />
+            <SolidColorBrush x:Key="CloseButtonBackgroundPressed" Color="#FF5A8CDF" />
+
+            <Style x:Key="CloseButtonStyle" TargetType="Button">
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
+                <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Content" Value="✖"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"
+                                                  Focusable="False"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundMouseOver}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundPressed}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="FontFamily" Value="Segoe UI" />
+            </Style>
+
+            <Style x:Key="ContentTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBox_TextBlockSelection}">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="FontFamily" Value="Segoe UI" />
+            </Style>
+
+            <Storyboard x:Key="FadeOutStoryboard"
+                        Completed="OnFadeOutStoryboardCompleted">
+                <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                                 From="1.0" To="0.0" 
+                                 Duration="0:0:1.5" 
+                                 BeginTime="0:0:3.5"
+                                 AutoReverse="False"
+                                 FillBehavior="HoldEnd"/>
+            </Storyboard>
+
+            <Storyboard x:Key="FadeOutResetStoryboard">
+                <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                                 To="1" Duration="0:0:0.0" 
+                                 FillBehavior="HoldEnd"/>
+            </Storyboard>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+
+                <!-- Animates the button's opacity on mouse over. -->
+                <EventTrigger RoutedEvent="Window.Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOutStoryboard}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+                <!-- Returns the button's opacity to 1 when the mouse leaves. -->
+                <EventTrigger RoutedEvent="Window.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOutResetStoryboard}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="Window.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOutStoryboard}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <Grid>
+        <Border BorderBrush="{StaticResource ToastNotificationBorderBrush}" 
+                BorderThickness="2"
+                Background="{StaticResource ToastNotificationBackground}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="ButtonClose" 
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Style="{StaticResource CloseButtonStyle}"
+                        Click="OnButtonCloseClick"/>
+                <TextBlock x:Name="TitleTextBlock" 
+                           Grid.Row="1"
+                           Grid.Column="0" 
+                           Margin="11,-15,11,0" 
+                           TextTrimming="CharacterEllipsis"
+                           Style="{StaticResource TitleTextBlockStyle}"
+                           Foreground="{StaticResource ToastNotificationForeground}"/>
+                <TextBox x:Name="ChapterNumberAndTitleTextBox" 
+                         Grid.Row="2" 
+                         Grid.ColumnSpan="2"
+                         Margin="11,5,11,0"
+                         HorizontalAlignment="Left"
+                         Foreground="{StaticResource ToastNotificationForeground}"                  
+                         Style="{StaticResource ContentTextBoxStyle}"
+                         MouseDoubleClick="OnChapterNumberAndTitleTextBoxMouseDoubleClick"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

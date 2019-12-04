@@ -14,19 +14,26 @@
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/MenuItem.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="MenuBackground" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="MainViewBackgroundLight" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="MainViewBackgroundDark" Color="#FF303030"/>
+
+            <SolidColorBrush x:Key="MenuBackgroundLight" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="MenuBackgroundDark" Color="#FF484848" />
+
+            <SolidColorBrush x:Key="MenuForegroundLight" Color="#FF000000"/>
+            <SolidColorBrush x:Key="MenuForegroundDark" Color="#FFD0D0D0"/>
 
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid Background="White">
+
+    <Grid Background="{StaticResource MainViewBackgroundLight}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" 
-              Background="{StaticResource MenuBackground}">
+              Background="{StaticResource MenuBackgroundLight}">
             <MenuItem Header="Options"
                       TabIndex="0">
                 <MenuItem Header="Keep Running on Close"

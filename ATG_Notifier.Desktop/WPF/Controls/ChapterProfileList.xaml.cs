@@ -1,8 +1,11 @@
 ﻿using ATG_Notifier.Desktop.ViewModels;
+using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
+using ATG_Notifier.ViewModels.Helpers.Extensions;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
@@ -13,30 +16,33 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             InitializeComponent();
         }
 
-        #region ViewModel
+        public ChapterProfilesListViewModel ViewModel => this.DataContext as ChapterProfilesListViewModel;
 
-        public ChapterProfilesListViewModel ViewModel
+        #region ItemClickCommand
+
+        public ICommand ItemClickCommand
         {
-            get => (ChapterProfilesListViewModel)GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
+            get => (ICommand)GetValue(ItemClickCommandProperty);
+            set => SetValue(ItemClickCommandProperty, value);
         }
 
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register(nameof(ViewModel), typeof(ChapterProfilesListViewModel), typeof(ChapterProfileList), new PropertyMetadata(null, OnPropertyChanged));
+        public static readonly DependencyProperty ItemClickCommandProperty =
+            DependencyProperty.Register(nameof(ItemClickCommand), typeof(ICommand), typeof(ChapterProfileList), new PropertyMetadata(null));
 
-        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        #endregion // ItemClickCommand
+
+        #region ItemLostFocusCommand
+
+        public ICommand ItemLostFocusCommand
         {
-            var profileList = (ChapterProfileList)d;
-            if (e.Property == ViewModelProperty)
-            {
-                if (e.NewValue is ChapterProfilesListViewModel viewModel)
-                {
-                    profileList.DataContext = viewModel;
-                }
-            }
+            get => (ICommand)GetValue(ItemLostFocusCommandProperty);
+            set => SetValue(ItemLostFocusCommandProperty, value);
         }
 
-        #endregion // ViewModel
+        public static readonly DependencyProperty ItemLostFocusCommandProperty =
+            DependencyProperty.Register(nameof(ItemLostFocusCommand), typeof(ICommand), typeof(ChapterProfileList), new PropertyMetadata(null));
+
+        #endregion // ItemLostFocusCommand
 
         public object GetDataItem(UIElement element)
         {
@@ -70,6 +76,28 @@ namespace ATG_Notifier.Desktop.WPF.Controls
                     element.Focus();
                 }
             }
+        }
+
+        private void OnChapterListKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && e.OriginalSource is ListBoxItem item)
+            {
+                this.ItemClickCommand.TryExecute(item.DataContext as ChapterProfileViewModel);
+            }
+        }
+
+        private void OnChapterListMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (this.ChapterList.SelectedItem is ChapterProfileViewModel chapterProfileViewModel)
+            {
+                this.ItemClickCommand.TryExecute(chapterProfileViewModel);
+            }
+        }
+        private void OnChapterProfileLostFocus(object sender, RoutedEventArgs e)
+        {
+            var item = (ListBoxItem)sender;
+
+            this.ItemLostFocusCommand.TryExecute(item.DataContext as ChapterProfileViewModel);
         }
     }
 }

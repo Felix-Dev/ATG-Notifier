@@ -77,7 +77,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="26"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <!-- Unread chapter indicator -->
         <TextBlock x:Name="NewTextBlock" 

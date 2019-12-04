@@ -20,6 +20,20 @@ namespace ATG_Notifier.ViewModels.Services
             this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
         }
 
+        public async Task<ChapterProfileModel> GetChapterProfileAsync(long id)
+        {
+            ChapterProfile chapterProfile = null;
+
+            using (var dataService = this.dataServiceFactory.CreateDataService())
+            {
+                chapterProfile = await dataService.GetChapterProfileAsync(id);
+            }
+
+            return chapterProfile != null
+                ? CreateChapterProfileModel(chapterProfile)
+                : null;
+        }
+
         public async Task<IList<ChapterProfileModel>> GetChapterProfilesAsync(/*DataRequest<Order> request*/)
         {
             IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
@@ -132,11 +146,6 @@ namespace ATG_Notifier.ViewModels.Services
 
         private ChapterProfileModel CreateChapterProfileModel(ChapterProfile source)
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
             var model = new ChapterProfileModel()
             {
                 ChapterProfileId = source.ChapterProfileId,

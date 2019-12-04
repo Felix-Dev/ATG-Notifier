@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x86;x64</Platforms>
-    <AssemblyName>Restarter</AssemblyName>
+    <AssemblyName>ATG_Notifier.Restarter</AssemblyName>
     <ApplicationIcon />
     <StartupObject />
     <Configurations>Debug;Release;DesktopPackage</Configurations>
@@ -12,6 +12,18 @@
     <Company />
     <Authors>Felix-Dev</Authors>
     <Version>1.1.0</Version>
+    <PackageId>ATG-Notifier.Restarter</PackageId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishedTrimmed>true</PublishedTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
 </Project>

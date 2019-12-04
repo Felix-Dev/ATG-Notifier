@@ -9,6 +9,7 @@
              x:ClassModifier="internal"
              mc:Ignorable="d" 
              d:DesignHeight="310" d:DesignWidth="120"
+             x:Name="ChapterProfilesViewControl"
              HorizontalContentAlignment="Stretch"
              FontFamily="Segoe UI"
              Loaded="OnLoaded"
@@ -319,7 +320,7 @@
                             ToolTipService.ShowDuration="2000"
                             TabIndex="6"
                             Click="OnLatestChapterButtonClick"
-                            IsEnabled="{Binding AppSettings.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}, Mode=OneWay}">
+                            IsEnabled="{Binding AppSettings.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}}">
                         <Button.Content>
                             <StackPanel>
                                 <ContentPresenter Content="{StaticResource IconMostRecentUpdate}"/>
@@ -394,11 +395,13 @@
                    TextAlignment="Center"
                    FontSize="20"
                    Foreground="Black"
-                   Visibility="{Binding ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}, Mode=OneWay}" />
+                   Visibility="{Binding ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
 
         <controls:ChapterProfileList x:Name="ChapterProfileList" 
                                      Grid.Row="1"
                                      DataContext="{Binding ListViewModel}"
-                                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}, Mode=OneWay}"/>
+                                     ItemClickCommand="{Binding ViewModel.OpenChapterProfileCommand, ElementName=ChapterProfilesViewControl}"
+                                     ItemLostFocusCommand="{Binding ViewModel.ChapterProfileLostFocusCommand, ElementName=ChapterProfilesViewControl}"
+                                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"/>
     </Grid>
 </UserControl>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
     <Version>1.4.0.0</Version>
@@ -14,6 +14,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;DesktopPackage</Configurations>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -28,14 +29,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <!--<PublishTrimmed>true</PublishTrimmed>
-    <PublishReadyToRun>true</PublishReadyToRun>-->
+    <PublishReadyToRun>true</PublishReadyToRun>
     <PublishedTrimmed>true</PublishedTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Views\ToastNotification\ToastNotificationView2.xaml" />
     <None Remove="WPF\Controls\MainView.xaml" />
     <None Remove="WPF\Themes\MenuItem.xaml" />
   </ItemGroup>
@@ -101,14 +102,13 @@
     <None Update="WPF\Themes\ToolTip.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-
-    <None Include="ATG_Notifier.UI.Properties.Settings.datasource" />
     
   </ItemGroup>
   
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  
   <ItemGroup>
     <Content Include="logo_16_ld4_icon.ico" />
     <Content Include="Resources\logo_16_ld4_icon.ico" />
@@ -118,11 +118,18 @@
     </Content>
     <Content Include="testLogo.ico" />
   </ItemGroup>
+  
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Condition="'$(Configuration)'=='Debug'" Command="xcopy $(SolutionDir)ATG_Notifier.Restarter\$(OutDir). $(TargetDir)Restarter\ /d /Y" />
+    <Exec Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Command="dotnet publish -r win-x64 -c release -o $(TargetDir)Restarter\ $(SolutionDir)ATG_Notifier.Restarter\ /p:PublishSingleFile=true /p:PublishTrimmed=true" />
+    <Exec Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'" Command="dotnet publish -r win-x64 -c release -o $(TargetDir)Restarter\ $(SolutionDir)ATG_Notifier.Restarter\ /p:PublishSingleFile=true /p:PublishTrimmed=true" />
+  </Target>
   
 </Project>

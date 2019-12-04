@@ -1,8 +1,4 @@
-﻿using ATG_Notifier.Desktop.Views.ToastNotification;
-using ATG_Notifier.Desktop.Utilities.Bindings;
-using System;
-using System.Windows.Forms;
-using System.Windows.Forms.Integration;
+﻿using System.Windows.Forms.Integration;
 
 namespace ATG_Notifier.Desktop.Views
 {

@@ -5,17 +5,42 @@ using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.View;
 using ATG_Notifier.Desktop.ViewModels;
+using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.Views.ToastNotification;
+using ATG_Notifier.Desktop.WinForms.Helpers.Extensions;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ATG_Notifier.Desktop.Services
 {
     internal class ToastNotificationManager
     {
         private const int MaxDisplayedPopups = 3;
+
+        private const int DISPLAY_START_POSITION_Y = 10;
+
+        /// <summary>Space between two consecutive notifications.</summary>
+        private const int INTER_NOTIFICATION_OFFSET_Y = 5;
+
+        /// <summary>
+        /// Representing the margin between "top-most" notification and screen height border.
+        /// </summary>
+        private const int MarginY = 10;
+
+        /// <summary>
+        /// Representing the margin between "top-most" notification and screen height border.
+        /// </summary>
+        private const int MarginX = 0;
+
+        /// <summary>
+        /// Representing the size of the space between two notifications.
+        /// </summary>
+        private const int Padding = 5;
 
         private readonly object notificationCounterLock = new object();
 
@@ -24,6 +49,8 @@ namespace ATG_Notifier.Desktop.Services
         private readonly int[] displaySlots;
 
         private readonly SettingsViewModel appSettings;
+
+        private readonly StaTaskScheduler taskScheduler;
 
         #region Creation
 
@@ -34,11 +61,13 @@ namespace ATG_Notifier.Desktop.Services
         private ToastNotificationManager()
         {
             int diffPositions = Enum.GetValues(typeof(DisplayPosition)).Length;
-            displaySlots = new int[diffPositions];
+            this.displaySlots = new int[diffPositions];
 
-            notificationSema = new Semaphore(MaxDisplayedPopups, MaxDisplayedPopups);
+            this.notificationSema = new Semaphore(MaxDisplayedPopups, MaxDisplayedPopups);
 
             this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
+
+            this.taskScheduler = new StaTaskScheduler(3);
         }
 
         #endregion // Creation        
@@ -50,23 +79,32 @@ namespace ATG_Notifier.Desktop.Services
                 throw new ArgumentNullException(nameof(chapterProfileViewModel));
             }
 
-            string nTitle = title ?? "";
-
-            if (!this.appSettings.IsDisabledOnFullscreen)
+            if (!this.appSettings.IsDisabledOnFullscreen 
+                || ((NativeMethods.SHQueryUserNotificationState(out QUERY_USER_NOTIFICATION_STATE state) == (int)HRESULT.S_OK)
+                    && state == QUERY_USER_NOTIFICATION_STATE.AcceptsNotifications))
             {
-                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileViewModel));
-                return;
-            }
+                // Task version
 
-            int result = NativeMethods.SHQueryUserNotificationState(out QUERY_USER_NOTIFICATION_STATE state);
-            if (result == (int)HRESULT.S_OK 
-                && state == QUERY_USER_NOTIFICATION_STATE.AcceptsNotifications)
-            {
-                Task.Factory.StartNew(() => ShowCore(nTitle, chapterProfileViewModel));
+                //Task.Run(() => ShowCore(title ?? "", chapterProfileViewModel));
+
+                // Thread version
+
+                var th = new Thread(new ThreadStart(() => ShowCore2(title ?? "", chapterProfileViewModel)));
+
+                th.SetApartmentState(ApartmentState.STA);
+                th.IsBackground = true;
+                th.Start();
+
+                // STA Task scheduler version below
+
+                //Task.Factory.StartNew(() =>
+                //{
+                //    ShowCore2(title ?? "", chapterProfileViewModel);
+                //}, CancellationToken.None, TaskCreationOptions.None, this.taskScheduler);
             }
         }
 
-        private async void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
+        private void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
         {
             int displaySlot;
 
@@ -104,6 +142,84 @@ namespace ATG_Notifier.Desktop.Services
 
             ReleaseDisplaySlot(position, displaySlot);
             notificationSema.Release();
+        }
+
+        private void ShowCore2(string title, ChapterProfileViewModel chapterProfileViewModel)
+        {
+            int displaySlot;
+
+            /* 
+             * Only <MAX_DISPLAYED_NOTIFICATIONS> notifications are displayed at once. 
+             * Incoming notifications have to wait until a "notification spot" has become 
+             * available.
+             */
+            notificationSema.WaitOne();
+
+            var position = this.appSettings.NotificationDisplayPosition;
+
+            /*
+             * Multiple threads can try to obtain an <available slot> simultanenously, so we
+             * need to synchronize the multiple thread accesses.
+             */
+            lock (this.notificationCounterLock)
+            {
+                displaySlot = ReserveDisplaySlot(position);
+            }
+
+            var toast = new ToastNotificationView2(title, chapterProfileViewModel.NumberAndTitleDisplayString);
+            toast.Loaded += (s, e) =>
+            {
+                Point p = GetScreenPosition(position, displaySlot, toast);
+                toast.Left = p.X;
+                toast.Top = p.Y;
+
+                if (this.appSettings.IsSoundEnabled)
+                {
+                    Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
+                }
+            };
+
+            toast.Closed += (s, e) =>
+            {
+                if (e.Reason == CloseReason.Click)
+                {
+                    ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
+                    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringToFront());
+                }
+
+                ReleaseDisplaySlot(position, displaySlot);
+                notificationSema.Release();
+
+                Dispatcher.CurrentDispatcher.InvokeShutdown();
+             };
+
+            // Get screen position
+            //Point displayPoint = GetScreenPosition(position, displaySlot, toast);
+
+            //toast.Left = displayPoint.X;
+            //toast.Top = displayPoint.Y;
+
+            toast.Show();
+            Dispatcher.Run();
+
+            //CloseReason reason = toast.ShowDialog();
+
+            //if (reason == CloseReason.Click)
+            //{
+            //    ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
+            //    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringToFront());
+            //}
+
+            //ReleaseDisplaySlot(position, displaySlot);
+            //notificationSema.Release();
+        }
+
+        private void OnToastLoaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (this.appSettings.IsSoundEnabled)
+            {
+                Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
+            }
         }
 
         private void OnNotificationShown(object sender, EventArgs e)
@@ -152,6 +268,44 @@ namespace ATG_Notifier.Desktop.Services
                 : position == DisplayPosition.BottomRight
                 ? 3
                 : 0;
+        }
+
+        private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView2 toastNotification)
+        {
+            Rect currentScreenBounds;
+            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainWindow.GetScreen());
+
+            double dpiScale = DpiHelper.GetDpiScaleForWindow(toastNotification);
+
+            double dpiDisplayWidth = currentScreenBounds.Width / dpiScale;
+            double dpiDisplayHeight = currentScreenBounds.Height / dpiScale;
+
+            double dpiMarginX = MarginX / dpiScale;
+            double dpiMarginY = MarginY / dpiScale;
+
+            double dpiPadding = Padding / dpiScale;
+
+            double toastWidth = toastNotification.Width;
+            double toastHeight = toastNotification.Height;
+
+            var displayPoint = position switch
+            {
+                DisplayPosition.TopLeft => new Point(0 + dpiMarginX, 0 + dpiMarginY),
+                DisplayPosition.TopRight => new Point(dpiDisplayWidth - toastWidth - dpiMarginX, 0 + dpiMarginY),
+                DisplayPosition.BottomLeft => new Point(0 + dpiMarginX, dpiDisplayHeight - toastHeight - dpiMarginY),
+                DisplayPosition.BottomRight => new Point(dpiDisplayWidth - toastWidth - dpiMarginX, dpiDisplayHeight - toastHeight - dpiMarginY),
+            };
+
+            if (position == DisplayPosition.TopLeft || position == DisplayPosition.TopRight)
+            {
+                displayPoint.Y += displaySlot * (toastHeight + dpiPadding);
+            }
+            else
+            {
+                displayPoint.Y -= displaySlot * (toastHeight + dpiPadding);
+            }
+
+            return displayPoint;
         }
     }
 }

@@ -15,6 +15,9 @@
     >
     <Page.Resources>
         <ResourceDictionary>
+            
+            <!--#region XAML UI Command -->
+            
             <XamlUICommand x:Key="UpdateCommand"
                            Label="Update check" Description="Check for new Updates"
                            Command="{x:Bind ViewModel.UpdateCommand}"
@@ -54,6 +57,8 @@
 
             <XamlUICommand x:Key="LostFocusChapterCommand"
                            Command="{x:Bind ViewModel.LostFocusChapterCommand}" />
+            
+            <!--#endregion-->
 
         </ResourceDictionary>
     </Page.Resources>

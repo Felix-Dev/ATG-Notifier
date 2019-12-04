@@ -7,13 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-using WinForms = System.Windows.Forms;
-
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
     internal partial class MessageDialogControl : UserControl
     {
-        private readonly WinForms.Form owner;
+        private readonly System.Windows.Forms.Form owner;
 
         public MessageDialogControl()
         {
@@ -24,9 +22,9 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             ? this.OptionalActionCheckbox.IsChecked.Value 
             : false;
 
-        public WinForms.DialogResult DialogResult { get; private set; }
+        public System.Windows.Forms.DialogResult DialogResult { get; private set; }
 
-        public MessageDialogControl(WinForms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string optionalActionText = null, bool initialOptionalActionState = false)
+        public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string optionalActionText = null, bool initialOptionalActionState = false)
         {
             this.owner = owner;
 
@@ -64,19 +62,19 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         private void OnButtonOKClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = WinForms.DialogResult.OK;
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.owner.Close();
         }
 
         private void OnButtonYesClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = WinForms.DialogResult.Yes;
+            this.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.owner.Close();
         }
 
         private void OnButtonNoClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = WinForms.DialogResult.No;
+            this.DialogResult = System.Windows.Forms.DialogResult.No;
             this.owner.Close();
         }
 

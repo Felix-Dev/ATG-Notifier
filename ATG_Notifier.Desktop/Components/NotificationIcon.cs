@@ -1,11 +1,9 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
-using ATG_Notifier.Desktop.Utilities.Bindings;
+using ATG_Notifier.Desktop.WinForms;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Components
@@ -20,14 +18,19 @@ namespace ATG_Notifier.Desktop.Components
 
         public NotificationIcon(Icon icon, string tooltipText)
         {
+            if (icon is null)
+            {
+                throw new ArgumentNullException(nameof(icon));
+            }
+
             this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             var components = new System.ComponentModel.Container();
             this.notifyIcon = new NotifyIcon(components)
             {
-                ContextMenu = GetContextMenu(),
+                ContextMenuStrip = GetContextMenu(),
                 Icon = icon,
-                Text = tooltipText,
+                Text = tooltipText ?? "",
             };
 
             this.notifyIcon.MouseUp += OnMouseUp;
@@ -130,59 +133,48 @@ namespace ATG_Notifier.Desktop.Components
             CommonHelpers.RunOnUIThread(() => this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon()));
         }
 
-        private ContextMenu GetContextMenu()
+        private ContextMenuStrip GetContextMenu()
         {
-            var contextMenu = new ContextMenu();
+            var contextMenu = new ContextMenuStrip();
 
             // Sound
-            var menuItemSound = new BindableMenuItem
+            var menuItemSound = new BindableToolStripMenuItem
             {
-                Index = 0,
                 Text = "Play Notification Sound"
             };
-            menuItemSound.DataBindings.Add(new Binding(nameof(BindableMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsSoundEnabled), true, DataSourceUpdateMode.OnPropertyChanged));
+            menuItemSound.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsSoundEnabled), true, DataSourceUpdateMode.OnPropertyChanged));
             menuItemSound.Click += OnMenuItemSoundClick;
 
-            contextMenu.MenuItems.Add(menuItemSound);
+            contextMenu.Items.Add(menuItemSound);
 
             // separator
-            var separator = new MenuItem
-            {
-                Index = 1,
-                Text = "-"
-            };
+            var separator = new ToolStripSeparator();
 
-            contextMenu.MenuItems.Add(separator);
+            contextMenu.Items.Add(separator);
 
             // Focus mode
-            var menuItemFocus = new BindableMenuItem
+            var menuItemFocus = new BindableToolStripMenuItem
             {
-                Index = 2,
                 Text = "Do Not Disturb"
             };
-            menuItemFocus.DataBindings.Add(new Binding(nameof(BindableMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsInFocusMode), true, DataSourceUpdateMode.OnPropertyChanged));
+            menuItemFocus.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsInFocusMode), true, DataSourceUpdateMode.OnPropertyChanged));
             menuItemFocus.Click += OnMenuItemFocusClick;
 
-            contextMenu.MenuItems.Add(menuItemFocus);
+            contextMenu.Items.Add(menuItemFocus);
 
             // separator
-            separator = new MenuItem
-            {
-                Index = 3,
-                Text = "-"
-            };
+            separator = new ToolStripSeparator();
 
-            contextMenu.MenuItems.Add(separator);
+            contextMenu.Items.Add(separator);
 
             // Exit
-            var menuItemExit = new MenuItem
+            var menuItemExit = new ToolStripMenuItem
             {
-                Index = 4,
                 Text = "Exit"
             };
             menuItemExit.Click += OnMenuItemExitClick;
 
-            contextMenu.MenuItems.Add(menuItemExit);
+            contextMenu.Items.Add(menuItemExit);
 
             return contextMenu;
         }
@@ -194,24 +186,16 @@ namespace ATG_Notifier.Desktop.Components
 
         private void OnMenuItemFocusClick(object sender, EventArgs e)
         {
-            var menuItem = (BindableMenuItem)sender;
+            var menuItem = (BindableToolStripMenuItem)sender;
 
             menuItem.Checked = !menuItem.Checked;
-
-            // DataSourceUpdateMode.OnPropertyChanged should automatically write back the value to the data source
-            // but it's not working so we have to it manually here...
-            menuItem.DataBindings[0].WriteValue();
         }
 
         private void OnMenuItemSoundClick(object sender, EventArgs e)
         {
-            var menuItem = (BindableMenuItem)sender;
+            var menuItem = (BindableToolStripMenuItem)sender;
 
             menuItem.Checked = !menuItem.Checked;
-
-            // DataSourceUpdateMode.OnPropertyChanged should automatically write back the value to the data source
-            // but it's not working so we have to it manually here...
-            menuItem.DataBindings[0].WriteValue();
         }
     }
 }

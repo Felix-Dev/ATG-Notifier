@@ -14,13 +14,13 @@ namespace ATG_Notifier.Restarter
                 Console.WriteLine($"Started restarter with argument: {args[0]}");
 
                 string[] argumentData = args[0].Split(';', StringSplitOptions.RemoveEmptyEntries);
-                if (argumentData.Length < 2)
+                if (argumentData.Length < 3)
                 {
                     Console.WriteLine("Error: Restarter was not supplied with the relevant data needed to perform the Notifier restart!");
                 }
-                else if (!int.TryParse(argumentData[0], out int procId))
+                else if (!int.TryParse(argumentData[0], out int procId) || !int.TryParse(argumentData[1], out int appType))
                 {
-                    Console.WriteLine("Error: First argument is NOT a process ID!");
+                    Console.WriteLine("Error: process ID and/or appType have invalid values!");
                 }
                 else
                 {
@@ -43,17 +43,39 @@ namespace ATG_Notifier.Restarter
 
                     Console.Write("Attempting to restart the Notifier...");
 
-                    var appActivationManager = new ApplicationActivationManager();
-                    var result = appActivationManager.ActivateApplication($"{argumentData[1]}!App", "Requested Restart", ActivateOptions.None, out _);
-                    if (result.ToInt32() == 0)
+                    bool restartSuccess = false;
+                    if (appType == 0)
+                    {
+                        var process = new Process();
+                        process.StartInfo.FileName = argumentData[2];
+                        process.StartInfo.Arguments = "restart";
+
+                        try
+                        {
+                            restartSuccess = process.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Failed! Could not start process {argumentData[2]}. Technical details: {ex.Message}");
+                        }
+                        
+                    }
+                    else if (appType == 1)
+                    {
+                        var appActivationManager = new ApplicationActivationManager();
+                        var result = appActivationManager.ActivateApplication($"{argumentData[2]}!App", "Requested Restart", ActivateOptions.None, out _);
+
+                        restartSuccess = result.ToInt32() == 0;
+                        if (!restartSuccess)
+                        {
+                            Console.WriteLine($"Failed! See error {result.ToInt32().ToString()} for more details!");
+                        }
+                    }
+
+                    if (restartSuccess)
                     {
                         Console.WriteLine("OK!");
-
                         return;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed with error {result.ToInt32().ToString()}!");
                     }
                 }
             }

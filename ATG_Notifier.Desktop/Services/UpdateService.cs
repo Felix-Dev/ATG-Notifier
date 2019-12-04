@@ -14,7 +14,7 @@ namespace ATG_Notifier.Desktop.Services
     internal class UpdateService : IUpdateService
     {
 #if DEBUG
-        private const int RawSourcePollingInterval = 1 * 10 * 1000;
+        private const int RawSourcePollingInterval = 1 * 1 * 1000;
 #else
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif
@@ -205,10 +205,10 @@ namespace ATG_Notifier.Desktop.Services
                 this.saveguardSema.Release();
             }
 #endif
-            // TODO: Crashing code below to text unexpected error handling:
-            await Task.Delay(7000);
+            // TODO: Crashing code below to test unexpected error handling:
+            //await Task.Delay(7000);
 
-            string s = null; int i = s.Length;
+            //string s = null; int i = s.Length;
 
             lock (this.timerLock)
             {

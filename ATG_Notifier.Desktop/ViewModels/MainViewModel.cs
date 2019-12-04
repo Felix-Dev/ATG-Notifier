@@ -13,18 +13,18 @@ namespace ATG_Notifier.Desktop.ViewModels
     {
         public MainViewModel()
         {
-            this.ExitCommand = new RelayCommand(OnExit);
+            //this.ExitCommand = new RelayCommand(OnExit);
 
             this.SettingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
         }
 
         public SettingsViewModel SettingsViewModel { get; }
 
-        public ICommand ExitCommand { get; }
+        //public ICommand ExitCommand { get; }
 
-        private void OnExit()
-        {
-            Application.Current.Shutdown();
-        }
+        //private void OnExit()
+        //{
+        //    Application.Current.Shutdown();
+        //}
     }
 }

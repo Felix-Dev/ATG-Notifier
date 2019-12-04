@@ -16,6 +16,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATG_Notifier.Restarter", "ATG_Notifier.Restarter\ATG_Notifier.Restarter.csproj", "{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATG_Notifier.Desktop", "ATG_Notifier.Desktop\ATG_Notifier.Desktop.csproj", "{6E82B9CE-92E7-4B63-B21F-0CF9CAF5FBF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0} = {14B5A6FC-D96F-4BF6-9D03-CAA6D5AA54A0}
+	EndProjectSection
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "ATG_Notifier.DesktopPackage", "ATG_Notifier.DesktopPackage\ATG_Notifier.DesktopPackage.wapproj", "{BAA05230-C929-425C-8278-32614B23A46B}"
 EndProject

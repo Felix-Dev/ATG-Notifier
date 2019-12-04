@@ -1,18 +1,12 @@
 ﻿using ATG_Notifier.Desktop.Components;
 using ATG_Notifier.Desktop.Configuration;
-using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Utilities;
-using ATG_Notifier.Desktop.Utilities.Bindings;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Controls;
 using ATG_Notifier.ViewModels.Services;
 using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Views
@@ -52,7 +46,7 @@ namespace ATG_Notifier.Desktop.Views
             this.wpfHost.Child = new MainView(this);
             this.wpfHost.Visible = true;
 
-            Components.JumplistManager.BuildJumplist();
+            //JumplistManager.BuildJumplist();
             this.notificationIcon = new NotificationIcon(Properties.Resources.logo_16_ld4_icon, AppConfiguration.AppId);
         }
 
@@ -69,58 +63,6 @@ namespace ATG_Notifier.Desktop.Views
             }
         }
 
-        private void RestorePreviousWindowsPosition()
-        {          
-            if (!(this.appSettings.WindowSetting is WindowSetting prevWindowSetting)
-                || !(Screen.PrimaryScreen?.Bounds is Rectangle screenClientArea))
-            {
-                return;
-            }
-
-            if (prevWindowSetting.X >= screenClientArea.Width 
-                || prevWindowSetting.Y < -8 || prevWindowSetting.Y >= screenClientArea.Height)
-            {
-                return;
-            }
-
-            if (prevWindowSetting.Width < this.MinimumSize.Width || prevWindowSetting.Height < this.MinimumSize.Height)
-            {
-                return;
-            }
-
-            if (prevWindowSetting.X < 0 && prevWindowSetting.X + prevWindowSetting.Width < SurfaceAreaMinWidth)
-            {
-                return;
-            }
-
-            if (screenClientArea.Width - prevWindowSetting.X < SurfaceAreaMinWidth)
-            {
-                return;
-            }
-
-            if (screenClientArea.Height - prevWindowSetting.Y < SurfaceAreaMinHeight)
-            {
-                return;
-            }
-
-            this.Location = new Point((int)prevWindowSetting.X, (int)prevWindowSetting.Y);
-
-            this.Width = (int)prevWindowSetting.Width;
-            this.Height = (int)prevWindowSetting.Height;
-        }
-
-        private void SaveWindowPosition()
-        {
-            if (this.WindowState == FormWindowState.Minimized || this.WindowState == FormWindowState.Maximized)
-            {
-                this.appSettings.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
-            }
-            else
-            {
-                this.appSettings.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
-            }            
-        }
-
         /// <summary>
         /// Handles our custom window messages such as jumplist commands.
         /// </summary>
@@ -130,7 +72,10 @@ namespace ATG_Notifier.Desktop.Views
             // terminate the application when we receive our custom exit message.
             if (msg.Msg == WindowsMessageHelper.WM_EXIT)
             {
-                System.Windows.Application.Current.Shutdown();
+                // Calling WinForms Exit() method here, so that we terminate the app insted of keeping it running (Form ClosingReason = ApplicationExit).
+                // We don't directly call WPFs Application Exit method here as any normal app termination will first close this window and then exits the app
+                // (so that we can handle <keep running on closed). In fact, we never call WPFs Exit method but in case of an unhandled exception just quit directly.
+                Application.Exit();
             }
             // bring the current instance to the foreground when we receive out custom show-instance message.
             else if (msg.Msg == WindowsMessageHelper.WM_SHOWINSTANCE)
@@ -191,7 +136,6 @@ namespace ATG_Notifier.Desktop.Views
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-
             Exit();
         }
 
@@ -204,16 +148,64 @@ namespace ATG_Notifier.Desktop.Views
             
             this.chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
 
-            // clear jumplist from added custom entries
-            Components.JumplistManager.ClearJumplist();
-
             // remove icon from Windows notification area
             this.notificationIcon.Hide();
             this.notificationIcon.Dispose();
             this.notificationIcon = null;
 
-            //Environment.Exit(0);
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void RestorePreviousWindowsPosition()
+        {
+            if (!(this.appSettings.WindowSetting is WindowSetting prevWindowSetting)
+                || !(Screen.PrimaryScreen?.Bounds is Rectangle screenClientArea))
+            {
+                return;
+            }
+
+            if (prevWindowSetting.X >= screenClientArea.Width
+                || prevWindowSetting.Y < -8 || prevWindowSetting.Y >= screenClientArea.Height)
+            {
+                return;
+            }
+
+            if (prevWindowSetting.Width < this.MinimumSize.Width || prevWindowSetting.Height < this.MinimumSize.Height)
+            {
+                return;
+            }
+
+            if (prevWindowSetting.X < 0 && prevWindowSetting.X + prevWindowSetting.Width < SurfaceAreaMinWidth)
+            {
+                return;
+            }
+
+            if (screenClientArea.Width - prevWindowSetting.X < SurfaceAreaMinWidth)
+            {
+                return;
+            }
+
+            if (screenClientArea.Height - prevWindowSetting.Y < SurfaceAreaMinHeight)
+            {
+                return;
+            }
+
+            this.Location = new Point((int)prevWindowSetting.X, (int)prevWindowSetting.Y);
+
+            this.Width = (int)prevWindowSetting.Width;
+            this.Height = (int)prevWindowSetting.Height;
+        }
+
+        private void SaveWindowPosition()
+        {
+            if (this.WindowState == FormWindowState.Minimized || this.WindowState == FormWindowState.Maximized)
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
+            }
+            else
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
+            }
         }
 
         /// <summary>
@@ -226,30 +218,5 @@ namespace ATG_Notifier.Desktop.Views
         {
             this.notificationIcon.UpdateBadge(e.UnreadCount);
         }
-
-#region MenuItem Handler
-
-        private void OnMenuItemNotificationPositionTopLeft_Click(object sender, EventArgs e)
-        {
-            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopLeft;
-
-        }
-
-        private void OnMenuItemNotificationPositionTopRight_Click(object sender, EventArgs e)
-        {
-            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopRight;
-        }
-
-        private void OnMenuItemNotificationPositionBottomLeft_Click(object sender, EventArgs e)
-        {
-            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomLeft;
-        }
-
-        private void OnMenuItemNotificationPositionBottomRight_Click(object sender, EventArgs e)
-        {
-            this.appSettings.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomRight;
-        }
-
-#endregion // MenuItem Handler
     }
 }

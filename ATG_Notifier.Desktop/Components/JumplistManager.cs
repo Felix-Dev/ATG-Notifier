@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ATG_Notifier.Desktop.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -44,7 +45,7 @@ namespace ATG_Notifier.Desktop.Components
             {
                 jumpList.JumpItems.Clear();
 
-                JumpList.SetJumpList(Application.Current, jumpList);
+                CommonHelpers.RunOnUIThread(() => JumpList.SetJumpList(Application.Current, jumpList));
             }
         }
     }

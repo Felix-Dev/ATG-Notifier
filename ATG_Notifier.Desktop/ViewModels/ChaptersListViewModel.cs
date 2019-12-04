@@ -34,8 +34,6 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.Items = new ObservableCollection<ChapterProfileViewModel>();
 
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
-            this.OpenChapterCommand = new RelayCommand<ChapterProfileViewModel>(OnOpenChapter);
-            this.ReadChapterCommand = new RelayCommand<ChapterProfileViewModel>(OnChapterProfileReadAsync);
 
             this.updateService.ChapterUpdated += OnChapterUpdateAsync;
         }
@@ -45,10 +43,6 @@ namespace ATG_Notifier.Desktop.ViewModels
         public SettingsViewModel AppSettings { get; private set; }
 
         public ICommand DeleteChapterProfileCommand { get; }
-
-        public ICommand OpenChapterCommand { get; }
-
-        public ICommand ReadChapterCommand { get; }
 
         public ICommand SetListAsReadCommand { get; }
 
@@ -120,26 +114,21 @@ namespace ATG_Notifier.Desktop.ViewModels
             }
         }
 
-        private async void OnChapterProfileReadAsync(ChapterProfileViewModel viewModel)
+        public async Task UpdateChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
         {
-            if (viewModel.IsRead)
+            if (chapterProfileViewModel is null)
             {
-                return;
+                throw new ArgumentNullException(nameof(chapterProfileViewModel));
             }
 
-            viewModel.IsRead = true;
+            ChapterProfileModel chapterProfileModel = await this.chapterProfileService.GetChapterProfileAsync(chapterProfileViewModel.ChapterProfileId);
+            if (chapterProfileModel?.IsRead != chapterProfileViewModel.IsRead)
+            {
+                this.chapterProfilesUnreadCount--;
+                ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
+            }
 
-            this.chapterProfilesUnreadCount--;
-            ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
-
-            await this.chapterProfileService.UpdateChapterProfileAsync(viewModel.ChapterProfileModel);
-        }
-
-        private void OnOpenChapter(ChapterProfileViewModel viewModel)
-        {
-            WebUtility.OpenWebsite(viewModel.Url);
-
-            OnChapterProfileReadAsync(viewModel);
+            await this.chapterProfileService.UpdateChapterProfileAsync(chapterProfileViewModel.ChapterProfileModel);
         }
     }
 }

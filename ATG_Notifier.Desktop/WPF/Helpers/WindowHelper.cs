@@ -20,7 +20,7 @@ namespace ATG_Notifier.Desktop.WPF.Helpers
             var wiHelper = new WindowInteropHelper(window);
             IntPtr handle = wiHelper.Handle;
 
-            IntPtr monitor = NativeMethods.MonitorFromWindow(handle, (int)MONITORINFO.MonitorOptions.MONITOR_DEFAULT_TO_NEAREST);
+            IntPtr monitor = NativeMethods.MonitorFromWindow(handle, (int)MonitorOptions.MONITOR_DEFAULT_TO_NEAREST);
 
             Size workSize = new Size(0, 0);
             if (monitor != IntPtr.Zero)
@@ -43,7 +43,7 @@ namespace ATG_Notifier.Desktop.WPF.Helpers
             MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
 
             /* Adjust the maximized size and position to fit the work area of the correct monitor. */
-            IntPtr monitor = NativeMethods.MonitorFromWindow(hWnd, (int)MONITORINFO.MonitorOptions.MONITOR_DEFAULT_TO_NEAREST);
+            IntPtr monitor = NativeMethods.MonitorFromWindow(hWnd, (int)MonitorOptions.MONITOR_DEFAULT_TO_NEAREST);
 
             if (monitor != IntPtr.Zero)
             {
