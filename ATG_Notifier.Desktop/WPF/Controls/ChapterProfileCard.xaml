@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:ATG_Notifier.Desktop.WPF.Converters"
-             xmlns:local="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -16,18 +15,17 @@
             
             <!--#region Brushes -->
 
-            <SolidColorBrush x:Key="MenuNotification.WCB.Foreground" Color="#FFA9A9A9" />
-            <SolidColorBrush x:Key="MenuNotification.WCB.MouseOver.Foreground" Color="#FFFF0000" />
-            <SolidColorBrush x:Key="MenuNotification.WCB.Pressed.Foreground" Color="#FFA00000" />
+            <SolidColorBrush x:Key="ChapterProfileCardForegorund" Color="DarkGray" />
+            <SolidColorBrush x:Key="ChapterProfileCardForegroundAlert" Color="#FFFF0000" />
 
-            <SolidColorBrush x:Key="MenuNotification.Border" Color="LightGray" />
+            <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="Transparent" />
 
-            <SolidColorBrush x:Key="MenuNotification.Alert.Foreground" Color="Red" />
-            <SolidColorBrush x:Key="MenuNotification.Title.Foreground" Color="DarkGray" />
-            <SolidColorBrush x:Key="MenuNotification.Body.Foreground" Color="DarkGray" />
-
-            <SolidColorBrush x:Key="MenuNotification.WCB.Background" Color="Transparent" />
+            <SolidColorBrush x:Key="CloseButtonForeground" Color="#FFA9A9A9" />
+            <SolidColorBrush x:Key="CloseButtonForegroundMouseOver" Color="#FFFF0000" />
+            <SolidColorBrush x:Key="CloseButtonForegroundPressed" Color="#FFA00000" />
             
+            <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
+
             <!--#endregion-->
             
             <!--#region Converters -->
@@ -35,40 +33,44 @@
             <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
             
             <!--#endregion-->
+            
+            <!--#region Styles -->
 
-            <Style x:Key="Button_Style_MenuNotificationWCB" TargetType="Button">
+            <Style x:Key="CloseButtonStyle" TargetType="Button">
                 <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
-                <Setter Property="Height" Value="22" />
-                <Setter Property="MaxHeight" Value="22" />
-                <Setter Property="Width" Value="22" />
-
-                <Setter Property="Background" Value="{StaticResource MenuNotification.WCB.Background}" />
-                <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.Foreground}" />
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="Content" Value="✖"/>
+                <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
+                <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" 
-                                                  VerticalAlignment="Center"
-                                                  Focusable="False"/>
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Focusable="{TemplateBinding Focusable}"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.MouseOver.Foreground}" />
+                                    <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundMouseOver}" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource MenuNotification.WCB.Pressed.Foreground}" />
+                                    <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundPressed}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!--#endregion-->
+            
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-          HorizontalAlignment="Stretch">
+    <Grid Background="{StaticResource ChapterProfileCardBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -82,7 +84,7 @@
         <!-- Unread chapter indicator -->
         <TextBlock x:Name="NewTextBlock" 
                    Grid.Row="0" Grid.Column="1"
-                   Foreground="{DynamicResource MenuNotification.Alert.Foreground}" 
+                   Foreground="{StaticResource ChapterProfileCardForegroundAlert}" 
                    FontSize="11" FontWeight="Bold"
                    Margin="0,8,0,0"
                    Text="NEW!">
@@ -99,15 +101,14 @@
         <!-- Delete chapter profile button -->
         <Button x:Name="CloseButton" 
                 Grid.Row="0" Grid.Column="2"
-                HorizontalAlignment="Right"
-                Margin="0,3,3,0"
-                Style="{StaticResource Button_Style_MenuNotificationWCB}" 
-                Content="✖"
-                FontFamily="Segoe UI Symbol" FontSize="15"
+                Margin="0,5,6,0"
+                Style="{StaticResource CloseButtonStyle}" 
+                FontSize="15"
                 ToolTip="Delete"
                 ToolTipService.InitialShowDelay="1000"
                 ToolTipService.ShowDuration="2000"
                 IsTabStop="False"
+                Focusable="False"
                 Click="OnCloseButtonClick"
                 PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
         <!-- Chapter number and title textbox -->
@@ -115,7 +116,7 @@
                  Grid.Row="1" Grid.Column="1"
                  Margin="0,0,3,0" Padding="0"
                  Style="{StaticResource TextBox_TextBlockSelection}"
-                 Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
+                 Foreground="{StaticResource ChapterProfileCardForegorund}" 
                  FontSize="14" FontWeight="Bold"
                  HorizontalAlignment="Left"
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
@@ -126,7 +127,7 @@
         <!-- Chapter word count and release time textblock -->
         <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                    Margin="0,0,3,1"
-                   Foreground="{DynamicResource MenuNotification.Title.Foreground}" 
+                   Foreground="{StaticResource ChapterProfileCardForegorund}" 
                    FontSize="11"                                      
                    HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock.Text>

@@ -52,7 +52,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             foreach (var model in chapterProfileModels)
             {
-                CommonHelpers.RunOnUIThread(() => this.Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
+                CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
 
                 if (!model.IsRead)
                 {
@@ -93,7 +93,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         private async void OnChapterUpdateAsync(object sender, ChapterUpdateEventArgs e)
         {
-            CommonHelpers.RunOnUIThread(() => this.Add(e.ChapterProfile));
+            CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfile));
 
             this.chapterProfilesUnreadCount++;
             ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));

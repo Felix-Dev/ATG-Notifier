@@ -1,25 +1,11 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.ViewModels;
-using ATG_Notifier.Desktop.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
-    /// <summary>
-    /// Interaction logic for MainView.xaml
-    /// </summary>
     internal partial class MainView : UserControl
     {
         private readonly System.Windows.Forms.Form owner;

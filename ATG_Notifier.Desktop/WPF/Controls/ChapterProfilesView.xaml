@@ -338,8 +338,7 @@
                                                        HorizontalAlignment="Center" TextAlignment="Center"
                                                        FontSize="12"
                                                        Foreground="#FF6A6A6A"
-                                                       TextWrapping="Wrap"
-                                                       />
+                                                       TextWrapping="Wrap"/>
                                             <TextBlock Margin="0,5,0,0" 
                                                        HorizontalAlignment="Center"
                                                        TextAlignment="Center"

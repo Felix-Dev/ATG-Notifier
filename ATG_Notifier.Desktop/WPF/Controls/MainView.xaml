@@ -92,6 +92,7 @@
                           Click="OnMenuItemAboutClick"/>
             </MenuItem>
         </Menu>
-        <controls:ChapterProfilesView Grid.Row="1"/>
+        <controls:ChapterProfilesView x:Name="ChapterProfilesViewControl" 
+                                      Grid.Row="1"/>
     </Grid>
 </UserControl>

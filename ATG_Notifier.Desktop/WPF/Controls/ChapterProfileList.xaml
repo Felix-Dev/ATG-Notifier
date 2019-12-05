@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:behaviors="clr-namespace:ATG_Notifier.Desktop.WPF.Behaviors"
              xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              x:ClassModifier="internal"
@@ -22,6 +21,8 @@
 
         <!--#endregion-->
         
+        <!--#region Styles -->
+        
         <Style x:Key="ChapterProfileListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Margin" Value="0" />
@@ -32,13 +33,6 @@
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Focusable" Value="True" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <!--<Setter Property="behaviors:FocusBehavior.LostFocusCommand" Value="{Binding Path=Tag.ReadChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-            <Setter Property="behaviors:FocusBehavior.LostFocusCommandParameter" Value="{Binding}" />-->
-            <!--<Setter Property="behaviors:PreviewClickBehavior.ClickCommand" Value="{Binding Path=Tag.OpenChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-            <Setter Property="behaviors:PreviewClickBehavior.ClickCommandParameter" Value="{Binding}" />-->
-            <!--<Setter Property="behaviors:KeyDownBehavior.KeyDownCommand" Value="{Binding Path=Tag.OpenChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            <Setter Property="behaviors:KeyDownBehavior.KeyDownCommandParameter" Value="{Binding}"/>
-            <Setter Property="behaviors:KeyDownBehavior.Key" Value="Enter" />-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -87,9 +81,11 @@
             </Setter>
             <EventSetter Event="LostFocus" Handler="OnChapterProfileLostFocus" />
         </Style>
+        
+        <!--#endregion-->
 
         <CollectionViewSource x:Key="NotificationsSortView"
-                                  Source="{Binding Items}">
+                              Source="{Binding Items}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="ArrivalTime" Direction="Descending" />
             </CollectionViewSource.SortDescriptions>

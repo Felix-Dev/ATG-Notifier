@@ -93,6 +93,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
                 this.ItemClickCommand.TryExecute(chapterProfileViewModel);
             }
         }
+
         private void OnChapterProfileLostFocus(object sender, RoutedEventArgs e)
         {
             var item = (ListBoxItem)sender;

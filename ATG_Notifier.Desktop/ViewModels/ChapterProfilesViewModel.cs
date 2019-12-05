@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using ATG_Notifier.ViewModels.Helpers.Extensions;
+
 namespace ATG_Notifier.Desktop.ViewModels
 {
     internal class ChapterProfilesViewModel : ObservableObject
@@ -46,7 +48,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public ICommand ChapterProfileLostFocusCommand { get; }
 
-        private async void OnChangeChapterUpdateModel()
+        private void OnChangeChapterUpdateModel()
         {
             bool isUpdateServiceRunning = AppSettings.IsUpdateServiceRunning;
 
@@ -61,7 +63,13 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             AppSettings.IsUpdateServiceRunning = !isUpdateServiceRunning;
 
+            ApplyCooldownPhaseForCanChangeUpdateStatusService().FireAndForget();
+        }
+
+        private async Task ApplyCooldownPhaseForCanChangeUpdateStatusService()
+        {
             CanChangeUpdateServiceStatus = false;
+
             await Task.Delay(2000);
 
             CanChangeUpdateServiceStatus = true;
@@ -69,11 +77,6 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         private void OnOpenChapterProfile(ChapterProfileViewModel chapterProfileViewModel)
         {
-            if (chapterProfileViewModel is null)
-            {
-                throw new ArgumentNullException(nameof(chapterProfileViewModel));
-            }
-
             WebUtility.OpenWebsite(chapterProfileViewModel.Url);
 
             if (chapterProfileViewModel.IsRead)
@@ -82,23 +85,18 @@ namespace ATG_Notifier.Desktop.ViewModels
             }
 
             chapterProfileViewModel.IsRead = true;
-            this.ListViewModel.UpdateChapterProfileAsync(chapterProfileViewModel);
+            this.ListViewModel.UpdateChapterProfileAsync(chapterProfileViewModel).FireAndForgetSafeAsync();
         }
 
         private void OnChapterProfileLostFocus(ChapterProfileViewModel chapterProfileViewModel)
         {
-            if (chapterProfileViewModel is null)
-            {
-                throw new ArgumentNullException(nameof(chapterProfileViewModel));
-            }
-
-            if (chapterProfileViewModel.IsRead)
+            if (chapterProfileViewModel == null || chapterProfileViewModel.IsRead)
             {
                 return;
             }
 
             chapterProfileViewModel.IsRead = true;
-            this.ListViewModel.UpdateChapterProfileAsync(chapterProfileViewModel);
+            this.ListViewModel.UpdateChapterProfileAsync(chapterProfileViewModel).FireAndForgetSafeAsync();
         }
     }
 }
