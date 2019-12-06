@@ -10,30 +10,33 @@ namespace ATG_Notifier.Desktop.Views
     internal partial class MessageDialogForm : Form
     {
         private readonly MessageDialogIcon icon;
+        private readonly MessageDialogButton buttons;
 
         // Enable if close button should be disabled for dialog without cancel button
-        //protected override CreateParams CreateParams
-        //{
-        //    get
-        //    {
-        //        CreateParams myCp = base.CreateParams;
-        //        if (this.button == MessageDialogButton.YesNo)
-        //        {
-        //            myCp.ClassStyle |= (int)WindowClassStyles.CS_NOCLOSE;
-        //        }
-                
-        //        return myCp;
-        //    }
-        //}
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                if (this.buttons == MessageDialogButton.YesNo)
+                {
+                    myCp.ClassStyle |= (int)WindowClassStyles.CS_NOCLOSE;
+                }
 
-        public MessageDialogForm(string title, string errorMessage, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
+                return myCp;
+            }
+        }
+
+        public MessageDialogForm(string message, string title, MessageDialogButton button = MessageDialogButton.OK, 
+            MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
         {
             InitializeComponent();
 
             this.Text = title;
             this.icon = icon;
+            this.buttons = button;
 
-            this.messageDialogControl = new MessageDialogControl(this, errorMessage, button, icon, optionalActionText, initialOptionalActionState);
+            this.messageDialogControl = new MessageDialogControl(this, message, button, icon, optionalActionText, initialOptionalActionState);
             this.wpfElementHost.Child = this.messageDialogControl;
         }
 
@@ -41,11 +44,7 @@ namespace ATG_Notifier.Desktop.Views
 
         public new DialogResult ShowDialog()
         {
-            this.TopMost = true;
-
             base.ShowDialog();
-
-            this.TopMost = false;
 
             return this.messageDialogControl.DialogResult;
         }

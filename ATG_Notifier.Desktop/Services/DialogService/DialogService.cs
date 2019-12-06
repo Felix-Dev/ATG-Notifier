@@ -65,10 +65,42 @@ namespace ATG_Notifier.Desktop.Services
 
         public DialogResult ShowDialog(string message, string title)
         {
-            using (var dialog = new MessageDialogForm(title, message, MessageDialogButton.OK))
-            { 
-                return dialog.ShowDialog();
-            }
+            return CommonHelpers.RunOnUIThread(() =>
+            {
+                using (var dialog = new MessageDialogForm(message, title))
+                {
+                    return dialog.ShowDialog();
+                }
+            }); 
+        }
+
+        public DialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None)
+        {
+            return CommonHelpers.RunOnUIThread(() =>
+            {
+                using (var dialog = new MessageDialogForm(message, title, button, icon))
+                {
+                    return dialog.ShowDialog();
+                }
+            });
+        }
+
+        public DialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon,
+            string optionalActionText, bool initialOptionalActionState, out bool IsOptionalActionChecked)
+        {
+            var(dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread< (DialogResult, bool)>(() =>
+            {
+                using (var dialog = new MessageDialogForm(message, title,button, icon, optionalActionText, initialOptionalActionState))
+                {
+                    var res = dialog.ShowDialog();
+
+                    bool isOptionalActionChecked = dialog.IsOptionalActionChecked;
+                    return (res, isOptionalActionChecked);
+                }
+            });
+
+            IsOptionalActionChecked = isOptionalActionChecked;
+            return dialogResult;
         }
 
         public DialogResult ShowDialog(string id, string title, string message, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, bool showWhenApplicationActive = true)
@@ -79,7 +111,7 @@ namespace ATG_Notifier.Desktop.Services
 
                 var (dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(DialogResult, bool)>(() =>
                 {
-                    using (var dialog = new MessageDialogForm(title, message, button, icon))
+                    using (var dialog = new MessageDialogForm(message, title, button, icon))
                     {
                         dialog.Shown += (s, e) => DialogShown?.Invoke(this, new DialogShownEventArgs(id));
 
@@ -109,7 +141,7 @@ namespace ATG_Notifier.Desktop.Services
 
                 var (dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(DialogResult, bool)>(() =>
                 {
-                    using (var dialog = new MessageDialogForm(title, message, button, icon, optionalActionText, initialOptionalActionState))
+                    using (var dialog = new MessageDialogForm(message, title, button, icon, optionalActionText, initialOptionalActionState))
                     {
                         dialog.Shown += (s, e) => DialogShown?.Invoke(this, new DialogShownEventArgs(id));
 

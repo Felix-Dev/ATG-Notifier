@@ -80,7 +80,6 @@
                         Padding="16,2,15,2"
                         Content="No"
                         Width="{Binding ActualWidth, ElementName=ButtonYes}"
-                        IsCancel="True"
                         TabIndex="2"
                         Style="{StaticResource MessageDialogButtonStyle}"
                         Visibility="Collapsed"

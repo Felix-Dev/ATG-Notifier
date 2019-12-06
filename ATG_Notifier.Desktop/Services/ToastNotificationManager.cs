@@ -143,7 +143,7 @@ namespace ATG_Notifier.Desktop.Services
                 if (e.Reason == CloseReason.Click)
                 {
                     ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-                    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringToFront());
+                    CommonHelpers.RunOnUIThread(() => App.MainView.BringToFront());
                 }
 
                 ReleaseDisplaySlot(position, displaySlot);
@@ -174,14 +174,6 @@ namespace ATG_Notifier.Desktop.Services
         }
 
         private void OnToastLoaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (this.appSettings.IsSoundEnabled)
-            {
-                Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
-            }
-        }
-
-        private void OnNotificationShown(object sender, EventArgs e)
         {
             if (this.appSettings.IsSoundEnabled)
             {
@@ -232,7 +224,7 @@ namespace ATG_Notifier.Desktop.Services
         private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView toastNotification)
         {
             Rect currentScreenBounds;
-            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainWindow.GetScreen());
+            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainView.GetScreen());
 
             double dpiScale = DpiHelper.GetDpiScaleForWindow(toastNotification);
 

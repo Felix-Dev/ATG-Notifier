@@ -21,20 +21,19 @@ using Windows.ApplicationModel;
 
 namespace ATG_Notifier.Desktop
 {
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
     internal partial class App : Application
     {
         private static ILogService logService;
         private static DialogService dialogService;
 
-        public static new MainWindow MainWindow { get; private set; }
+        public static new MainWindow MainView { get; private set; }
+
+        private readonly AutoResetEvent mainViewActivatedResetEvent;
 
         /// <summary>
         /// Application Entry Point.
         /// </summary>
-        [STAThreadAttribute()]
+        [STAThread()]
         public static void Main(string[] args)
         {
             bool firstInstance;
@@ -46,16 +45,11 @@ namespace ATG_Notifier.Desktop
             {
                 if (firstInstance)
                 {
-                    Configuration.Startup.Configure();
-
                     AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-                    logService = ServiceLocator.Current.GetService<ILogService>();
-                    dialogService = ServiceLocator.Current.GetService<DialogService>();
-                    dialogService.DialogShown += OnDialogShown;
+                    Configuration.Startup.Configure();
 
                     var app = new App();
-                    app.InitializeComponent();
                     app.Run();
                 }
                 else
@@ -65,21 +59,33 @@ namespace ATG_Notifier.Desktop
             }
         }
 
+        public App()
+        {
+            logService = ServiceLocator.Current.GetService<ILogService>();
+            dialogService = ServiceLocator.Current.GetService<DialogService>();
+            //dialogService.DialogShown += OnDialogShown;
+
+            this.mainViewActivatedResetEvent = new AutoResetEvent(false);
+
+            InitializeComponent();
+        }
+
+        public new static App Current => (App)Application.Current;
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (e.Args.Length > 0)
-            {
-                //ProcessCommandLine(e.Args);
-            }
-
             base.OnStartup(e);
 
-            App.MainWindow = new MainWindow();
-            dialogService.MainForm = App.MainWindow;
+            var window = new MainWindow();
+            window.Activated += (s, e) => mainViewActivatedResetEvent.Set();
+            window.Deactivate += (s, e) => mainViewActivatedResetEvent.Reset();
+
+            //dialogService.MainForm = App.MainWindow;
 
             JumplistManager.BuildJumplist();
 
-            App.MainWindow.Show();
+            App.MainView = window;
+            App.MainView.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -89,7 +95,7 @@ namespace ATG_Notifier.Desktop
             SaveAndCleanup();
         }
 
-        private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
+        private void OnSessionEnding(object? sender, SessionEndingCancelEventArgs e)
         {
             SaveAndCleanup();
 
@@ -108,7 +114,7 @@ namespace ATG_Notifier.Desktop
             ServiceLocator.Current.GetService<SettingsViewModel>().Save();
         }
 
-        private static void OnDialogShown(object sender, DialogShownEventArgs e)
+        private void OnDialogShown(object? sender, DialogShownEventArgs e)
         {
             if (e.DialogId == "critical error")
             {
@@ -120,39 +126,53 @@ namespace ATG_Notifier.Desktop
         {
             logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
-            ((App)(Application.Current)).SaveAndCleanup();
+            App.Current.SaveAndCleanup();
 
+            // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention
             CommonHelpers.RunOnUIThread(() =>
             {
-                if (!App.MainWindow.Visible)
+                if (!App.MainView.Visible)
                 {
-                    App.MainWindow.Visible = true;
+                    App.MainView.Visible = true;
                 }
             });
-
             TaskbarManager.Current.SetErrorTaskbarButton();
 
-            string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
-            System.Windows.Forms.DialogResult result = dialogService.ShowDialog("critical error", "Critical Error", message, MessageDialogButton.YesNo, MessageDialogIcon.Error, "Do you want to open the folder to the log file?", out bool openLogFile);
+            // Wait for the notifier app to be in the foreground.
+            App.Current.mainViewActivatedResetEvent.WaitOne();
 
-            if (openLogFile)
+            // As soon as we are the foregroudn app, clear the error mode of the taskbar button
+            // and show our error message
+            TaskbarManager.Current.ClearErrorTaskbarButton();
+            ShowAndProcessErrorDialog();
+
+            static void ShowAndProcessErrorDialog()
             {
-                var psi = new ProcessStartInfo
+                string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
+                System.Windows.Forms.DialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
+                    "Do you want to open the folder to the log file?", false, out bool openLogFileDirRequested);
+
+                // Open the directory of the log file in the file explorer
+                if (openLogFileDirRequested)
                 {
-                    FileName = AppConfiguration.LogfileDirectory,
-                    UseShellExecute = true
-                };
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = AppConfiguration.LogfileDirectory,
+                        UseShellExecute = true
+                    };
 
-                Process.Start(psi);
-            }
+                    Process.Start(psi);
+                }
 
-            if (result == System.Windows.Forms.DialogResult.Yes)
-            {
-                RequestRestart();
-            }
-            else
-            {
-                Environment.Exit(1);
+                // Process the reply of the user about whether or not to restart the notifier app.
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    RequestRestart();
+                }
+                else
+                {
+                    Environment.Exit(1);
+                }
             }
         }
 
@@ -182,16 +202,16 @@ namespace ATG_Notifier.Desktop
 #endif
             var proc = Process.GetCurrentProcess();
 
-            Process wd = new Process();
-            wd.StartInfo.FileName = restarterPath;
-            wd.StartInfo.Arguments = $"{proc.Id};{appType};{notifierStartString}";
+            var restarterProcess = new Process();
+            restarterProcess.StartInfo.FileName = restarterPath;
+            restarterProcess.StartInfo.Arguments = $"{proc.Id};{appType};{notifierStartString}";
 
-            bool started = wd.Start();
+            bool started = restarterProcess.Start();
             if (!started)
             {
                 logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.\n Additional info:\n" +
                     $"Restarter path: [{restarterPath}]\n" +
-                    $"Restarter args: [{wd.StartInfo.Arguments}]");
+                    $"Restarter args: [{restarterProcess.StartInfo.Arguments}]");
             }
 
             Environment.Exit(1);
