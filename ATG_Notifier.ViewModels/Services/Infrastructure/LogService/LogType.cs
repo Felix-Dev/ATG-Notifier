@@ -6,8 +6,7 @@ namespace ATG_Notifier.ViewModels.Services
 {
     public enum LogType
     {
-        None = 0,
-        Debug,
+        Debug = 0,
         Info,
         Warning,
         Error,

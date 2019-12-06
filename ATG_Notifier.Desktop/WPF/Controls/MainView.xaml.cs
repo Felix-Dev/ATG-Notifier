@@ -38,7 +38,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             }
         }
 
-        public MainViewModel ViewModel => this.DataContext as MainViewModel;
+        public MainViewModel ViewModel => (MainViewModel)this.DataContext;
 
         private void OnMenuItemCloseClick(object sender, RoutedEventArgs e)
         {

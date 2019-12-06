@@ -18,7 +18,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             InitializeComponent();
         }
 
-        public ChapterProfilesViewModel ViewModel => this.DataContext as ChapterProfilesViewModel;
+        public ChapterProfilesViewModel ViewModel => (ChapterProfilesViewModel)this.DataContext;
 
         private async void OnChapterProfilesViewKeyDown(object sender, KeyEventArgs e)
         {
@@ -29,8 +29,8 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             //    Console.WriteLine(item?.ToString() ?? "");
             //}
 
-            var uiElement = Keyboard.FocusedElement as UIElement;
-            if (e.Key == Key.Delete
+            if (e.Key == Key.Delete 
+                && Keyboard.FocusedElement is UIElement uiElement
                 && this.ChapterProfileList.GetDataItem(uiElement) is ChapterProfileViewModel chapterProfileViewModel)
             {
                 // Programmatically set the focus to the chapter profile when we delete the currently focused one.

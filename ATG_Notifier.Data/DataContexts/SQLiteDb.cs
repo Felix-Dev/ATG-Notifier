@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using ATG_Notifier.Data.Entities;
+﻿using ATG_Notifier.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 
 namespace ATG_Notifier.Data.DataContexts
 {
@@ -15,7 +10,7 @@ namespace ATG_Notifier.Data.DataContexts
 
         public SQLiteDb(string connectionString)
         {
-            this.connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            this.connectionString = connectionString;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,8 +23,8 @@ namespace ATG_Notifier.Data.DataContexts
             modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications);
         }
 
-        public DbSet<DbVersion> DbVersion { get; set; }
+        public DbSet<DbVersion> DbVersion { get; set; } = null!;
 
-        public DbSet<ChapterProfile> ChapterProfiles { get; set; }
+        public DbSet<ChapterProfile> ChapterProfiles { get; set; } = null!;
     }
 }

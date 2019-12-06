@@ -6,7 +6,13 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    internal class DialogService : IDisposable
+    // TODO: Re-think the DialogService: Especially the form owner concept
+    // One idea is to show a dialog and pass along an owner form, so that the dialog is shown
+    // when the form is active.
+    //
+    // Another idea, to reduce complexity of this class is to handle the case of showing a dialog only when
+    // a specific form is active in the requesting class.
+    internal sealed class DialogService : IDisposable
     {
         private AutoResetEvent activatedResetEvent;
         private Form mainForm;
@@ -18,7 +24,7 @@ namespace ATG_Notifier.Desktop.Services
             this.activatedResetEvent = new AutoResetEvent(false);
         }
 
-        public event EventHandler<DialogShownEventArgs> DialogShown;
+        public event EventHandler<DialogShownEventArgs>? DialogShown;
 
         public Form MainForm 
         { 
@@ -47,12 +53,12 @@ namespace ATG_Notifier.Desktop.Services
             }
         }
 
-        private void OnMainFormDeactivate(object sender, EventArgs e)
+        private void OnMainFormDeactivate(object? sender, EventArgs e)
         {
             this.activatedResetEvent.Reset();
         }
 
-        private void OnMainFormActivated(object sender, EventArgs e)
+        private void OnMainFormActivated(object? sender, EventArgs e)
         {
             this.activatedResetEvent.Set();
         }
@@ -120,23 +126,33 @@ namespace ATG_Notifier.Desktop.Services
                 return dialogResult;
             }
 
-            // TODO: already UI thread
+            // TODO: already on the UI thread
             IsOptionalActionChosen = false;
             return DialogResult.None;
         }
 
         public void Dispose()
         {
-            if (!this.disposed)
-            {
-                if (this.activatedResetEvent != null)
-                {
-                    this.activatedResetEvent.Dispose();
-                    this.activatedResetEvent = null;
-                }
+            // Dispose of unmanaged resources.
+            Dispose(true);
 
-                this.disposed = true;
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
             }
+
+            if (disposing)
+            {
+                this.activatedResetEvent.Dispose();
+            }
+
+            this.disposed = true;
         }
     }
 }

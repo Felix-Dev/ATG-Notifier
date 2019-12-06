@@ -9,7 +9,7 @@ namespace ATG_Notifier.ViewModels.Services
     {
         public ChapterUpdateEventArgs(ChapterProfileViewModel chapterProfile)
         {
-            this.ChapterProfile = chapterProfile ?? throw new ArgumentNullException(nameof(chapterProfile));
+            this.ChapterProfile = chapterProfile;
         }
 
         public ChapterProfileViewModel ChapterProfile { get; set; }

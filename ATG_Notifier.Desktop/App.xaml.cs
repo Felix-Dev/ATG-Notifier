@@ -110,7 +110,7 @@ namespace ATG_Notifier.Desktop
 
         private static void OnDialogShown(object sender, DialogShownEventArgs e)
         {
-            if (e.Id == "critical error")
+            if (e.DialogId == "critical error")
             {
                 TaskbarManager.Current.ClearErrorTaskbarButton();
             }
@@ -118,7 +118,7 @@ namespace ATG_Notifier.Desktop
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            logService.Log(LogType.Fatal, (e.ExceptionObject as Exception).ToString() + "\r\n" + (e.ExceptionObject as Exception).Message);
+            logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
             ((App)(Application.Current)).SaveAndCleanup();
 
@@ -168,8 +168,15 @@ namespace ATG_Notifier.Desktop
             appType = 1;
 #else
             string notifierPath = Assembly.GetExecutingAssembly().Location;
-            string restarterPath = Path.Combine(Path.GetDirectoryName(notifierPath), @"Restarter\ATG_Notifier.Restarter.exe");
 
+            string? notifierDir = Path.GetDirectoryName(notifierPath);
+            if (notifierDir == null)
+            {
+                logService.Log(LogType.Error, $"The notifier could not be restarted! Failed to retrieve the parent directory of the notifier executable with path <{notifierPath}>.");
+                Environment.Exit(1);
+            }
+
+            string restarterPath = Path.Combine(notifierDir, @"Restarter\ATG_Notifier.Restarter.exe");
             string notifierStartString = notifierPath.Replace(".dll", ".exe");
             appType = 0;
 #endif
@@ -182,7 +189,9 @@ namespace ATG_Notifier.Desktop
             bool started = wd.Start();
             if (!started)
             {
-                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
+                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.\n Additional info:\n" +
+                    $"Restarter path: [{restarterPath}]\n" +
+                    $"Restarter args: [{wd.StartInfo.Arguments}]");
             }
 
             Environment.Exit(1);

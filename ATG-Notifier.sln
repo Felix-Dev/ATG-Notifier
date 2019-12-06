@@ -22,6 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATG_Notifier.Desktop", "ATG
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "ATG_Notifier.DesktopPackage", "ATG_Notifier.DesktopPackage\ATG_Notifier.DesktopPackage.wapproj", "{BAA05230-C929-425C-8278-32614B23A46B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1ECAF987-539D-4702-803A-0916E7940456}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

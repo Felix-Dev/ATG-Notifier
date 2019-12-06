@@ -18,8 +18,8 @@ namespace ATG_Notifier.Desktop.Components
             {
                 Title = "Exit",
                 Arguments = JumplistManager.ActionExit,
-                IconResourcePath = Assembly.GetEntryAssembly().CodeBase,
-                ApplicationPath = Assembly.GetEntryAssembly().CodeBase.Replace(".dll", ".exe"),
+                IconResourcePath = Assembly.GetEntryAssembly()?.CodeBase ?? "",
+                ApplicationPath = Assembly.GetEntryAssembly()?.CodeBase?.Replace(".dll", ".exe") ?? "",
             };
 
             var jumpList = JumpList.GetJumpList(Application.Current);

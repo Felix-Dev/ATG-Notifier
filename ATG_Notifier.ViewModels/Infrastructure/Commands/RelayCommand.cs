@@ -14,7 +14,7 @@ namespace ATG_Notifier.ViewModels.Infrastructure
     /// </summary>
     public class RelayCommand<T> : BaseCommand, ICommand
     {
-        private readonly Action<T> action = null;
+        private readonly Action<T> action;
 
         public RelayCommand(Action<T> action) : this(action, null) { }
 
@@ -23,9 +23,10 @@ namespace ATG_Notifier.ViewModels.Infrastructure
         /// </summary>
         /// <param name="action">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<T> action, Func<bool> canExecute) : base(canExecute)
+        public RelayCommand(Action<T> action, Func<bool>? canExecute) 
+            : base(canExecute)
         {
-            this.action = action ?? throw new ArgumentNullException(nameof(action));
+            this.action = action;
         }
 
         public void Execute(object parameter)
@@ -54,9 +55,10 @@ namespace ATG_Notifier.ViewModels.Infrastructure
         /// </summary>
         /// <param name="execute">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action execute, Func<bool> canExecute) : base(canExecute)
+        public RelayCommand(Action execute, Func<bool>? canExecute) 
+            : base(canExecute)
         {
-            action = execute ?? throw new ArgumentNullException(nameof(execute));
+            action = execute;
         }
 
         public void Execute(object parameter)

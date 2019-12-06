@@ -8,7 +8,7 @@ namespace ATG_Notifier.Data.Services
 {
     public interface IDataService : IDisposable
     {
-        Task<ChapterProfile> GetChapterProfileAsync(long id);
+        Task<ChapterProfile?> GetChapterProfileAsync(long id);
 
         Task<IList<ChapterProfile>> GetChapterProfilesAsync();
 

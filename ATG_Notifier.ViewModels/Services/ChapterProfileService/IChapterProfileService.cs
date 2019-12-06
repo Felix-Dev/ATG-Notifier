@@ -8,7 +8,7 @@ namespace ATG_Notifier.ViewModels.Services
 {
     public interface IChapterProfileService
     {
-        Task<ChapterProfileModel> GetChapterProfileAsync(long id);
+        Task<ChapterProfileModel?> GetChapterProfileAsync(long id);
 
         Task<IList<ChapterProfileModel>> GetChapterProfilesAsync();
 

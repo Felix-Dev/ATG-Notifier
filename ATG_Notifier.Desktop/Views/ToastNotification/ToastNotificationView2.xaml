@@ -17,8 +17,7 @@
         SnapsToDevicePixels="True"
         RenderOptions.ClearTypeHint="Enabled"    
         TextOptions.TextFormattingMode="Display"
-        d:DesignWidth="400" d:DesignHeight="200"
-        Height="85" Width="310"
+        Height="75" Width="310"
         MouseLeftButtonUp="OnMouseLeftButtonUp">
     <Window.Resources>
         <ResourceDictionary>
@@ -149,7 +148,7 @@
                 <TextBlock x:Name="TitleTextBlock" 
                            Grid.Row="1"
                            Grid.Column="0" 
-                           Margin="11,-15,11,0" 
+                           Margin="11,-20,11,0" 
                            TextTrimming="CharacterEllipsis"
                            Style="{StaticResource TitleTextBlockStyle}"
                            Foreground="{StaticResource ToastNotificationForeground}"/>

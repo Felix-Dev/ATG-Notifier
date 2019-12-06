@@ -19,18 +19,17 @@ namespace ATG_Notifier.Data.Entities
 
         public int Number { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
-        public string NumberAndTitleFallbackString { get; set; }
+        public string NumberAndTitleFallbackString { get; set; } = null!;
 
         public int WordCount { get; set; }
 
-        [Required]
         public int ChapterSource { get; set; }
 
         [Required]
-        public string Url { get; set; }
+        public string Url { get; set; } = null!;
 
         public DateTime? ReleaseTime { get; set; }
 
@@ -49,9 +48,9 @@ namespace ATG_Notifier.Data.Entities
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        private void NotifyPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

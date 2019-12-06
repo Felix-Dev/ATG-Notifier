@@ -29,7 +29,7 @@ namespace ATG_Notifier.ViewModels.ViewModels
             set => ChapterProfileModel.Number = value;
         }
 
-        public string Title
+        public string? Title
         {
             get => ChapterProfileModel.Title;
             set => ChapterProfileModel.Title = value;
@@ -92,16 +92,13 @@ namespace ATG_Notifier.ViewModels.ViewModels
         {
             get
             {
-                switch (ChapterProfileModel.Source)
+                return ChapterProfileModel.Source switch
                 {
-                    case ChapterSource.Zongheng:
-                        return new Uri("ms-appx:///Assets/Images/logoZH.png");
-                    case ChapterSource.Lnmtl:
-                        return new Uri("ms-appx:///Assets/Images/logoLnmtl.png");
-                    default:
-                        // Use Placeholder image?
-                        return null;
-                }
+                    ChapterSource.Zongheng => new Uri("ms-appx:///Assets/Images/logoZH.png"),
+                    ChapterSource.Lnmtl    => new Uri("ms-appx:///Assets/Images/logoLnmtl.png"),
+                    _                      => throw new InvalidOperationException("Invalid chapter source"),
+
+                };
             }
         }
     }

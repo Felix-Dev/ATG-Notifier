@@ -81,20 +81,18 @@ namespace ATG_Notifier.Desktop.View
 
         private Point GetDisplayPosition(int slot, DisplayPosition position)
         {
-            Screen screen = null;
+            Screen? appScreen = null;
             //if (Program.MainWindow.InvokeRequired)
             //{
             //    del GetScreen = () => Screen.FromControl(Program.MainWindow);
-            //    screen = (Screen)Program.MainWindow.Invoke(GetScreen);
+            //    appScreen = (Screen)Program.MainWindow.Invoke(GetScreen);
             //}
             //else
             //{
-            //    screen = Screen.FromControl(Program.MainWindow);
+            //    appScreen = Screen.FromControl(Program.MainWindow);
             //}
 
-            //System.Windows.Application.Current.Dispatcher.Invoke(() => screen = System.Windows.Application.Current.MainWindow.)
-
-            screen = screen ?? Screen.PrimaryScreen;
+            Screen screen = appScreen ?? Screen.PrimaryScreen;
 
             int x = 0, y = 0;
             switch (position)
@@ -156,7 +154,6 @@ namespace ATG_Notifier.Desktop.View
             Application.RemoveMessageFilter(this.mouseMessageFilter);
 
             fadeTimer.Dispose();
-            fadeTimer = null;
 
             base.OnFormClosed(e);
         }

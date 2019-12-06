@@ -12,13 +12,13 @@ namespace ATG_Notifier.ViewModels.Infrastructure
     /// </summary>
     public class BaseCommand
     {
-        private readonly Func<bool> canExecute;
+        private readonly Func<bool>? canExecute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseCommand"/> class.
         /// </summary>
         /// <param name="canExecute">If set to true, command can be executed. Otherwise, false.</param>
-        protected BaseCommand(Func<bool> canExecute)
+        protected BaseCommand(Func<bool>? canExecute)
         {
             this.canExecute = canExecute;
         }
@@ -26,7 +26,7 @@ namespace ATG_Notifier.ViewModels.Infrastructure
         /// <summary>
         /// Raised when RaiseCanExecuteChanged is called.
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         /// <summary>
         /// Determines whether this <see cref="RelayCommand" /> can execute in its current state.

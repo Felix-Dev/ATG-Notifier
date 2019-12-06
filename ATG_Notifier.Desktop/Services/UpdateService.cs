@@ -19,6 +19,8 @@ namespace ATG_Notifier.Desktop.Services
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif
 
+        private const string NotificationTitle = "ATG Chapter Update!";
+
         private readonly ILogService logService;
         private readonly IWebService webService;
 
@@ -27,23 +29,23 @@ namespace ATG_Notifier.Desktop.Services
         private readonly ToastNotificationManager notifier = ToastNotificationManager.Instance;
 
         private readonly object timerLock = new object();
-        private Timer periodicTimerRawSource = null;
+        private Timer? periodicTimerRawSource = null;
 
-        private readonly EventWaitHandle jobRoundFinished;
-        private readonly Thread workThread;
-        private bool finishJob;
+        //private readonly EventWaitHandle jobRoundFinished;
+        //private readonly Thread workThread;
+        //private bool finishJob;
 
-        private Random rand;
-        private int debugCount = 0;
+        //private Random rand;
+        //private int debugCount = 0;
 
-        private Semaphore saveguardSema;
+        private Semaphore? saveguardSema;
 
-        private SettingsViewModel appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
+        private SettingsViewModel settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
         public UpdateService(IWebService webService, ILogService logService)
         {
-            this.webService = webService ?? throw new ArgumentNullException(nameof(webService));
-            this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
+            this.webService = webService;
+            this.logService = logService;
 
             this.rawSourceChecker = new RawSourceChecker(this.webService, this.logService);
 
@@ -53,12 +55,12 @@ namespace ATG_Notifier.Desktop.Services
             //workThread.Name = "worker"; // Assign worker thread a name for easier debugging.
 #endif
             /* Create the job-round Event Handler */
-            this.jobRoundFinished = new EventWaitHandle(true, EventResetMode.ManualReset);
+            //this.jobRoundFinished = new EventWaitHandle(true, EventResetMode.ManualReset);
 
-            this.rand = new Random();
+            //this.rand = new Random();
         }
 
-        public event EventHandler<ChapterUpdateEventArgs> ChapterUpdated;
+        public event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
         // Note: not thread-safe!
         public void Start()
@@ -78,7 +80,6 @@ namespace ATG_Notifier.Desktop.Services
             }
 
             this.saveguardSema = new Semaphore(1, 1);
-
             this.periodicTimerRawSource = new Timer(OnTimerEllapsed, null, 0, Timeout.Infinite);
         }
 
@@ -95,7 +96,7 @@ namespace ATG_Notifier.Desktop.Services
 
             logService.Log(LogType.Debug, "Attempting to terminate the update service...");
 
-            this.saveguardSema.WaitOne();
+            this.saveguardSema?.WaitOne();
 
             //jobRoundFinished.WaitOne();
 
@@ -112,10 +113,10 @@ namespace ATG_Notifier.Desktop.Services
 
             logService.Log(LogType.Debug, "The update service was terminated!");
 
-            this.saveguardSema.Release();
+            this.saveguardSema?.Release();
 
             // Clean-up resources used by the event handler.
-            this.saveguardSema.Dispose();
+            this.saveguardSema?.Dispose();
             this.saveguardSema = null;
 
             //jobRoundFinished.Dispose();
@@ -133,16 +134,16 @@ namespace ATG_Notifier.Desktop.Services
             }
         }
 
-        private async void OnTimerEllapsed(object state)
+        private async void OnTimerEllapsed(object? state)
         {
 #if DEBUG
             ChapterProfileModel chapterProfileModel = new ChapterProfileModel()
             {
-                Number = 1600 + debugCount++,
+                Number = 1600,
                 Title = "Hello World1234567",
                 NumberAndTitleFallbackString = "Fallback String",
                 Url = "http://book.zongheng.com/chapter/408586/58484757.html",
-                WordCount = this.rand.Next(2500, 4500),
+                WordCount = 3000,
                 ReleaseTime = DateTime.Now,
                 AppArrivalTime = DateTime.Now
             };
@@ -150,59 +151,56 @@ namespace ATG_Notifier.Desktop.Services
             var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
             ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
 
-            this.appSettings.MostRecentChapterInfo = new MostRecentChapterInfo()
+            this.settingsViewModel.MostRecentChapterInfo = new MostRecentChapterInfo(chapterProfileViewModel.NumberAndTitleDisplayString, chapterProfileViewModel.WordCount)
             {
-                NumberAndTitle = chapterProfileViewModel.NumberAndTitleDisplayString,
                 ReleaseTime = chapterProfileViewModel.ReleaseTime,
-                WordCount = chapterProfileViewModel.WordCount,
             };
 
             TaskbarManager.Current.FlashTaskbarButton();
 
-            if (!appSettings.IsInFocusMode)
+            if (!settingsViewModel.IsInFocusMode)
             {
                 notifier.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
             }
 #else
-            ChapterSourceCheckResult checkResult = null;
+            ChapterSourceCheckResult? checkResult = null;
             try
             {
-                checkResult = await rawSourceChecker.GetUpdateAsync(this.appSettings.CurrentChapterId);
+                checkResult = await rawSourceChecker.GetUpdateAsync(this.settingsViewModel.CurrentChapterId);
             }
             catch (SourceCheckerOperationFailedException ex)
             {
-                logService.Log(LogType.Error, $"Checking for a raw source chapter update failed!\nException: {ex.InnerException}\nTechnical details: {ex.InnerException.Message}");
+                logService.Log(LogType.Error, $"Checking for a raw source chapter update failed!\n Message: {ex.Message}\n" +
+                    $"Exception: {ex.InnerException?.ToString() ?? ""}\nTechnical details: {ex.InnerException?.Message ?? ""}");
             }
 
             if (checkResult != null)
             {
-                this.saveguardSema.WaitOne();
+                this.saveguardSema?.WaitOne();
 
                 // Store the [number and title] of the new chapter.
-                this.appSettings.CurrentChapterId = checkResult.ChapterId;
+                this.settingsViewModel.CurrentChapterId = checkResult.ChapterId;
 
                 ChapterProfileModel chapterProfileModel = checkResult.ChapterProfileModel;
 
                 var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
                 ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
 
-                this.appSettings.MostRecentChapterInfo = new MostRecentChapterInfo()
+                this.settingsViewModel.MostRecentChapterInfo = new MostRecentChapterInfo(chapterProfileViewModel.NumberAndTitleDisplayString, chapterProfileViewModel.WordCount)
                 {
-                    NumberAndTitle = chapterProfileViewModel.NumberAndTitleDisplayString,
                     ReleaseTime = chapterProfileViewModel.ReleaseTime,
-                    WordCount = chapterProfileViewModel.WordCount,
                 };
 
                 TaskbarManager.Current.FlashTaskbarButton();
 
                 //jobRoundFinished.Set();
 
-                if (!appSettings.IsInFocusMode)
+                if (!settingsViewModel.IsInFocusMode)
                 {
-                    notifier.Show("ATG Chapter Update!", chapterProfileViewModel);
+                    notifier.Show(NotificationTitle, chapterProfileViewModel);
                 }
 
-                this.saveguardSema.Release();
+                this.saveguardSema?.Release();
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:

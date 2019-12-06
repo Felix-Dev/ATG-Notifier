@@ -18,11 +18,6 @@ namespace ATG_Notifier.Desktop.Components
 
         public NotificationIcon(Icon icon, string tooltipText)
         {
-            if (icon is null)
-            {
-                throw new ArgumentNullException(nameof(icon));
-            }
-
             this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             var components = new System.ComponentModel.Container();
@@ -30,7 +25,7 @@ namespace ATG_Notifier.Desktop.Components
             {
                 ContextMenuStrip = GetContextMenu(),
                 Icon = icon,
-                Text = tooltipText ?? "",
+                Text = tooltipText,
             };
 
             this.notifyIcon.MouseUp += OnMouseUp;
@@ -55,9 +50,7 @@ namespace ATG_Notifier.Desktop.Components
         {
             if (!this.isDisposed)
             {
-
                 this.notifyIcon.Dispose();
-                this.notifyIcon = null;
                 this.isDisposed = true;
             }
         }
@@ -179,23 +172,25 @@ namespace ATG_Notifier.Desktop.Components
             return contextMenu;
         }
 
-        private void OnMenuItemExitClick(object sender, EventArgs e)
+        private void OnMenuItemExitClick(object? sender, EventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void OnMenuItemFocusClick(object sender, EventArgs e)
+        private void OnMenuItemFocusClick(object? sender, EventArgs e)
         {
-            var menuItem = (BindableToolStripMenuItem)sender;
-
-            menuItem.Checked = !menuItem.Checked;
+            if (sender is BindableToolStripMenuItem menuItem)
+            {
+                menuItem.Checked = !menuItem.Checked;
+            }
         }
 
-        private void OnMenuItemSoundClick(object sender, EventArgs e)
+        private void OnMenuItemSoundClick(object? sender, EventArgs e)
         {
-            var menuItem = (BindableToolStripMenuItem)sender;
-
-            menuItem.Checked = !menuItem.Checked;
+            if (sender is BindableToolStripMenuItem menuItem)
+            {
+                menuItem.Checked = !menuItem.Checked;
+            }
         }
     }
 }

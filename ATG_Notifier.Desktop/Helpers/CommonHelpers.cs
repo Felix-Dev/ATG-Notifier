@@ -8,6 +8,7 @@ using System.Windows.Threading;
 
 namespace ATG_Notifier.Desktop.Helpers
 {
+    // TODO: Rethink exception handling 
     internal static class CommonHelpers
     {
         private static ILogService logService;
@@ -55,15 +56,10 @@ namespace ATG_Notifier.Desktop.Helpers
 
         public static void RunOnUIThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            if (action is null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
             try
             {
-                // TODO: Can throw TaskCanceledException - once testcode is in place, text with super fast debug update service
-                Application.Current?.Dispatcher.Invoke(action, priority);
+                // TODO: Can throw TaskCanceledException - once testcode is in place, test with super fast debug update service
+                Application.Current.Dispatcher.Invoke(action, priority);
             }
             catch (TaskCanceledException)
             {
@@ -78,11 +74,10 @@ namespace ATG_Notifier.Desktop.Helpers
                 throw new ArgumentNullException(nameof(action));
             }
 
-            if (Application.Current?.Dispatcher is Dispatcher dispatcher)
+            if (Application.Current.Dispatcher is Dispatcher dispatcher)
             {
                 try
                 {
-                    // TODO: Can throw TaskCanceledException - once testcode is in place, text with super fast debug update service
                     return Application.Current.Dispatcher.Invoke(action, priority);
                 }
                 catch (TaskCanceledException ex)

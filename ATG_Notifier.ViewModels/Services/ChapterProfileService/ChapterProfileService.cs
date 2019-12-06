@@ -16,17 +16,17 @@ namespace ATG_Notifier.ViewModels.Services
 
         public ChapterProfileService(IDataServiceFactory dataServiceFactory, ILogService logService)
         {
-            this.dataServiceFactory = dataServiceFactory ?? throw new ArgumentNullException(nameof(dataServiceFactory));
-            this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
+            this.dataServiceFactory = dataServiceFactory;
+            this.logService = logService;
         }
 
-        public async Task<ChapterProfileModel> GetChapterProfileAsync(long id)
+        public async Task<ChapterProfileModel?> GetChapterProfileAsync(long id)
         {
-            ChapterProfile chapterProfile = null;
+            ChapterProfile? chapterProfile = null;
 
             using (var dataService = this.dataServiceFactory.CreateDataService())
             {
-                chapterProfile = await dataService.GetChapterProfileAsync(id);
+                chapterProfile = await dataService.GetChapterProfileAsync(id).ConfigureAwait(false);
             }
 
             return chapterProfile != null
@@ -39,7 +39,7 @@ namespace ATG_Notifier.ViewModels.Services
             IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
             using (var dataService = this.dataServiceFactory.CreateDataService())
             {
-                chapterProfiles = await dataService.GetChapterProfilesAsync();
+                chapterProfiles = await dataService.GetChapterProfilesAsync().ConfigureAwait(false);
             }
 
             return chapterProfiles
@@ -58,12 +58,13 @@ namespace ATG_Notifier.ViewModels.Services
             using (var dataService = dataServiceFactory.CreateDataService())
             {
                 var chapterProfile = id > 0 
-                    ? await dataService.GetChapterProfileAsync(model.ChapterProfileId) 
+                    ? await dataService.GetChapterProfileAsync(model.ChapterProfileId).ConfigureAwait(false)
                     : new ChapterProfile();
+
                 if (chapterProfile != null)
                 {
                     UpdateChapterProfileFromModel(chapterProfile, model);
-                    await dataService.UpdateChapterProfileAsync(chapterProfile);
+                    await dataService.UpdateChapterProfileAsync(chapterProfile).ConfigureAwait(false);
 
                     UpdateModelFromChapterProfile(model, chapterProfile);
                 }
@@ -86,19 +87,18 @@ namespace ATG_Notifier.ViewModels.Services
                 foreach (var chapterProfileModel in models)
                 {
                     var chapterProfile = chapterProfileModel.ChapterProfileId > 0 
-                        ? await dataService.GetChapterProfileAsync(chapterProfileModel.ChapterProfileId) 
+                        ? await dataService.GetChapterProfileAsync(chapterProfileModel.ChapterProfileId).ConfigureAwait(false) 
                         : new ChapterProfile();
 
                     if (chapterProfile != null)
                     {
                         UpdateChapterProfileFromModel(chapterProfile, chapterProfileModel);
+                        chapterProfiles.Add(chapterProfile);
                         
                     }
-
-                    chapterProfiles.Add(chapterProfile);
                 }
 
-                await dataService.UpdateChapterProfilesAsync(chapterProfiles.ToArray());
+                await dataService.UpdateChapterProfilesAsync(chapterProfiles.ToArray()).ConfigureAwait(false);
 
                 for (int i = 0; i < models.Count; i++)
                 {
@@ -119,7 +119,7 @@ namespace ATG_Notifier.ViewModels.Services
             var chapterProfile = new ChapterProfile { ChapterProfileId = model.ChapterProfileId };
             using (var dataService = dataServiceFactory.CreateDataService())
             {
-                return await dataService.DeleteChapterProfilesAsync(chapterProfile);
+                return await dataService.DeleteChapterProfilesAsync(chapterProfile).ConfigureAwait(false);
             }
         }
 
@@ -136,11 +136,14 @@ namespace ATG_Notifier.ViewModels.Services
 
                 foreach (var model in models)
                 {
-                    var chapterProfile = await dataService.GetChapterProfileAsync(model.ChapterProfileId);
-                    chapterProfiles.Add(chapterProfile);
+                    var chapterProfile = await dataService.GetChapterProfileAsync(model.ChapterProfileId).ConfigureAwait(false);
+                    if (chapterProfile != null)
+                    {
+                        chapterProfiles.Add(chapterProfile);
+                    }                    
                 }
 
-                return await dataService.DeleteChapterProfilesAsync(chapterProfiles.ToArray());
+                return await dataService.DeleteChapterProfilesAsync(chapterProfiles.ToArray()).ConfigureAwait(false);
             }
         }
 

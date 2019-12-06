@@ -8,8 +8,6 @@ namespace ATG_Notifier.Desktop.Models
     {
         public SettingsViewModel() {}
 
-        #region Properties
-
         public bool IsDisabledOnFullscreen
         {
             get => Properties.Settings.Default.DisableOnFullscreen;
@@ -94,7 +92,7 @@ namespace ATG_Notifier.Desktop.Models
             }
         }
 
-        public WindowSetting WindowSetting
+        public WindowSetting? WindowSetting
         {
             get
             {
@@ -126,7 +124,7 @@ namespace ATG_Notifier.Desktop.Models
             }
         }
 
-        public MostRecentChapterInfo MostRecentChapterInfo
+        public MostRecentChapterInfo? MostRecentChapterInfo
         {
             get
             {
@@ -136,22 +134,19 @@ namespace ATG_Notifier.Desktop.Models
                     return null;
                 }
 
-                var info = new MostRecentChapterInfo()
+                if (!int.TryParse(data[1], out int wordCount))
                 {
-                    NumberAndTitle = data[0]
-                };
-
-                if (int.TryParse(data[1], out int wordCount))
-                {
-                    info.WordCount = wordCount;
+                    wordCount = MostRecentChapterInfo.InvalidWordCount;
                 }
+
+                var chapterInfo = new MostRecentChapterInfo(data[0], wordCount);
 
                 if (data.Length <= 3 && DateTime.TryParse(data[2], out DateTime releaseTime))
                 {
-                    info.ReleaseTime = releaseTime;
+                    chapterInfo.ReleaseTime = releaseTime;
                 }
 
-                return info;
+                return chapterInfo;
 
             }
             set
@@ -174,10 +169,6 @@ namespace ATG_Notifier.Desktop.Models
             }
         }
 
-        #endregion // Properties
-
-        #region Public Methods
-
         public void Load()
         {
             Properties.Settings.Default.Reload();
@@ -187,7 +178,5 @@ namespace ATG_Notifier.Desktop.Models
         {
             Properties.Settings.Default.Save();
         }
-
-        #endregion // Public Methods
     }
 }

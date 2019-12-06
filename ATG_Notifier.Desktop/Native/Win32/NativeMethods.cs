@@ -10,6 +10,9 @@ namespace ATG_Notifier.Desktop.Native.Win32
 {
     internal class NativeMethods
     {
+        internal const int ICON_SMALL = 0;
+        internal const int ICON_BIG = 1;
+
         #region Window_Feedback
 
         /// <devdoc>https://msdn.microsoft.com/en-us/library/windows/desktop/ms679347(v=vs.85).aspx</devdoc>
@@ -24,15 +27,18 @@ namespace ATG_Notifier.Desktop.Native.Win32
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, IntPtr lParam);
+
         [DllImport("user32.dll")]
-        internal static extern int RegisterWindowMessage(string msgName);
+        internal static extern int RegisterWindowMessage(string? msgName);
 
         #endregion // WIndow Messages
 
         #region Window
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        internal static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
 
         /// <devdoc>https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdpiforwindow</devdoc>
         [DllImport("user32.dll")]

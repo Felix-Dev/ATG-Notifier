@@ -116,7 +116,7 @@ namespace ATG_Notifier.Desktop
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            logService.Log(LogType.Fatal, (e.ExceptionObject as Exception).ToString() + "\r\n" + (e.ExceptionObject as Exception).Message);
+            logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
             CommonHelpers.RunOnUIThread(() =>
             {
@@ -154,7 +154,7 @@ namespace ATG_Notifier.Desktop
 
         private static void OnDialogShown(object sender, DialogShownEventArgs e)
         {
-            if (e.Id == "critical error")
+            if (e.DialogId == "critical error")
             {
                 TaskbarManager.Current.ClearErrorTaskbarButton();
             }
@@ -188,53 +188,54 @@ namespace ATG_Notifier.Desktop
             Application.Restart();
         }
 #endif
+        // TODO: Remove
 
-        private static void PerformRecovery()
-        {
-            logService.Log(LogType.Info, "Attempting to restart the notifier...");
+        //private static void PerformRecovery()
+        //{
+        //    logService.Log(LogType.Info, "Attempting to restart the notifier...");
 
-            /* Save data. */
-            SaveData();
+        //    /* Save data. */
+        //    SaveData();
 
-            /*  Start watchdog which restarts the notifier. */
-            var asm = Assembly.GetExecutingAssembly();
+        //    /*  Start watchdog which restarts the notifier. */
+        //    var asm = Assembly.GetExecutingAssembly();
 
-            var proc = Process.GetCurrentProcess();
+        //    var proc = Process.GetCurrentProcess();
 
-            Process wd = new Process();
+        //    Process wd = new Process();
 
-            wd.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(asm.Location), @"Restarter\Restarter.exe");
-            wd.StartInfo.Arguments = proc.Id + ";" + asm.Location;
-            wd.StartInfo.UseShellExecute = false;
-            wd.StartInfo.CreateNoWindow = true;
+        //    wd.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(asm.Location), @"Restarter\Restarter.exe");
+        //    wd.StartInfo.Arguments = proc.Id + ";" + asm.Location;
+        //    wd.StartInfo.UseShellExecute = false;
+        //    wd.StartInfo.CreateNoWindow = true;
 
-            bool started = wd.Start();
-            if (!started)
-            {
-                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
-            }
-        }
+        //    bool started = wd.Start();
+        //    if (!started)
+        //    {
+        //        logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
+        //    }
+        //}
 
-        private static void Restart()
-        {
-            /*  Start watchdog which restarts the notifier. */
-            var asm = Assembly.GetExecutingAssembly();
+        //private static void Restart()
+        //{
+        //    /*  Start watchdog which restarts the notifier. */
+        //    var asm = Assembly.GetExecutingAssembly();
 
-            var proc = Process.GetCurrentProcess();
+        //    var proc = Process.GetCurrentProcess();
 
-            Process wd = new Process();
+        //    Process wd = new Process();
 
-            wd.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(asm.Location), @"Restarter\Restarter.exe");
-            wd.StartInfo.Arguments = proc.Id + ";" + asm.Location;
-            wd.StartInfo.UseShellExecute = false;
-            wd.StartInfo.CreateNoWindow = true;
+        //    wd.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(asm.Location), @"Restarter\Restarter.exe");
+        //    wd.StartInfo.Arguments = proc.Id + ";" + asm.Location;
+        //    wd.StartInfo.UseShellExecute = false;
+        //    wd.StartInfo.CreateNoWindow = true;
 
-            bool started = wd.Start();
-            if (!started)
-            {
-                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
-            }
-        }
+        //    bool started = wd.Start();
+        //    if (!started)
+        //    {
+        //        logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.");
+        //    }
+        //}
 
         /// <summary>
         /// Save data (user settings).

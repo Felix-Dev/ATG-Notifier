@@ -4,11 +4,11 @@ namespace ATG_Notifier.Desktop.Services
 {
     internal class DialogShownEventArgs : EventArgs
     {
-        public DialogShownEventArgs(string id)
+        public DialogShownEventArgs(string dialogId)
         {
-            this.Id = id ?? throw new ArgumentNullException(nameof(id));
+            this.DialogId = dialogId;
         }
 
-        public string Id { get; }
+        public string DialogId { get; }
     }
 }

@@ -6,14 +6,17 @@ using System.Windows.Input;
 
 namespace ATG_Notifier.ViewModels.ViewModels
 {
+    // TODO: Improve API to remove cases of protected async void methods in inheritor classes
     public class GenericListViewModel<TModel> : ObservableObject
         where TModel : ObservableObject
     {
         private IList<TModel> items;
-        private TModel selectedItem;
+        private TModel? selectedItem;
 
         public GenericListViewModel()
         {
+            this.items = new List<TModel>();
+
             this.DeleteCommand = new RelayCommand<TModel>(OnRemove);
             this.ClearCommand = new RelayCommand(OnClear);
         }
@@ -24,7 +27,7 @@ namespace ATG_Notifier.ViewModels.ViewModels
             set => Set(ref items, value);
         }
 
-        public TModel SelectedItem
+        public TModel? SelectedItem
         {
             get => selectedItem;
             set => Set(ref selectedItem, value);

@@ -6,7 +6,7 @@ namespace ATG_Notifier.ViewModels.Services
 {
     public interface IUpdateService
     {
-        event EventHandler<ChapterUpdateEventArgs> ChapterUpdated;
+        event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
         void Start();
 

@@ -20,7 +20,7 @@ namespace ATG_Notifier.Desktop.Configuration
         public const string AppId = "ATG-Notifier";
 
         /// <summary>The current app version. </summary>
-        public static readonly string AppVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
+        public static readonly string AppVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "ERROR";
 
         /// <summary>The database's file name.</summary>
         private static readonly string fullDatabaseName = $"{databaseName}.{databaseVersion}.db";

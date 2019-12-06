@@ -151,7 +151,6 @@ namespace ATG_Notifier.Desktop.Views
             // remove icon from Windows notification area
             this.notificationIcon.Hide();
             this.notificationIcon.Dispose();
-            this.notificationIcon = null;
 
             System.Windows.Application.Current.Shutdown();
         }
@@ -214,7 +213,7 @@ namespace ATG_Notifier.Desktop.Views
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data. Contains the new unread-chapter-profiles count.</param>
-        private void OnChapterProfilesUnreadCountChanged(object sender, ChapterProfilesUnreadCountChangedEventArgs e)
+        private void OnChapterProfilesUnreadCountChanged(object? sender, ChapterProfilesUnreadCountChangedEventArgs e)
         {
             this.notificationIcon.UpdateBadge(e.UnreadCount);
         }

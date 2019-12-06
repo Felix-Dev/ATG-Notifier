@@ -24,7 +24,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         public System.Windows.Forms.DialogResult DialogResult { get; private set; }
 
-        public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string optionalActionText = null, bool initialOptionalActionState = false)
+        public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
         {
             this.owner = owner;
 

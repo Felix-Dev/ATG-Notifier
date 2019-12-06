@@ -12,15 +12,15 @@ namespace ATG_Notifier.ViewModels.Models
 
         public int Number { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string NumberAndTitleFallbackString { get; set; }
+        public string NumberAndTitleFallbackString { get; set; } = null!;
 
         public int WordCount { get; set; }
 
         public ChapterSource Source { get; set; }
 
-        public string Url { get; set; }
+        public string Url { get; set; } = null!;
 
         public DateTime? ReleaseTime { get; set; }
 

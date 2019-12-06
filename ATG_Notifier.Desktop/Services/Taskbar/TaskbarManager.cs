@@ -32,7 +32,7 @@ namespace ATG_Notifier.Desktop.Services.Taskbar
                 if (ownerHandle == IntPtr.Zero)
                 {
                     var currentProcess = Process.GetCurrentProcess();
-                    if (currentProcess?.MainWindowHandle == IntPtr.Zero)
+                    if (currentProcess == null || currentProcess.MainWindowHandle == IntPtr.Zero)
                     {
                         return IntPtr.Zero;
                     }

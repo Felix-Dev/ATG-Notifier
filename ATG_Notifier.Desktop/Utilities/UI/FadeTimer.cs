@@ -12,7 +12,7 @@ namespace ATG_Notifier.Desktop.Utilities.UI
         private const int FadeOpInterval = 55; // The timer interval in milliseconds
 
         //private int steps = 100;
-        private double currentStep;
+        //private double currentStep;
 
         private int fadeDelay;
 
@@ -94,7 +94,7 @@ namespace ATG_Notifier.Desktop.Utilities.UI
             return FadeTimerStatus.Ok;
         }
 
-        public void FadeOut(object sender, EventArgs e)
+        public void FadeOut(object? sender, EventArgs e)
         {
             if (this.started)
             {
@@ -150,7 +150,7 @@ namespace ATG_Notifier.Desktop.Utilities.UI
             targetForm.Close();
         }
 
-        private void _doFadeOut(object sender, EventArgs e)
+        private void _doFadeOut(object? sender, EventArgs e)
         {
             targetForm.Opacity -= granularity;
 
@@ -166,7 +166,7 @@ namespace ATG_Notifier.Desktop.Utilities.UI
             }
         }
 
-        private void _doFadeIn(object sender, EventArgs e)
+        private void _doFadeIn(object? sender, EventArgs e)
         {
             targetForm.Opacity += granularity;
             //currentStep++;

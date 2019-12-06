@@ -2,28 +2,27 @@
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
+using ATG_Notifier.ViewModels.Services.Infrastructure.LogService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
+    // TODO: Take a look at the ServiceLocator again, with example implementations from the internet.
     internal class ServiceLocator : IDisposable
     {
         private static readonly Lazy<ServiceLocator> lazy = new Lazy<ServiceLocator>(() => new ServiceLocator());
 
-        private static ServiceProvider rootServiceProvider = null;
+        private static ServiceProvider rootServiceProvider = null!;
+
+        private bool disposed = false;
 
         public static ServiceLocator Current => lazy.Value;
 
         public static void Configure(IServiceCollection serviceCollection)
         {
-            //serviceCollection.AddSingleton<ISettingsService, SettingsService>();
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
-            serviceCollection.AddSingleton<ILogService>(new SerilogLogService(AppConfiguration.LogfilePath));
+            serviceCollection.AddSingleton<ILogService>(new FileLogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
@@ -48,7 +47,7 @@ namespace ATG_Notifier.Desktop.Configuration
             //}
         }
 
-        private readonly IServiceScope serviceScope = null;
+        private readonly IServiceScope serviceScope = null!;
 
         private ServiceLocator()
         {
@@ -80,11 +79,12 @@ namespace ATG_Notifier.Desktop.Configuration
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!this.disposed && disposing)
             {
-                if (serviceScope != null)
+                if (this.serviceScope != null)
                 {
-                    serviceScope.Dispose();
+                    this.serviceScope.Dispose();
+                    this.disposed = true;
                 }
             }
         }

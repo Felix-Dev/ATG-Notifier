@@ -26,7 +26,7 @@ namespace ATG_Notifier.Desktop.Views
         //    }
         //}
 
-        public MessageDialogForm(string title, string errorMessage, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string optionalActionText = null, bool initialOptionalActionState = false)
+        public MessageDialogForm(string title, string errorMessage, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
         {
             InitializeComponent();
 

@@ -19,7 +19,7 @@ namespace ATG_Notifier.Desktop.Utilities
     internal sealed class StaTaskScheduler : TaskScheduler, IDisposable
     {
         /// <summary>Stores the queued tasks to be executed by our pool of STA threads.</summary>
-        private BlockingCollection<Task> _tasks;
+        private BlockingCollection<Task>? _tasks;
         /// <summary>The STA threads used by the scheduler.</summary>
         private readonly List<Thread> _threads;
 
@@ -59,7 +59,7 @@ namespace ATG_Notifier.Desktop.Utilities
         protected override void QueueTask(Task task)
         {
             // Push it into the blocking collection of tasks
-            _tasks.Add(task);
+            _tasks?.Add(task);
         }
 
         /// <summary>Provides a list of the scheduled tasks for the debugger to consume.</summary>
@@ -67,7 +67,7 @@ namespace ATG_Notifier.Desktop.Utilities
         protected override IEnumerable<Task> GetScheduledTasks()
         {
             // Serialize the contents of the blocking collection of tasks for the debugger
-            return _tasks.ToArray();
+            return _tasks?.ToArray() ?? new Task[0];
         }
 
         /// <summary>Determines whether a Task may be inlined.</summary>

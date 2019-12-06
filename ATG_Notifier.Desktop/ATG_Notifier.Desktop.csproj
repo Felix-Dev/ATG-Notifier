@@ -15,6 +15,7 @@
     <Configurations>Debug;Release;DesktopPackage</Configurations>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
     <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -42,10 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.14" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.0.2" />
     <PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>

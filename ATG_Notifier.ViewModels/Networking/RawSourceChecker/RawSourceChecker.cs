@@ -26,11 +26,11 @@ namespace ATG_Notifier.ViewModels.Networking
 
         public RawSourceChecker(IWebService webService, ILogService logService)
         {
-            this.webService = webService ?? throw new ArgumentNullException(nameof(webService));
-            this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
+            this.webService = webService;
+            this.logService = logService; ;
         }
 
-        public async Task<ChapterSourceCheckResult> GetUpdateAsync(string mostRecentChapterId)
+        public async Task<ChapterSourceCheckResult?> GetUpdateAsync(string mostRecentChapterId)
         {
             string data;
             try
@@ -55,14 +55,14 @@ namespace ATG_Notifier.ViewModels.Networking
                 return null;
             }
 
-            var chapterNumberAndTitle = (string)json.SelectToken(JsonChapterNumberTitlePath);
+            var chapterNumberAndTitle = json.SelectToken(JsonChapterNumberTitlePath)?.ToString();
             if (chapterNumberAndTitle == null)
             {
                 logService.Log(LogType.Error, "The current chapter information could not be retrieved!\n");
                 return null;
             }
 
-            var chapterId = (string)json.SelectToken(JsonChapterIdPath);
+            var chapterId = json.SelectToken(JsonChapterIdPath)?.ToString();
             if (chapterId == null)
             {
                 logService.Log(LogType.Error, "The current chapter ID could not be retrieved!\n");
@@ -84,19 +84,18 @@ namespace ATG_Notifier.ViewModels.Networking
             int wordCount = 0;
             DateTime? releaseTime = null;
 
-            HtmlDocument doc = null;
+            HtmlDocument doc;
             try
             {
                 doc = await webService.DownloadHtmlContentAsync(chapterUrl);
             }
             catch (SourceCheckerOperationFailedException ex)
             {
-                /* In case there was a Network error, wait 20 seconds for a retry. */
-                logService.Log(LogType.Warning, $"Checking for a raw source chapter update failed!\nException: {ex.InnerException}\nTechnical details: {ex.InnerException.Message}");
+                throw ex;
             }
 
             // Read chapter word & release date if possible.
-            var nodes = doc?.DocumentNode?.SelectNodes("//div[@class='bookinfo']//span");   
+            var nodes = doc.DocumentNode.SelectNodes("//div[@class='bookinfo']//span");   
             if (nodes?.Count > 0)
             {
                 // Read chapter word count if possible
@@ -106,7 +105,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 }
 
                 // Read chapter release date is possible.
-                if (nodes?.Count > 1 && DateTime.TryParse(nodes[1].InnerText, out DateTime time))
+                if (nodes.Count > 1 && DateTime.TryParse(nodes[1].InnerText, out DateTime time))
                 {
                     releaseTime = time;
                 }
@@ -123,7 +122,7 @@ namespace ATG_Notifier.ViewModels.Networking
             string chapterString;
 
             int chapterNumber = 0;
-            string chapterTitle = null;
+            string? chapterTitle = null;
 
             #region Chapter-info Regex
 
@@ -139,7 +138,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 var errorChapterProfileModel = new ChapterProfileModel()
                 {
                     Number = 0,
-                    Title = "",
+                    Title = null,
                     NumberAndTitleFallbackString = chapterNumberAndTitle,
                     WordCount = 0,
                     Url = chapterUrl,

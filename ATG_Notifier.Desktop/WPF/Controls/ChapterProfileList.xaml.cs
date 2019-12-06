@@ -16,7 +16,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             InitializeComponent();
         }
 
-        public ChapterProfilesListViewModel ViewModel => this.DataContext as ChapterProfilesListViewModel;
+        public ChapterProfilesListViewModel? ViewModel => this.DataContext as ChapterProfilesListViewModel;
 
         #region ItemClickCommand
 
@@ -44,7 +44,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         #endregion // ItemLostFocusCommand
 
-        public object GetDataItem(UIElement element)
+        public object? GetDataItem(UIElement element)
         {
             return element is ListBoxItem listBoxItem 
                 ? listBoxItem.DataContext 

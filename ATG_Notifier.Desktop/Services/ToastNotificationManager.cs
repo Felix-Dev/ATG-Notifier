@@ -104,45 +104,45 @@ namespace ATG_Notifier.Desktop.Services
             }
         }
 
-        private void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
-        {
-            int displaySlot;
+        //private void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
+        //{
+        //    int displaySlot;
 
-            /* 
-             * Only <MAX_DISPLAYED_NOTIFICATIONS> notifications are displayed at once. 
-             * Incoming notifications have to wait until a "notification spot" has become 
-             * available.
-             */
-            notificationSema.WaitOne();
+        //    /* 
+        //     * Only <MAX_DISPLAYED_NOTIFICATIONS> notifications are displayed at once. 
+        //     * Incoming notifications have to wait until a "notification spot" has become 
+        //     * available.
+        //     */
+        //    notificationSema.WaitOne();
 
-            var position = this.appSettings.NotificationDisplayPosition;
+        //    var position = this.appSettings.NotificationDisplayPosition;
 
-            /*
-             * Multiple threads can try to obtain an <available slot> simultanenously, so we
-             * need to synchronize the multiple thread accesses.
-             */
-            lock (this.notificationCounterLock)
-            {
-                displaySlot = ReserveDisplaySlot(position);
-            }
+        //    /*
+        //     * Multiple threads can try to obtain an <available slot> simultanenously, so we
+        //     * need to synchronize the multiple thread accesses.
+        //     */
+        //    lock (this.notificationCounterLock)
+        //    {
+        //        displaySlot = ReserveDisplaySlot(position);
+        //    }
 
-            UserInteraction userInteraction;
-            using (ToastNotificationView toast = new ToastNotificationView(chapterProfileViewModel, title, displaySlot, position))
-            {
-                toast.Shown += OnNotificationShown;
+        //    UserInteraction userInteraction;
+        //    using (ToastNotificationView toast = new ToastNotificationView(chapterProfileViewModel, title, displaySlot, position))
+        //    {
+        //        toast.Shown += OnNotificationShown;
 
-                userInteraction = toast.ShowDialog();
-            }
+        //        userInteraction = toast.ShowDialog();
+        //    }
 
-            if (userInteraction == UserInteraction.Click)
-            {
-                ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-                CommonHelpers.RunOnUIThread(() => Program.MainWindow.BringToFront());
-            }
+        //    if (userInteraction == UserInteraction.Click)
+        //    {
+        //        ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
+        //        CommonHelpers.RunOnUIThread(() => Program.MainWindow.BringToFront());
+        //    }
 
-            ReleaseDisplaySlot(position, displaySlot);
-            notificationSema.Release();
-        }
+        //    ReleaseDisplaySlot(position, displaySlot);
+        //    notificationSema.Release();
+        //}
 
         private void ShowCore2(string title, ChapterProfileViewModel chapterProfileViewModel)
         {
@@ -288,7 +288,9 @@ namespace ATG_Notifier.Desktop.Services
             double toastWidth = toastNotification.Width;
             double toastHeight = toastNotification.Height;
 
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             var displayPoint = position switch
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             {
                 DisplayPosition.TopLeft => new Point(0 + dpiMarginX, 0 + dpiMarginY),
                 DisplayPosition.TopRight => new Point(dpiDisplayWidth - toastWidth - dpiMarginX, 0 + dpiMarginY),

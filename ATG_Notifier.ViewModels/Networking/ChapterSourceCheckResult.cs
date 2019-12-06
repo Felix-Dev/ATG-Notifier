@@ -9,8 +9,8 @@ namespace ATG_Notifier.ViewModels.Networking
     {
         public ChapterSourceCheckResult(string chapterId, ChapterProfileModel chapterProfileModel)
         {
-            this.ChapterId = chapterId ?? throw new ArgumentNullException(nameof(chapterId));
-            this.ChapterProfileModel = chapterProfileModel ?? throw new ArgumentNullException(nameof(chapterProfileModel));
+            this.ChapterId = chapterId;
+            this.ChapterProfileModel = chapterProfileModel;
         }
 
         public string ChapterId { get; }

@@ -7,14 +7,11 @@ namespace ATG_Notifier.ViewModels.Helpers.Extensions
 {
     public static class ICommandExtensions
     {
-        public static void TryExecute(this ICommand command, object parameter = null)
+        public static void TryExecute(this ICommand command, object? parameter = null)
         {
-            if (command != null)
+            if (command.CanExecute(parameter))
             {
-                if (command.CanExecute(parameter))
-                {
-                    command.Execute(parameter);
-                }
+                command.Execute(parameter);
             }
         }
     }

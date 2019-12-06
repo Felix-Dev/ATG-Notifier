@@ -20,7 +20,7 @@ namespace ATG_Notifier.Desktop.Services
 
         public WebService(ILogService logService)
         {
-            this.logService = logService ?? throw new ArgumentNullException(nameof(logService));
+            this.logService = logService;
         }
 
         public async Task<HtmlDocument> DownloadHtmlContentAsync(string url, int retryAttempts)
@@ -117,13 +117,12 @@ namespace ATG_Notifier.Desktop.Services
             {
                 throw new ArgumentOutOfRangeException(nameof(retryAttempts), "The number of possible retry attempts cannot be negative!");
             }
-            
-
+       
             while (retryAttempts-- >= 0)
             {
                 var httpClientHandler = new HttpClientHandler
                 {
-                    UseCookies = false
+                    UseCookies = false,
                 };
 
                 using (var httpClient = new HttpClient(httpClientHandler))
@@ -137,8 +136,8 @@ namespace ATG_Notifier.Desktop.Services
 
                         try
                         {
-                            var response = httpClient.SendAsync(request).Result;
-                            return await response.Content.ReadAsStringAsync();
+                            HttpResponseMessage response = await httpClient.SendAsync(request).ConfigureAwait(false);
+                            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         }
                         catch (Exception ex) when (retryAttempts >= 0 && (ex is AggregateException || ex is WebException || ex is HttpRequestException || ex is InvalidOperationException))
                         {
@@ -156,7 +155,7 @@ namespace ATG_Notifier.Desktop.Services
 
             // We should not reach here based on our exception handling above (instead, the 
             // unhandled exception should be passed to the caller)
-            return null;
+           return "";
         }
 
         public async Task<string> DownloadRawContentAsync2(string url)

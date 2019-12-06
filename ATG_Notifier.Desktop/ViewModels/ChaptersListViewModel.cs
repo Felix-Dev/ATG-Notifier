@@ -26,8 +26,8 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public ChapterProfilesListViewModel(IChapterProfileService chapterProfileService, IUpdateService updateService)
         {
-            this.chapterProfileService = chapterProfileService ?? throw new ArgumentNullException(nameof(chapterProfileService));
-            this.updateService = updateService ?? throw new ArgumentNullException(nameof(updateService));
+            this.chapterProfileService = chapterProfileService;
+            this.updateService = updateService;
 
             this.AppSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
@@ -38,11 +38,9 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.updateService.ChapterUpdated += OnChapterUpdateAsync;
         }
 
-        public event EventHandler<ChapterProfilesUnreadCountChangedEventArgs> ChapterProfilesUnreadCountChanged;
+        public event EventHandler<ChapterProfilesUnreadCountChangedEventArgs>? ChapterProfilesUnreadCountChanged;
 
         public SettingsViewModel AppSettings { get; private set; }
-
-        public ICommand DeleteChapterProfileCommand { get; }
 
         public ICommand SetListAsReadCommand { get; }
 
@@ -65,7 +63,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public async Task DeleteChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
         {
-            this.Remove(chapterProfileViewModel);
+            Remove(chapterProfileViewModel);
         }
 
         protected override async void OnClear()
@@ -91,7 +89,7 @@ namespace ATG_Notifier.Desktop.ViewModels
             await this.chapterProfileService.UpdateChapterProfilesAsync(this.Items.Select(vm => vm.ChapterProfileModel).ToList());
         }
 
-        private async void OnChapterUpdateAsync(object sender, ChapterUpdateEventArgs e)
+        private async void OnChapterUpdateAsync(object? sender, ChapterUpdateEventArgs e)
         {
             CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfile));
 
@@ -116,19 +114,15 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public async Task UpdateChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
         {
-            if (chapterProfileViewModel is null)
-            {
-                throw new ArgumentNullException(nameof(chapterProfileViewModel));
-            }
-
-            ChapterProfileModel chapterProfileModel = await this.chapterProfileService.GetChapterProfileAsync(chapterProfileViewModel.ChapterProfileId);
-            if (chapterProfileModel?.IsRead != chapterProfileViewModel.IsRead)
+            ChapterProfileModel? chapterProfileModel = await this.chapterProfileService.GetChapterProfileAsync(chapterProfileViewModel.ChapterProfileId).ConfigureAwait(false);
+            if (chapterProfileModel != null 
+                && chapterProfileViewModel.IsRead && !chapterProfileModel.IsRead)
             {
                 this.chapterProfilesUnreadCount--;
                 ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
             }
 
-            await this.chapterProfileService.UpdateChapterProfileAsync(chapterProfileViewModel.ChapterProfileModel);
+            await this.chapterProfileService.UpdateChapterProfileAsync(chapterProfileViewModel.ChapterProfileModel).ConfigureAwait(false);
         }
     }
 }

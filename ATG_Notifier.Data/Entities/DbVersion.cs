@@ -11,8 +11,8 @@ namespace ATG_Notifier.Data.Entities
     public class DbVersion : INotifyPropertyChanged
     {
         [Key]
-        public string Version { get; set; }
+        public string Version { get; set; } = null!;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

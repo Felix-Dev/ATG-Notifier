@@ -1,8 +1,5 @@
 ﻿using ATG_Notifier.Data.DataContexts;
-using ATG_Notifier.Data.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ATG_Notifier.Data.Services
 {
@@ -15,7 +12,7 @@ namespace ATG_Notifier.Data.Services
 
         public DataServiceBase(IDataSource dataSource)
         {
-            this.dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+            this.dataSource = dataSource;
         }
 
         #region Dispose
@@ -34,11 +31,7 @@ namespace ATG_Notifier.Data.Services
         {
             if (!this.disposed && disposing)
             {
-                if (this.dataSource != null)
-                {
-                    this.dataSource.Dispose();
-                }
-
+                this.dataSource.Dispose();
                 this.disposed = true;
             }
         }

@@ -13,7 +13,7 @@ namespace ATG_Notifier.ViewModels.Helpers.Extensions
             // Use it when you don't want or need to wait for the task to complete.
         }
 
-        public static async void FireAndForgetSafeAsync(this Task task, IErrorHandler handler = null)
+        public static async void FireAndForgetSafeAsync(this Task task, IErrorHandler? handler = null)
         {
             try
             {
