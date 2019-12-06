@@ -28,6 +28,7 @@ namespace ATG_Notifier.Desktop
 
         public static new MainWindow MainView { get; private set; }
 
+        // TODO: Implement IDisposable?
         private readonly AutoResetEvent mainViewActivatedResetEvent;
 
         /// <summary>
@@ -63,7 +64,6 @@ namespace ATG_Notifier.Desktop
         {
             logService = ServiceLocator.Current.GetService<ILogService>();
             dialogService = ServiceLocator.Current.GetService<DialogService>();
-            //dialogService.DialogShown += OnDialogShown;
 
             this.mainViewActivatedResetEvent = new AutoResetEvent(false);
 
@@ -79,8 +79,6 @@ namespace ATG_Notifier.Desktop
             var window = new MainWindow();
             window.Activated += (s, e) => mainViewActivatedResetEvent.Set();
             window.Deactivate += (s, e) => mainViewActivatedResetEvent.Reset();
-
-            //dialogService.MainForm = App.MainWindow;
 
             JumplistManager.BuildJumplist();
 
@@ -112,14 +110,6 @@ namespace ATG_Notifier.Desktop
 
             // Save user data
             ServiceLocator.Current.GetService<SettingsViewModel>().Save();
-        }
-
-        private void OnDialogShown(object? sender, DialogShownEventArgs e)
-        {
-            if (e.DialogId == "critical error")
-            {
-                TaskbarManager.Current.ClearErrorTaskbarButton();
-            }
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

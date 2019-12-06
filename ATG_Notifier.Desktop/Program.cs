@@ -52,8 +52,8 @@ namespace ATG_Notifier.Desktop
                     };
 
                     dialogService = ServiceLocator.Current.GetService<DialogService>();
-                    dialogService.MainForm = MainWindow;
-                    dialogService.DialogShown += OnDialogShown;
+                    //dialogService.MainForm = MainWindow;
+                    //dialogService.DialogShown += OnDialogShown;
 
                     appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
@@ -128,28 +128,28 @@ namespace ATG_Notifier.Desktop
 
             TaskbarManager.Current.SetErrorTaskbarButton();
 
-            string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
-            DialogResult result = dialogService.ShowDialog("critical error", "Critical Error", message, MessageDialogButton.YesNo, MessageDialogIcon.Error, "Do you want to open the folder to the log file?", out bool openLogFile);
+            //string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
+            //DialogResult result = dialogService.ShowDialog("critical error", "Critical Error", message, MessageDialogButton.YesNo, MessageDialogIcon.Error, "Do you want to open the folder to the log file?", out bool openLogFile);
 
-            if (openLogFile)
-            {
-                var psi = new ProcessStartInfo
-                {
-                    FileName = AppConfiguration.LogfileDirectory,
-                    UseShellExecute = true
-                };
+            //if (openLogFile)
+            //{
+            //    var psi = new ProcessStartInfo
+            //    {
+            //        FileName = AppConfiguration.LogfileDirectory,
+            //        UseShellExecute = true
+            //    };
 
-                Process.Start(psi);
-            }
+            //    Process.Start(psi);
+            //}
 
-            if (result == DialogResult.Yes)
-            {
-                RequestRestart();
-            }
-            else
-            {
-                Application.Exit();
-            }
+            //if (result == DialogResult.Yes)
+            //{
+            //    RequestRestart();
+            //}
+            //else
+            //{
+            //    Application.Exit();
+            //}
         }
 
         private static void OnDialogShown(object sender, DialogShownEventArgs e)
