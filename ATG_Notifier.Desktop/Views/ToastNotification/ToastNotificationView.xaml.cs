@@ -1,23 +1,15 @@
 ﻿using ATG_Notifier.Desktop.Views.ToastNotification;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    internal partial class ToastNotificationView2 : Window
+    internal partial class ToastNotificationView : Window
     {
         private CloseReason closeReason;
 
-        public ToastNotificationView2(string title, string content)
+        public ToastNotificationView(string title, string content)
         {
             InitializeComponent();
 
@@ -25,7 +17,7 @@ namespace ATG_Notifier.Desktop.Views
             this.ChapterNumberAndTitleTextBox.Text = content;
         }
 
-        public new event EventHandler<ToastNotificationClosedEventArgs> Closed;
+        public new event EventHandler<ToastNotificationClosedEventArgs>? Closed;
 
         public new CloseReason ShowDialog()
         {

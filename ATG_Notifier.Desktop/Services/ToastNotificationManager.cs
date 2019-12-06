@@ -3,7 +3,6 @@ using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Utilities;
-using ATG_Notifier.Desktop.View;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.Views.ToastNotification;
@@ -104,46 +103,6 @@ namespace ATG_Notifier.Desktop.Services
             }
         }
 
-        //private void ShowCore(string title, ChapterProfileViewModel chapterProfileViewModel)
-        //{
-        //    int displaySlot;
-
-        //    /* 
-        //     * Only <MAX_DISPLAYED_NOTIFICATIONS> notifications are displayed at once. 
-        //     * Incoming notifications have to wait until a "notification spot" has become 
-        //     * available.
-        //     */
-        //    notificationSema.WaitOne();
-
-        //    var position = this.appSettings.NotificationDisplayPosition;
-
-        //    /*
-        //     * Multiple threads can try to obtain an <available slot> simultanenously, so we
-        //     * need to synchronize the multiple thread accesses.
-        //     */
-        //    lock (this.notificationCounterLock)
-        //    {
-        //        displaySlot = ReserveDisplaySlot(position);
-        //    }
-
-        //    UserInteraction userInteraction;
-        //    using (ToastNotificationView toast = new ToastNotificationView(chapterProfileViewModel, title, displaySlot, position))
-        //    {
-        //        toast.Shown += OnNotificationShown;
-
-        //        userInteraction = toast.ShowDialog();
-        //    }
-
-        //    if (userInteraction == UserInteraction.Click)
-        //    {
-        //        ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-        //        CommonHelpers.RunOnUIThread(() => Program.MainWindow.BringToFront());
-        //    }
-
-        //    ReleaseDisplaySlot(position, displaySlot);
-        //    notificationSema.Release();
-        //}
-
         private void ShowCore2(string title, ChapterProfileViewModel chapterProfileViewModel)
         {
             int displaySlot;
@@ -166,7 +125,7 @@ namespace ATG_Notifier.Desktop.Services
                 displaySlot = ReserveDisplaySlot(position);
             }
 
-            var toast = new ToastNotificationView2(title, chapterProfileViewModel.NumberAndTitleDisplayString);
+            var toast = new ToastNotificationView(title, chapterProfileViewModel.NumberAndTitleDisplayString);
             toast.Loaded += (s, e) =>
             {
                 Point p = GetScreenPosition(position, displaySlot, toast);
@@ -270,7 +229,7 @@ namespace ATG_Notifier.Desktop.Services
                 : 0;
         }
 
-        private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView2 toastNotification)
+        private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView toastNotification)
         {
             Rect currentScreenBounds;
             CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainWindow.GetScreen());
