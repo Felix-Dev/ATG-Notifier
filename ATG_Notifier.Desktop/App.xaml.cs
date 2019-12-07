@@ -2,7 +2,6 @@ using ATG_Notifier.Desktop.Components;
 using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
-using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.Services.Taskbar;
 using ATG_Notifier.Desktop.Utilities;
@@ -128,10 +127,10 @@ namespace ATG_Notifier.Desktop
             });
             TaskbarManager.Current.SetErrorTaskbarButton();
 
-            // Wait for the notifier app to be in the foreground.
+            // Wait for the notifier app to enter the foreground.
             App.Current.mainViewActivatedResetEvent.WaitOne();
 
-            // As soon as we are the foregroudn app, clear the error mode of the taskbar button
+            // As soon as we are the foreground app, clear the error mode of the taskbar button
             // and show our error message.
             TaskbarManager.Current.ClearErrorTaskbarButton();
             ShowAndProcessErrorDialog();

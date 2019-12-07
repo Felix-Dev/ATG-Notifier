@@ -1,7 +1,5 @@
 ﻿using ATG_Notifier.Desktop.Native.Win32;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 

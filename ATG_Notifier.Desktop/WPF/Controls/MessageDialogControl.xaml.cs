@@ -1,10 +1,8 @@
 ﻿using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
-using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
@@ -13,18 +11,12 @@ namespace ATG_Notifier.Desktop.WPF.Controls
     {
         private readonly System.Windows.Forms.Form owner;
 
-        public MessageDialogControl()
-        {
-            InitializeComponent();
-        }
-
-        public bool IsOptionalActionChecked => this.OptionalActionCheckbox.IsChecked.HasValue 
-            ? this.OptionalActionCheckbox.IsChecked.Value 
-            : false;
+        public bool IsOptionalActionChecked => this.OptionalActionCheckbox.IsChecked ?? false;
 
         public System.Windows.Forms.DialogResult DialogResult { get; private set; }
 
-        public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
+        public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, 
+            string? optionalActionText = null, bool initialOptionalActionState = false)
         {
             this.owner = owner;
 
@@ -80,25 +72,14 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         private void ApplyMessageIcon(MessageDialogIcon icon)
         {
-            Icon systemIcon;
-            switch (icon)
+            var systemIcon = icon switch
             {
-                case MessageDialogIcon.Error:
-                    systemIcon = SystemIcons.Error;
-                    break;
-                case MessageDialogIcon.Warning:
-                    systemIcon = SystemIcons.Warning;
-                    break;
-                case MessageDialogIcon.Information:
-                    systemIcon = SystemIcons.Information;
-                    break;
-                case MessageDialogIcon.Question:
-                    systemIcon = SystemIcons.Question;
-                    break;
-                default:
-                    systemIcon = null;
-                    break;
-            }
+                MessageDialogIcon.Error => SystemIcons.Error,
+                MessageDialogIcon.Warning => SystemIcons.Warning,
+                MessageDialogIcon.Information => SystemIcons.Information,
+                MessageDialogIcon.Question => SystemIcons.Question,
+                _ => null,
+            };
 
             if (systemIcon?.ToImageSource() is ImageSource imageSource)
             {
