@@ -10,9 +10,7 @@ using ATG_Notifier.Desktop.WinForms.Helpers.Extensions;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace ATG_Notifier.Desktop.Services
@@ -20,11 +18,6 @@ namespace ATG_Notifier.Desktop.Services
     internal class ToastNotificationManager
     {
         private const int MaxDisplayedPopups = 3;
-
-        private const int DISPLAY_START_POSITION_Y = 10;
-
-        /// <summary>Space between two consecutive notifications.</summary>
-        private const int INTER_NOTIFICATION_OFFSET_Y = 5;
 
         /// <summary>
         /// Representing the margin between "top-most" notification and screen height border.
@@ -143,7 +136,7 @@ namespace ATG_Notifier.Desktop.Services
                 if (e.Reason == CloseReason.Click)
                 {
                     ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-                    CommonHelpers.RunOnUIThread(() => App.MainView.BringToFront());
+                    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringToFront());
                 }
 
                 ReleaseDisplaySlot(position, displaySlot);
@@ -224,7 +217,7 @@ namespace ATG_Notifier.Desktop.Services
         private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView toastNotification)
         {
             Rect currentScreenBounds;
-            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainView.GetScreen());
+            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainWindow.GetScreen());
 
             double dpiScale = DpiHelper.GetDpiScaleForWindow(toastNotification);
 

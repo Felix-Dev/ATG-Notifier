@@ -26,7 +26,7 @@ namespace ATG_Notifier.Desktop
         private static ILogService logService;
         private static DialogService dialogService;
 
-        public static new MainWindow MainView { get; private set; }
+        public static new MainWindow MainWindow { get; private set; }
 
         // TODO: Implement IDisposable?
         private readonly AutoResetEvent mainViewActivatedResetEvent;
@@ -82,8 +82,8 @@ namespace ATG_Notifier.Desktop
 
             JumplistManager.BuildJumplist();
 
-            App.MainView = window;
-            App.MainView.Show();
+            App.MainWindow = window;
+            App.MainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -121,9 +121,9 @@ namespace ATG_Notifier.Desktop
             // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention
             CommonHelpers.RunOnUIThread(() =>
             {
-                if (!App.MainView.Visible)
+                if (!App.MainWindow.Visible)
                 {
-                    App.MainView.Visible = true;
+                    App.MainWindow.Visible = true;
                 }
             });
             TaskbarManager.Current.SetErrorTaskbarButton();

@@ -33,7 +33,7 @@ namespace ATG_Notifier.Desktop.Components
 
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            App.MainView.BringToFront();
+            App.MainWindow.BringToFront();
         }
 
         public void Show()

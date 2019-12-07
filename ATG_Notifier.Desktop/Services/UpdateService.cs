@@ -7,7 +7,6 @@ using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
@@ -31,13 +30,6 @@ namespace ATG_Notifier.Desktop.Services
         private readonly object timerLock = new object();
         private Timer? periodicTimerRawSource = null;
 
-        //private readonly EventWaitHandle jobRoundFinished;
-        //private readonly Thread workThread;
-        //private bool finishJob;
-
-        //private Random rand;
-        //private int debugCount = 0;
-
         private Semaphore? saveguardSema;
 
         private SettingsViewModel settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
@@ -48,16 +40,6 @@ namespace ATG_Notifier.Desktop.Services
             this.logService = logService;
 
             this.rawSourceChecker = new RawSourceChecker(this.webService, this.logService);
-
-            /* Create the worker thread used to check for updates. */
-            //workThread = new Thread(new ThreadStart(DoJob));
-#if DEBUG
-            //workThread.Name = "worker"; // Assign worker thread a name for easier debugging.
-#endif
-            /* Create the job-round Event Handler */
-            //this.jobRoundFinished = new EventWaitHandle(true, EventResetMode.ManualReset);
-
-            //this.rand = new Random();
         }
 
         public event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
@@ -65,14 +47,6 @@ namespace ATG_Notifier.Desktop.Services
         // Note: not thread-safe!
         public void Start()
         {
-            //ThreadState state = workThread.ThreadState;
-
-            //// Only have one worker at a time.
-            //if (state == ThreadState.Unstarted || state == ThreadState.Stopped)
-            //{
-            //    workThread.Start();
-            //}
-
             if (this.periodicTimerRawSource != null)
             {
                 // The update service is already running.
@@ -92,22 +66,11 @@ namespace ATG_Notifier.Desktop.Services
                 return;
             }
 
-            /* Wait until a running update process is finished. */
+            // Wait until a running update process is finished.
 
             logService.Log(LogType.Debug, "Attempting to terminate the update service...");
 
             this.saveguardSema?.WaitOne();
-
-            //jobRoundFinished.WaitOne();
-
-            //finishJob = true;
-
-            // Request (immediate) termination of worker thread.
-            //workThread.Interrupt();
-            //workThread.Abort();
-
-            /* Wait for the worker thread to terminate. */
-            //workThread.Join();
 
             StopTimer();
 
@@ -118,8 +81,6 @@ namespace ATG_Notifier.Desktop.Services
             // Clean-up resources used by the event handler.
             this.saveguardSema?.Dispose();
             this.saveguardSema = null;
-
-            //jobRoundFinished.Dispose();
         }
 
         private void StopTimer()
@@ -192,8 +153,6 @@ namespace ATG_Notifier.Desktop.Services
                 };
 
                 TaskbarManager.Current.FlashTaskbarButton();
-
-                //jobRoundFinished.Set();
 
                 if (!settingsViewModel.IsInFocusMode)
                 {
