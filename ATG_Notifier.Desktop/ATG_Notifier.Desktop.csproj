@@ -91,9 +91,6 @@
     <None Update="WPF\Controls\ChapterProfilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Controls\LatestChapterControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
     <None Update="WPF\Controls\MessageDialogControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

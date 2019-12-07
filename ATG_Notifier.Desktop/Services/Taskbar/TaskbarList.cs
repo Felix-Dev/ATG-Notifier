@@ -14,7 +14,7 @@ namespace ATG_Notifier.Desktop.Services.Taskbar
     {
         private static readonly object syncLock = new object();
 
-        private static ITaskbarList3 taskbarList;
+        private static ITaskbarList3? taskbarList;
 
         internal static ITaskbarList3 Instance
         {

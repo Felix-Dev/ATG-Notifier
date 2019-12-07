@@ -118,7 +118,7 @@ namespace ATG_Notifier.Desktop
 
             App.Current.SaveAndCleanup();
 
-            // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention
+            // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention.
             CommonHelpers.RunOnUIThread(() =>
             {
                 if (!App.MainWindow.Visible)
@@ -132,7 +132,7 @@ namespace ATG_Notifier.Desktop
             App.Current.mainViewActivatedResetEvent.WaitOne();
 
             // As soon as we are the foregroudn app, clear the error mode of the taskbar button
-            // and show our error message
+            // and show our error message.
             TaskbarManager.Current.ClearErrorTaskbarButton();
             ShowAndProcessErrorDialog();
 
@@ -142,7 +142,7 @@ namespace ATG_Notifier.Desktop
                 System.Windows.Forms.DialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
                     "Do you want to open the folder to the log file?", false, out bool openLogFileDirRequested);
 
-                // Open the directory of the log file in the file explorer
+                // Open the directory of the log file in the file explorer.
                 if (openLogFileDirRequested)
                 {
                     var psi = new ProcessStartInfo

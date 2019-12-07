@@ -85,7 +85,7 @@ namespace ATG_Notifier.Desktop.Native.Win32
                 && r.Bottom == Bottom;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is RECT)
             {
