@@ -7,6 +7,7 @@ using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
@@ -162,7 +163,7 @@ namespace ATG_Notifier.Desktop.Services
                 this.saveguardSema?.Release();
             }
 #endif
-//            // TODO: Crashing code below to test unexpected error handling:
+            // TODO: Crashing code below to test unexpected error handling:
 //            await Task.Delay(7000);
 
 //#pragma warning disable CS8602 // Dereference of a possibly null reference.
