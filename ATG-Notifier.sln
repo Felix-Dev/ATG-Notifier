@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATG_Notifier", "ATG_Notifie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATG_Notifier.ViewModels", "ViewModels\ATG_Notifier.ViewModels.csproj", "{93FA07F3-6D82-4CD4-B3C0-5BDB2FEFD88B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATG_Notifier_Watchdog", "..\ATG_Notifier_Watchdog\ATG_Notifier_Watchdog.csproj", "{36B5C012-9F05-42C3-90B9-4AF1456AF6AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATG_Notifier_Watchdog", "ATG_Notifier_Watchdog\ATG_Notifier_Watchdog.csproj", "{36B5C012-9F05-42C3-90B9-4AF1456AF6AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
