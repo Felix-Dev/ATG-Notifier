@@ -30,7 +30,11 @@ namespace ATG_Notifier.Desktop.Views
         {
             InitializeComponent();
 
-            this.MaximumSize = new Size(Size.Width, Screen.GetWorkingArea(this).Height);
+            // TODO: enable full monitor width here? If yes, we can switch to WPF windows...
+            //this.MaximumSize = new Size(this.MaximumSize.Width, Screen.GetWorkingArea(this).Height);
+
+            Rectangle screenArea = Screen.GetWorkingArea(this);
+            this.MaximumSize = new Size(screenArea.Width, screenArea.Height);
             this.Text = AppConfiguration.AppId;
 
             this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();

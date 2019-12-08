@@ -7,12 +7,17 @@
              xmlns:local="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
              x:ClassModifier="internal"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             SnapsToDevicePixels="True"
+             FontFamily="Segoe UI">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/MenuItem.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!--#region Brushes -->
 
             <SolidColorBrush x:Key="MainViewBackgroundLight" Color="#FFFFFFFF"/>
             <SolidColorBrush x:Key="MainViewBackgroundDark" Color="#FF303030"/>
@@ -22,12 +27,38 @@
 
             <SolidColorBrush x:Key="MenuForegroundLight" Color="#FF000000"/>
             <SolidColorBrush x:Key="MenuForegroundDark" Color="#FFD0D0D0"/>
+            
+            <!--#endregion-->
+            
+            <!--#region Icons -->
+
+            <!-- update-check-status-ok icon -->
+            <Viewbox x:Key="IconWarning" Width="14" Height="14">
+                <Path Fill="#FF000000"
+                      Stretch="UniformToFill"
+                      Data="M960,960L0,960L480,0ZM103.5,896L856.5,896L480,143ZM512,384L512,704L448,704L448,384ZM448,768L512,768L512,832L448,832Z"/>
+            </Viewbox>
+
+            <!--#endregion-->
+            
+            <!--#region Styles -->
+
+            <Style x:Key="InfoBannerHyperlinkStyle" TargetType="Hyperlink">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--#endregion-->
 
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="{StaticResource MainViewBackgroundLight}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -92,7 +123,87 @@
                           Click="OnMenuItemAboutClick"/>
             </MenuItem>
         </Menu>
+        
+        <!-- Info banner -->
+        <Border Grid.Row="1" 
+                Background="#FFFEFCC8"
+                BorderBrush="Transparent"
+                Visibility="Collapsed">
+            <Grid Margin="5,5,5,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"
+                      HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Grid.Column="0"
+                                      Content="{StaticResource IconWarning}" 
+                                      VerticalAlignment="Top"
+                                      Margin="0,2,5,0"/>
+                    <ScrollViewer Grid.Column="1" 
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  MaxHeight="120">
+                        <TextBlock Grid.Column="1" 
+                               Text="The notifier currently cannot successfully check for updates! You might not be connected to the internet or the website is currently unavailable."
+                               TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    <TextBlock Grid.Column="2" 
+                               Margin="15,0,15,0">
+                        <Hyperlink Style="{StaticResource InfoBannerHyperlinkStyle}">
+                            Disable update checks
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+
+                <Button Grid.Column="2" 
+                        VerticalAlignment="Top"
+                        Content="✖"
+                        Cursor="Hand"
+                        FontFamily="Segoe UI Symbol"
+                        FontSize="12"
+                        BorderBrush="Transparent"
+                        ToolTip="Close"
+                        ToolTipService.InitialShowDelay="1000"
+                        ToolTipService.ShowDuration="2000">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="#FF8C8C8D"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            Focusable="{TemplateBinding Focusable}"
+                                                            />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="#FF4A4A4A" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Foreground" Value="#FF000000" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+       
         <controls:ChapterProfilesView x:Name="ChapterProfilesViewControl" 
-                                      Grid.Row="1"/>
+                                      Grid.Row="2"/>
     </Grid>
 </UserControl>

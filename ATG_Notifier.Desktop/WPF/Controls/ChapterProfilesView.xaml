@@ -290,18 +290,9 @@
                 <!-- left toolbar buttons -->
                 <StackPanel Grid.Column="0" 
                             Orientation="Horizontal">
-                    <!-- Update check status button -->
-                    <ToggleButton Style="{StaticResource ToolbarUpdateCheckStatusToggleButtonStyle}"
-                                  TabIndex="4"
-                                  IsChecked="True"/>
-                    
-                    <!-- separator -->
-                    <Rectangle Style="{StaticResource VerticalSeparator}"
-                               Fill="{StaticResource ToolbarSeparatorForeground}"/>
-                    
                     <!-- stop/resume update checks button -->
                     <ToggleButton Style="{StaticResource ToolbarUpdatesToggleButtonStyle}"
-                                  TabIndex="5"
+                                  TabIndex="4"
                                   Command="{Binding ChangeUpdateServiceStatusCommand}"
                                   IsEnabled="{Binding CanChangeUpdateServiceStatus}"
                                   IsChecked="{Binding AppSettings.IsUpdateServiceRunning, Mode=OneWay}"/>
@@ -318,7 +309,7 @@
                             ToolTip="Show latest chapter info"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="6"
+                            TabIndex="5"
                             Click="OnLatestChapterButtonClick"
                             IsEnabled="{Binding AppSettings.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}}">
                         <Button.Content>
@@ -367,7 +358,7 @@
                             ToolTip="Set all Chapters as read"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="7"
+                            TabIndex="6"
                             Command="{Binding ListViewModel.SetListAsReadCommand}"/>
                 </StackPanel>
                 
@@ -381,7 +372,7 @@
                             ToolTip="Remove all Notifications"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
-                            TabIndex="8"
+                            TabIndex="7"
                             Command="{Binding ListViewModel.ClearCommand}"/>
                 </StackPanel>
             </Grid>
