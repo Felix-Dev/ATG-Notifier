@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    internal partial class MessageDialogForm : Form
+    internal partial class MessageDialog : Form
     {
         private readonly MessageDialogIcon icon;
         private readonly MessageDialogButton buttons;
@@ -27,7 +27,7 @@ namespace ATG_Notifier.Desktop.Views
             }
         }
 
-        public MessageDialogForm(string message, string title, MessageDialogButton button = MessageDialogButton.OK, 
+        public MessageDialog(string message, string title, MessageDialogButton button = MessageDialogButton.OK, 
             MessageDialogIcon icon = MessageDialogIcon.None, string? optionalActionText = null, bool initialOptionalActionState = false)
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace ATG_Notifier.Desktop.Views
 
         public bool IsOptionalActionChecked { get; private set; }
 
-        public new DialogResult ShowDialog()
+        public new MessageDialogResult ShowDialog()
         {
             base.ShowDialog();
 

@@ -1,6 +1,6 @@
 ﻿namespace ATG_Notifier.Desktop.Views
 {
-    internal partial class MessageDialogForm
+    internal partial class MessageDialog
     {
         /// <summary>
         /// Required designer variable.

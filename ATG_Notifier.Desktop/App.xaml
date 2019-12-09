@@ -7,6 +7,6 @@
              x:ClassModifier="internal"
              mc:Ignorable="d"
              SessionEnding="OnSessionEnding"
-             ShutdownMode="OnExplicitShutdown">
+             ShutdownMode="OnMainWindowClose">
 
 </Application>

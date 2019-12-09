@@ -25,10 +25,10 @@ namespace ATG_Notifier.Desktop
         private static ILogService logService;
         private static DialogService dialogService;
 
-        public static new MainWindow MainWindow { get; private set; }
+        public static new MainView MainWindow => (MainView)Application.Current.MainWindow;
 
         // TODO: Implement IDisposable?
-        private readonly AutoResetEvent mainViewActivatedResetEvent;
+        private readonly AutoResetEvent appActivatedResetEvent;
 
         /// <summary>
         /// Application Entry Point.
@@ -64,7 +64,10 @@ namespace ATG_Notifier.Desktop
             logService = ServiceLocator.Current.GetService<ILogService>();
             dialogService = ServiceLocator.Current.GetService<DialogService>();
 
-            this.mainViewActivatedResetEvent = new AutoResetEvent(false);
+            this.appActivatedResetEvent = new AutoResetEvent(false);
+
+            this.Activated += (s, e) => this.appActivatedResetEvent.Set();
+            this.Deactivated += (s, e) => this.appActivatedResetEvent.Reset();
 
             InitializeComponent();
         }
@@ -75,14 +78,10 @@ namespace ATG_Notifier.Desktop
         {
             base.OnStartup(e);
 
-            var window = new MainWindow();
-            window.Activated += (s, e) => mainViewActivatedResetEvent.Set();
-            window.Deactivate += (s, e) => mainViewActivatedResetEvent.Reset();
-
             JumplistManager.BuildJumplist();
 
-            App.MainWindow = window;
-            App.MainWindow.Show();
+            var mainView = new MainView();
+            mainView.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -120,15 +119,15 @@ namespace ATG_Notifier.Desktop
             // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention.
             CommonHelpers.RunOnUIThread(() =>
             {
-                if (!App.MainWindow.Visible)
+                if (Application.Current.MainWindow.Visibility == Visibility.Hidden)
                 {
-                    App.MainWindow.Visible = true;
+                    Application.Current.MainWindow.Visibility = Visibility.Visible;
                 }
             });
             TaskbarManager.Current.SetErrorTaskbarButton();
 
             // Wait for the notifier app to enter the foreground.
-            App.Current.mainViewActivatedResetEvent.WaitOne();
+            App.Current.appActivatedResetEvent.WaitOne();
 
             // As soon as we are the foreground app, clear the error mode of the taskbar button
             // and show our error message.
@@ -138,7 +137,7 @@ namespace ATG_Notifier.Desktop
             static void ShowAndProcessErrorDialog()
             {
                 string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
-                System.Windows.Forms.DialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
+                MessageDialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
                     "Do you want to open the folder to the log file?", false, out bool openLogFileDirRequested);
 
                 // Open the directory of the log file in the file explorer.
@@ -154,7 +153,7 @@ namespace ATG_Notifier.Desktop
                 }
 
                 // Process the reply of the user about whether or not to restart the notifier app.
-                if (result == System.Windows.Forms.DialogResult.Yes)
+                if (result == MessageDialogResult.Yes)
                 {
                     RequestRestart();
                 }

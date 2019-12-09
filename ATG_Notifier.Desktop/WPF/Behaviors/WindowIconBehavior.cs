@@ -8,7 +8,7 @@ using System.Windows.Interop;
 
 namespace ATG_Notifier.Desktop.WPF.Behaviors
 {
-    // Note: This class is nit really useful for now as the app's main window is still a WinForms window.
+    // Note: This class is not really useful for now as the app's main window is still a WinForms window.
     // Once it has been replaced by a WPF window this class will get relevant.
     internal class WindowIconBehavior
     {

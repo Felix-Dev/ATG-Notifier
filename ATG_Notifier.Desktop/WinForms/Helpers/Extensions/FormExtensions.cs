@@ -7,7 +7,7 @@ namespace ATG_Notifier.Desktop.WinForms.Helpers.Extensions
 {
     internal static class FormExtensions
     {
-        public static Rect GetScreen(this Form form)
+        public static Rect GetScreenBounds(this Form form)
         {
             if (form is null)
             {

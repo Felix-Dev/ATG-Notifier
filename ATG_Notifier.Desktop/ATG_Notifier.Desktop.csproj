@@ -37,8 +37,8 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Views\MainView.xaml" />
     <None Remove="Views\ToastNotification\ToastNotificationView.xaml" />
-    <None Remove="WPF\Controls\MainView.xaml" />
     <None Remove="WPF\Themes\MenuItem.xaml" />
   </ItemGroup>
 

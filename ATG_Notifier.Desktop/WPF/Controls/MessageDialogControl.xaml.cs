@@ -13,7 +13,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         public bool IsOptionalActionChecked => this.OptionalActionCheckbox.IsChecked ?? false;
 
-        public System.Windows.Forms.DialogResult DialogResult { get; private set; }
+        public MessageDialogResult DialogResult { get; private set; }
 
         public MessageDialogControl(System.Windows.Forms.Form owner, string text, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None, 
             string? optionalActionText = null, bool initialOptionalActionState = false)
@@ -54,19 +54,19 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         private void OnButtonOKClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.DialogResult = MessageDialogResult.OK;
             this.owner.Close();
         }
 
         private void OnButtonYesClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.DialogResult = MessageDialogResult.Yes;
             this.owner.Close();
         }
 
         private void OnButtonNoClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.No;
+            this.DialogResult = MessageDialogResult.No;
             this.owner.Close();
         }
 

@@ -6,34 +6,34 @@ namespace ATG_Notifier.Desktop.Services
 {
     internal sealed class DialogService
     {
-        public DialogResult ShowDialog(string message, string title)
+        public MessageDialogResult ShowDialog(string message, string title)
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                using (var dialog = new MessageDialogForm(message, title))
+                using (var dialog = new MessageDialog(message, title))
                 {
                     return dialog.ShowDialog();
                 }
             }); 
         }
 
-        public DialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None)
+        public MessageDialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None)
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                using (var dialog = new MessageDialogForm(message, title, button, icon))
+                using (var dialog = new MessageDialog(message, title, button, icon))
                 {
                     return dialog.ShowDialog();
                 }
             });
         }
 
-        public DialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon,
+        public MessageDialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon,
             string optionalActionText, bool initialOptionalActionState, out bool IsOptionalActionChecked)
         {
-            var(dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread< (DialogResult, bool)>(() =>
+            var(dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(MessageDialogResult, bool)>(() =>
             {
-                using (var dialog = new MessageDialogForm(message, title,button, icon, optionalActionText, initialOptionalActionState))
+                using (var dialog = new MessageDialog(message, title, button, icon, optionalActionText, initialOptionalActionState))
                 {
                     var res = dialog.ShowDialog();
 

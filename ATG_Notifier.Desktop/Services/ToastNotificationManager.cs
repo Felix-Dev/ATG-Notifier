@@ -7,6 +7,7 @@ using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.Desktop.WinForms.Helpers.Extensions;
+using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;
 using System.Threading;
@@ -136,7 +137,7 @@ namespace ATG_Notifier.Desktop.Services
                 if (e.Reason == CloseReason.Click)
                 {
                     ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-                    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringToFront());
+                    CommonHelpers.RunOnUIThread(() => App.MainWindow.BringIntoView());
                 }
 
                 ReleaseDisplaySlot(position, displaySlot);
@@ -216,8 +217,15 @@ namespace ATG_Notifier.Desktop.Services
 
         private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView toastNotification)
         {
-            Rect currentScreenBounds;
-            CommonHelpers.RunOnUIThread(() => currentScreenBounds = App.MainWindow.GetScreen());
+            Rect? currentScreenBoundsRef = null;
+            CommonHelpers.RunOnUIThread(() => currentScreenBoundsRef = App.MainWindow.GetScreenBounds());
+
+            if (!currentScreenBoundsRef.HasValue)
+            {
+                return new Point(0 + MarginX, 0 + MarginY);
+            }
+
+            var currentScreenBounds = currentScreenBoundsRef.Value;
 
             double dpiScale = DpiHelper.GetDpiScaleForWindow(toastNotification);
 
