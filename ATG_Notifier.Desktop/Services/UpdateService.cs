@@ -23,10 +23,12 @@ namespace ATG_Notifier.Desktop.Services
 
         private readonly ILogService logService;
         private readonly IWebService webService;
+        private readonly TaskbarButtonService taskbarButtonService;
 
         private readonly RawSourceChecker rawSourceChecker; 
 
         private readonly ToastNotificationManager notifier = ToastNotificationManager.Instance;
+
 
         private readonly object timerLock = new object();
         private Timer? periodicTimerRawSource = null;
@@ -39,6 +41,8 @@ namespace ATG_Notifier.Desktop.Services
         {
             this.webService = webService;
             this.logService = logService;
+
+            this.taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
 
             this.rawSourceChecker = new RawSourceChecker(this.webService, this.logService);
         }
@@ -118,7 +122,7 @@ namespace ATG_Notifier.Desktop.Services
                 ReleaseTime = chapterProfileViewModel.ReleaseTime,
             };
 
-            TaskbarManager.Current.FlashTaskbarButton();
+            this.taskbarButtonService.FlashButton();
 
             if (!settingsViewModel.IsInFocusMode)
             {

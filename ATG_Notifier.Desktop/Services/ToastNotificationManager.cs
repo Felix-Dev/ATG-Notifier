@@ -6,7 +6,6 @@ using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.Views.ToastNotification;
-using ATG_Notifier.Desktop.WinForms.Helpers.Extensions;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
 using ATG_Notifier.ViewModels.ViewModels;
 using System;

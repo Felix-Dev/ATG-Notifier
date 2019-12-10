@@ -1,5 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Services;
+using ATG_Notifier.Desktop.Services.Taskbar;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.Services.Infrastructure.LogService;
@@ -28,6 +29,7 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
 
             serviceCollection.AddSingleton<DialogService>();
+            serviceCollection.AddSingleton(TaskbarButtonService.GetForApp());
 
             serviceCollection.AddSingleton<SettingsViewModel>();
 

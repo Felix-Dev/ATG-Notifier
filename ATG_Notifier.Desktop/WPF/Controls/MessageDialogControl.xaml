@@ -14,7 +14,8 @@
         </Style>
     </UserControl.Resources>
     <Grid Background="White"
-          MinWidth="150">
+          MinWidth="150"
+          MaxWidth="450">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />

@@ -24,6 +24,7 @@ namespace ATG_Notifier.Desktop
     {
         private static ILogService logService;
         private static DialogService dialogService;
+        private static TaskbarButtonService taskbarButtonService;
 
         public static new MainView MainWindow => (MainView)Application.Current.MainWindow;
 
@@ -63,6 +64,7 @@ namespace ATG_Notifier.Desktop
         {
             logService = ServiceLocator.Current.GetService<ILogService>();
             dialogService = ServiceLocator.Current.GetService<DialogService>();
+            taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
 
             this.appActivatedResetEvent = new AutoResetEvent(false);
 
@@ -124,14 +126,15 @@ namespace ATG_Notifier.Desktop
                     Application.Current.MainWindow.Visibility = Visibility.Visible;
                 }
             });
-            TaskbarManager.Current.SetErrorTaskbarButton();
+
+            taskbarButtonService.SetErrorMode();
 
             // Wait for the notifier app to enter the foreground.
             App.Current.appActivatedResetEvent.WaitOne();
 
             // As soon as we are the foreground app, clear the error mode of the taskbar button
             // and show our error message.
-            TaskbarManager.Current.ClearErrorTaskbarButton();
+            taskbarButtonService.ClearButton();
             ShowAndProcessErrorDialog();
 
             static void ShowAndProcessErrorDialog()
