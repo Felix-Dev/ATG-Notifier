@@ -1,6 +1,5 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Models;
-using ATG_Notifier.Desktop.Services.Taskbar;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Networking;
 using ATG_Notifier.ViewModels.Services;

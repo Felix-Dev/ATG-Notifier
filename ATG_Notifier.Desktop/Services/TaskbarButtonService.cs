@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Shell;
 
-namespace ATG_Notifier.Desktop.Services.Taskbar
+namespace ATG_Notifier.Desktop.Services
 {
     internal class TaskbarButtonService
     {
