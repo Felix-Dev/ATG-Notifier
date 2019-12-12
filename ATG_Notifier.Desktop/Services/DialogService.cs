@@ -1,16 +1,15 @@
 ﻿using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Views;
-using System.Windows.Forms;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    internal sealed class DialogService
+    internal class DialogService
     {
         public MessageDialogResult ShowDialog(string message, string title)
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                var dialog = new MessageDialog2(message, title)
+                var dialog = new MessageDialog(message, title)
                 {
                     Owner = App.Current.ActiveWindow,
                 };
@@ -23,7 +22,7 @@ namespace ATG_Notifier.Desktop.Services
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                var dialog = new MessageDialog2(message, title, button, icon)
+                var dialog = new MessageDialog(message, title, button, icon)
                 {
                     Owner = App.Current.ActiveWindow,
                 };
@@ -37,7 +36,7 @@ namespace ATG_Notifier.Desktop.Services
         {
             var (dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(MessageDialogResult, bool)>(() =>
             {
-                var dialog = new MessageDialog2(message, title, button, icon, optionalActionText, initialOptionalActionState)
+                var dialog = new MessageDialog(message, title, button, icon, optionalActionText, initialOptionalActionState)
                 {
                     Owner = App.Current.ActiveWindow,
                 };

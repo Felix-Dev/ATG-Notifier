@@ -8,14 +8,14 @@ using System.Windows.Media;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    internal partial class MessageDialog2 : Window
+    internal partial class MessageDialog : Window
     {
         private readonly MessageDialogButton button;
         private readonly MessageDialogIcon icon;
 
         private MessageDialogResult dialogResult;
 
-        public MessageDialog2(string message, string title, MessageDialogButton button = MessageDialogButton.OK, 
+        public MessageDialog(string message, string title, MessageDialogButton button = MessageDialogButton.OK, 
             MessageDialogIcon icon = MessageDialogIcon.None,
             string? optionalActionText = null, bool initialOptionalActionState = false)
         {

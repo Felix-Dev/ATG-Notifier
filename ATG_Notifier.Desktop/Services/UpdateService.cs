@@ -167,11 +167,11 @@ namespace ATG_Notifier.Desktop.Services
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:
-            await Task.Delay(7000);
+//            await Task.Delay(7000);
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            string? s = null; int i = s.Length;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+//#pragma warning disable CS8602 // Dereference of a possibly null reference.
+//            string? s = null; int i = s.Length;
+//#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             lock (this.timerLock)
             {
