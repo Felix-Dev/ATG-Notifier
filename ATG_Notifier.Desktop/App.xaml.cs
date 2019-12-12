@@ -3,7 +3,6 @@ using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Services;
-using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Services;
 using System;
@@ -214,15 +213,14 @@ namespace ATG_Notifier.Desktop
                 switch (args[0])
                 {
                     case JumplistManager.ActionExit:
-                        WindowsMessageHelper.SendMessage(AppConfiguration.AppId, WindowsMessageHelper.WM_EXIT);
+                        WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
                         break;
                 }
             }
             else
             {
-                // send our Win32 message to make the currently running instance
-                // jump on top of all the other windows
-                WindowsMessageHelper.SendMessage(AppConfiguration.AppId, WindowsMessageHelper.WM_SHOWINSTANCE);
+                // Bring the already running instance of the notifier to the foreground
+                WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_SHOWINSTANCE);
             }
         }
     }

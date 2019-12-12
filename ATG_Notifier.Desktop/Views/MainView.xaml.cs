@@ -1,8 +1,8 @@
 ﻿using ATG_Notifier.Desktop.Components;
 using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Services;
-using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
 using ATG_Notifier.ViewModels.Services;
@@ -109,11 +109,11 @@ namespace ATG_Notifier.Desktop.Views
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == WindowsMessageHelper.WM_EXIT)
+            if (msg == WindowWin32InteropHelper.WM_EXIT)
             {
                 Application.Current.Shutdown();
             }
-            else if (msg == WindowsMessageHelper.WM_SHOWINSTANCE)
+            else if (msg == WindowWin32InteropHelper.WM_SHOWINSTANCE)
             {
                 BringIntoView();
             }
