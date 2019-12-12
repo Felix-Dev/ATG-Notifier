@@ -2,15 +2,18 @@ using ATG_Notifier.Desktop.Components;
 using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Services;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
+using System.Windows.Interop;
 
 #if DesktopPackage
 using Windows.ApplicationModel;
@@ -73,6 +76,18 @@ namespace ATG_Notifier.Desktop
         }
 
         public new static App Current => (App)Application.Current;
+
+        public Window ActiveWindow
+        {
+            get
+            {
+                IntPtr activeHwnd = NativeMethods.GetActiveWindow();
+
+                return this.Windows
+                    .OfType<Window>()
+                    .FirstOrDefault(window => new WindowInteropHelper(window).Handle == activeHwnd);
+            }
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {

@@ -10,10 +10,12 @@ namespace ATG_Notifier.Desktop.Services
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                using (var dialog = new MessageDialog(message, title))
+                var dialog = new MessageDialog2(message, title)
                 {
-                    return dialog.ShowDialog();
-                }
+                    Owner = App.Current.ActiveWindow,
+                };
+
+                return dialog.ShowDialog();
             }); 
         }
 
@@ -21,25 +23,29 @@ namespace ATG_Notifier.Desktop.Services
         {
             return CommonHelpers.RunOnUIThread(() =>
             {
-                using (var dialog = new MessageDialog(message, title, button, icon))
+                var dialog = new MessageDialog2(message, title, button, icon)
                 {
-                    return dialog.ShowDialog();
-                }
+                    Owner = App.Current.ActiveWindow,
+                };
+
+                return dialog.ShowDialog();
             });
         }
 
         public MessageDialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon,
             string optionalActionText, bool initialOptionalActionState, out bool IsOptionalActionChecked)
         {
-            var(dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(MessageDialogResult, bool)>(() =>
+            var (dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(MessageDialogResult, bool)>(() =>
             {
-                using (var dialog = new MessageDialog(message, title, button, icon, optionalActionText, initialOptionalActionState))
+                var dialog = new MessageDialog2(message, title, button, icon, optionalActionText, initialOptionalActionState)
                 {
-                    var res = dialog.ShowDialog();
+                    Owner = App.Current.ActiveWindow,
+                };
 
-                    bool isOptionalActionChecked = dialog.IsOptionalActionChecked;
-                    return (res, isOptionalActionChecked);
-                }
+                var res = dialog.ShowDialog();
+
+                bool isOptionalActionChecked = dialog.IsOptionalActionChecked;
+                return (res, isOptionalActionChecked);
             });
 
             IsOptionalActionChecked = isOptionalActionChecked;
