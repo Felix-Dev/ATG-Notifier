@@ -16,11 +16,22 @@
         SourceInitialized="OnSourceInitialized"
         d:DesignHeight="450" d:DesignWidth="800">
     <Window.Resources>
+        <!--#region Brushes -->
+
+        <SolidColorBrush x:Key="MessageForegound" Color="#FF000000"/>
+        <SolidColorBrush x:Key="MessageBackground" Color="#FFFFFFFF"/>
+
+        <SolidColorBrush x:Key="ButtonPanelForeground" Color="#FF000000"/>
+        <SolidColorBrush x:Key="ButtonPanelBackground" Color="#FFF0F0F0"/>
+
+        <!--#endregion-->
+
         <Style x:Key="MessageDialogButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource ButtonPanelForeground}"/>
         </Style>
     </Window.Resources>
-    <Grid Background="White"
+    <Grid Background="{StaticResource MessageBackground}"
           MinWidth="150"
           MaxWidth="450">
         <Grid.RowDefinitions>
@@ -47,7 +58,8 @@
             <TextBlock x:Name="DialogTextTextBlock" 
                        Grid.Column="1"
                        Text="placeholder"
-                       FontSize="12" FontFamily="Segoe UI"
+                       Foreground="{StaticResource MessageForegound}"
+                       FontSize="12"
                        HorizontalAlignment="Center"
                        TextWrapping="Wrap"/>
         </Grid>
@@ -55,12 +67,13 @@
         <CheckBox x:Name="OptionalActionCheckbox" 
                   Grid.Row="1"
                   Margin="10,0,0,5"
+                  Foreground="{StaticResource MessageForegound}"
                   FontSize="12"
                   VerticalContentAlignment="Center"
                   TabIndex="3"
                   Visibility="Collapsed"/>
         <Grid Grid.Row="2"
-              Background="#FFF0F0F0"
+              Background="{StaticResource ButtonPanelBackground}"
               HorizontalAlignment="Stretch">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"

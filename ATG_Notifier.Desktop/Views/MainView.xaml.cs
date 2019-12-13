@@ -151,7 +151,19 @@ namespace ATG_Notifier.Desktop.Views
             this.notificationIcon.Hide();
             this.notificationIcon.Dispose();
 
-            System.Windows.Application.Current.Shutdown();
+            //Application.Current.Shutdown();
+        }
+
+        private void SaveWindowPosition()
+        {
+            if (this.WindowState == WindowState.Minimized || this.WindowState == WindowState.Maximized)
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
+            }
+            else
+            {
+                this.appSettings.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
+            }
         }
 
         private void SetWindowsPosition()
@@ -184,18 +196,6 @@ namespace ATG_Notifier.Desktop.Views
             this.Height = prevWindowSetting.Height;
         }
 
-        private void SaveWindowPosition()
-        {
-            if (this.WindowState == WindowState.Minimized || this.WindowState == WindowState.Maximized)
-            {
-                this.appSettings.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
-            }
-            else
-            {
-                this.appSettings.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
-            }
-        }
-
         /// <summary>
         /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
         /// unread chapter profiles in the app changes.
@@ -209,10 +209,9 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnMenuItemCloseClick(object sender, RoutedEventArgs e)
         {
-            // TODO: Check if it works with close -> keep running in background.
             //Application.Current.Shutdown();
 
-            this.Close();
+            Close();
         }
 
         private void OnMenuItemAboutClick(object sender, RoutedEventArgs e)
