@@ -32,41 +32,8 @@ namespace ATG_Notifier.Desktop
         // TODO: Implement IDisposable?
         private readonly AutoResetEvent appActivatedResetEvent;
 
-        /// <summary>
-        /// Application Entry Point.
-        /// </summary>
-        [STAThread()]
-        public static void Main(string[] args)
-        {
-            bool firstInstance;
-#if DEBUG
-            using (Mutex mtx = new Mutex(true, "ATG-Notfier.Debug.OneInstanceCheck", out firstInstance))
-#else
-            using (Mutex mtx = new Mutex(true, "ATG-Notfier.OneInstanceCheck", out firstInstance))
-#endif
-            {
-                if (firstInstance)
-                {
-                    AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-
-                    Configuration.Startup.Configure();
-
-                    var app = new App();
-                    app.Run();
-                }
-                else
-                {
-                    HandleArguments(args);
-                }
-            }
-        }
-
         public App()
         {
-            logService = ServiceLocator.Current.GetService<ILogService>();
-            dialogService = ServiceLocator.Current.GetService<DialogService>();
-            taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
-
             this.appActivatedResetEvent = new AutoResetEvent(false);
 
             this.Activated += (s, e) => this.appActivatedResetEvent.Set();
@@ -89,9 +56,37 @@ namespace ATG_Notifier.Desktop
             }
         }
 
+        public void Activate()
+        {
+            App.MainWindow?.BringIntoView();
+        }
+
+        public bool HandleArguments(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                switch (args[0])
+                {
+                    case JumplistManager.ActionExit:
+                        WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+            ServiceLocator.Configure();
+
+            logService = ServiceLocator.Current.GetService<ILogService>();
+            dialogService = ServiceLocator.Current.GetService<DialogService>();
+            taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
 
             JumplistManager.BuildJumplist();
 
@@ -125,7 +120,7 @@ namespace ATG_Notifier.Desktop
             ServiceLocator.Current.GetService<SettingsViewModel>().Save();
         }
 
-        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
@@ -150,7 +145,7 @@ namespace ATG_Notifier.Desktop
             taskbarButtonService.ClearButton();
             ShowAndProcessErrorDialog();
 
-            static void ShowAndProcessErrorDialog()
+            void ShowAndProcessErrorDialog()
             {
                 string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
                 MessageDialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
@@ -180,7 +175,7 @@ namespace ATG_Notifier.Desktop
             }
         }
 
-        private static void RequestRestart()
+        private void RequestRestart()
         {
             int appType;
 
@@ -219,24 +214,6 @@ namespace ATG_Notifier.Desktop
             }
 
             Environment.Exit(1);
-        }
-
-        private static void HandleArguments(string[] args)
-        {
-            if (args.Length > 0)
-            {
-                switch (args[0])
-                {
-                    case JumplistManager.ActionExit:
-                        WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
-                        break;
-                }
-            }
-            else
-            {
-                // Bring the already running instance of the notifier to the foreground
-                WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_SHOWINSTANCE);
-            }
         }
     }
 }

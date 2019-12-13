@@ -156,7 +156,7 @@ namespace ATG_Notifier.Desktop.Services
                     ReleaseTime = chapterProfileViewModel.ReleaseTime,
                 };
 
-                TaskbarManager.Current.FlashTaskbarButton();
+                this.taskbarButtonService.FlashButton();
 
                 if (!settingsViewModel.IsInFocusMode)
                 {

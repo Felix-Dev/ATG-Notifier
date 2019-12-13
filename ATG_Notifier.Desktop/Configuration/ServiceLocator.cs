@@ -19,8 +19,10 @@ namespace ATG_Notifier.Desktop.Configuration
 
         public static ServiceLocator Current => lazy.Value;
 
-        public static void Configure(IServiceCollection serviceCollection)
+        public static void Configure()
         {
+            var serviceCollection = new ServiceCollection();
+
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
             serviceCollection.AddSingleton<ILogService>(new FileLogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IWebService, WebService>();

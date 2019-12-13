@@ -36,8 +36,11 @@ namespace ATG_Notifier.Desktop.Configuration
                 + $@"\{AppId}\");
 #endif
 
+        /// <summary>The path to the database file directory.</summary>
+        public static string DatabaseDirectory { get; } = BaseDirectory;
+
         /// <summary>The path to the database file.</summary>
-        public static string DatabasePath { get; } = Path.Combine(BaseDirectory, fullDatabaseName);
+        public static string DatabasePath { get; } = Path.Combine(DatabaseDirectory, fullDatabaseName);
 
         /// <summary>The path to the logfile directory.</summary>
         public static string LogfileDirectory { get; } = Path.Combine(BaseDirectory, @"Logs\");

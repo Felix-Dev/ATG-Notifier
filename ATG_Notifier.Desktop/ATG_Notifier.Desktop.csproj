@@ -20,8 +20,8 @@
   
   <PropertyGroup>
     <ApplicationIcon>testLogo.ico</ApplicationIcon>
-    <Win32Resource />
-    <StartupObject>ATG_Notifier.Desktop.App</StartupObject>
+    <StartupObject>ATG_Notifier.Desktop.Startup</StartupObject>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
