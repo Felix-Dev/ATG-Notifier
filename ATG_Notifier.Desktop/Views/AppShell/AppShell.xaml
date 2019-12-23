@@ -17,6 +17,7 @@
         Initialized="OnInitialized"
         Loaded="OnLoaded">
     <Grid>
-        <Frame x:Name="ContentFrame"/>
+        <Frame x:Name="ContentFrame" 
+               IsTabStop="False"/>
     </Grid>
 </Window>
