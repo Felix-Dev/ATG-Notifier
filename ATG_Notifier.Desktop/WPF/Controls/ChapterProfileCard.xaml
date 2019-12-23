@@ -113,8 +113,9 @@
                 PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
         <!-- Chapter number and title textbox -->
         <TextBox x:Name="ChapterNumberAndTitleTextBox"
-                 Grid.Row="1" Grid.Column="1"
-                 Margin="0,0,3,0" Padding="0"
+                 Grid.Row="1" 
+                 Grid.Column="1" Grid.ColumnSpan="2"
+                 Margin="0,0,6,0" Padding="0"
                  Style="{StaticResource TextBox_TextBlockSelection}"
                  Foreground="{StaticResource ChapterProfileCardForegorund}" 
                  FontSize="14" FontWeight="Bold"
