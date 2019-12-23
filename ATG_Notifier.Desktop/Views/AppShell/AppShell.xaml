@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="{x:Static configuration:AppConfiguration.AppId}" 
         Width="300" Height="400"
-        MinWidth="200" MinHeight="300"
+        MinWidth="225" MinHeight="300"
         d:DesignHeight="450" d:DesignWidth="800"
         SnapsToDevicePixels="True"
         FontFamily="Segoe UI"
