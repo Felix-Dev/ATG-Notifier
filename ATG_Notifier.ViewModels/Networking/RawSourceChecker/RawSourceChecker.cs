@@ -51,7 +51,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 return null;
             }
 
-            // json layout: 
+            // We assume the following JSON layout: 
             // chapterId = chapterlist.chapters[0].chapterId
             // chapterName = chapterlist.chapters[0].chapterName
 
@@ -63,6 +63,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 return null;
             }
 
+            // Obtain the chapter ID used to determine if a new chapter is available.
             if (!chapters[0].TryGetProperty("chapterId", out JsonElement idElement))
             {
                 logService.Log(LogType.Error, "The current chapter ID could not be retrieved!\n");
@@ -70,6 +71,7 @@ namespace ATG_Notifier.ViewModels.Networking
             }
             string chapterId = idElement.ToString();
 
+            // Obtain the chapter number and title.
             if (!chapters[0].TryGetProperty("chapterName", out JsonElement nameElement))
             {
                 logService.Log(LogType.Error, "The current chapter name could not be retrieved!\n");
@@ -77,17 +79,20 @@ namespace ATG_Notifier.ViewModels.Networking
             }
             var chapterNumberAndTitle = nameElement.ToString();
 
+            // Dispose of the JSON document object to prevent memory leaks.
             document.Dispose();
 
+            // Check if a new chapter has been released. If the chapter ID differs, a new chapter is available and we proceed to fetch chapter-specific data. 
+            // If not, we hve nothing to do here any longer and return.
             if (mostRecentChapterId == chapterId)
             {
                 return null;
             }
 
-            /* Build chapter url. */           
+            // Build chapter url.          
             string chapterUrl = ATGRawSourceBaseUrl + chapterId + ".html";
 
-            /* Obtain chapter word count & release time */
+            // Next code block: Obtain chapter word count & release time.
 
             int wordCount = 0;
             DateTime? releaseTime = null;
@@ -106,7 +111,7 @@ namespace ATG_Notifier.ViewModels.Networking
             var nodes = doc.DocumentNode.SelectNodes("//div[@class='bookinfo']//span");   
             if (nodes?.Count > 0)
             {
-                // Read chapter word count if possible
+                // Read chapter word count if possible.
                 if (!int.TryParse(nodes[0].InnerText, out wordCount))
                 {
                     logService.Log(LogType.Warning, $"Word count for chapter <{chapterId}> could not be obtained (perhaps the HTML layout changed?)!\n");
@@ -124,7 +129,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 }
             }
 
-            /* Obtain separate chapter number and title of the newest chapter. */
+            // Next code block: Obtain separate chapter number and title of the newest chapter.
 
             string chapterInfo;
             string chapterString;
@@ -134,11 +139,9 @@ namespace ATG_Notifier.ViewModels.Networking
 
             #region Chapter-info Regex
 
-            /* 
-             * We assume that the string containing the chapter number and title looks like this:
-             * 
-             *      "第1208章 金乌圣剑"
-             */
+            // Regex info: We assume the string containing the chapter number and title looks like this:
+            //      "第1208章 金乌圣剑"
+
             Regex pattern = new Regex("(?<chapterInfo>[^\r\n]+)");
             Match match = pattern.Match(chapterNumberAndTitle);
             if (!match.Success)
