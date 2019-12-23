@@ -1,13 +1,12 @@
 ﻿using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Services;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -17,9 +16,6 @@ namespace ATG_Notifier.ViewModels.Networking
     {
         private const string ATGRawSourcePollingUrl = "https://m.zongheng.com/h5/ajax/chapter/list?h5=1&bookId=408586&pageNum=1&pageSize=1&chapterId=0&asc=1";
         private const string ATGRawSourceBaseUrl = "http://book.zongheng.com/chapter/408586/";
-
-        private const string JsonChapterNumberTitlePath = "chapterlist.chapters[0].chapterName";
-        private const string JsonChapterIdPath = "chapterlist.chapters[0].chapterId";
 
         private readonly ILogService logService;
         private readonly IWebService webService;
@@ -44,33 +40,45 @@ namespace ATG_Notifier.ViewModels.Networking
             }
 
             // The obtained data is saved in a JSON format. Parse the JSON string to obtain the latest chapter data.
-            JObject json;
+            JsonDocument document;
             try
             {
-                json = JObject.Parse(data);
+                document = JsonDocument.Parse(data);
             }
-            catch (JsonReaderException)
+            catch (JsonException)
             {
                 logService.Log(LogType.Error, "Downloaded chapter info is not in JSON format!\n");
                 return null;
             }
 
-            var chapterNumberAndTitle = json.SelectToken(JsonChapterNumberTitlePath)?.ToString();
-            if (chapterNumberAndTitle == null)
+            // json layout: 
+            // chapterId = chapterlist.chapters[0].chapterId
+            // chapterName = chapterlist.chapters[0].chapterName
+
+            if (!document.RootElement.TryGetProperty("chapterlist", out JsonElement chapterListNode)
+                || !chapterListNode.TryGetProperty("chapters", out JsonElement chapters)
+                || chapters.GetArrayLength() == 0)
             {
-                logService.Log(LogType.Error, "The current chapter information could not be retrieved!\n");
+                logService.Log(LogType.Error, "Downloaded chapter info has a different structure! The app might need to be updated.\n");
                 return null;
             }
 
-            var chapterId = json.SelectToken(JsonChapterIdPath)?.ToString();
-            if (chapterId == null)
+            if (!chapters[0].TryGetProperty("chapterId", out JsonElement idElement))
             {
                 logService.Log(LogType.Error, "The current chapter ID could not be retrieved!\n");
                 return null;
             }
+            string chapterId = idElement.ToString();
 
-            // TODO: Check here if the latest retrieved chapter info differs from the most-recently obtained latest
-            // chapter info.
+            if (!chapters[0].TryGetProperty("chapterName", out JsonElement nameElement))
+            {
+                logService.Log(LogType.Error, "The current chapter name could not be retrieved!\n");
+                return null;
+            }
+            var chapterNumberAndTitle = nameElement.ToString();
+
+            document.Dispose();
+
             if (mostRecentChapterId == chapterId)
             {
                 return null;
