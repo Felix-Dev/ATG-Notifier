@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ATG_Notifier.Desktop.Views.ToastNotification
+﻿namespace ATG_Notifier.Desktop.Views.ToastNotification
 {
-    public enum DisplayPosition
+    internal enum DisplayPosition
     {
         TopLeft = 0,
         TopRight,

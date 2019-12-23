@@ -10,14 +10,12 @@ namespace ATG_Notifier.Desktop.Components
 {
     internal static class JumplistManager
     {
-        public const string ActionExit = "Exit";
-
         public static void BuildJumplist()
         {
             JumpTask task = new JumpTask
             {
                 Title = "Exit",
-                Arguments = JumplistManager.ActionExit,
+                Arguments = App.AppExitCmd,
                 IconResourcePath = Assembly.GetEntryAssembly()?.CodeBase ?? "",
                 ApplicationPath = Assembly.GetEntryAssembly()?.CodeBase?.Replace(".dll", ".exe") ?? "",
             };
@@ -45,7 +43,7 @@ namespace ATG_Notifier.Desktop.Components
             {
                 jumpList.JumpItems.Clear();
 
-                CommonHelpers.RunOnUIThread(() => JumpList.SetJumpList(Application.Current, jumpList));
+                JumpList.SetJumpList(Application.Current, jumpList);
             }
         }
     }

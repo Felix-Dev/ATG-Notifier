@@ -1,5 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Networking;
 using ATG_Notifier.ViewModels.Services;
@@ -28,8 +29,9 @@ namespace ATG_Notifier.Desktop.Services
 
         private readonly ToastNotificationManager notifier = ToastNotificationManager.Instance;
 
-
+        private readonly object runningLock = new object();
         private readonly object timerLock = new object();
+
         private Timer? periodicTimerRawSource = null;
 
         private Semaphore? saveguardSema;
@@ -48,61 +50,64 @@ namespace ATG_Notifier.Desktop.Services
 
         public event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
-        // Note: not thread-safe!
+        public bool IsRunning { get; private set; } = false;
+
         public void Start()
         {
-            if (this.periodicTimerRawSource != null)
+            lock (this.runningLock)
             {
-                // The update service is already running.
-                return;
-            }
+                if (this.IsRunning)
+                {
+                    return;
+                }
 
-            this.saveguardSema = new Semaphore(1, 1);
-            this.periodicTimerRawSource = new Timer(OnTimerEllapsed, null, 0, Timeout.Infinite);
+                this.saveguardSema = new Semaphore(1, 1);
+                this.periodicTimerRawSource = new Timer(OnTimerEllapsed, null, 0, Timeout.Infinite);
+                this.IsRunning = true;
+            }
         }
 
-        // Note: not thread-safe!
         public void Stop()
         {
-            if (this.periodicTimerRawSource == null)
+            lock (this.runningLock)
             {
-                // The update service is already stopped.
-                return;
+                if (!this.IsRunning)
+                {
+                    return;
+                }
+
+                logService.Log(LogType.Debug, "Attempting to terminate the update service...");
+
+                // Wait until a running update process is finished.
+                this.saveguardSema?.WaitOne();
+
+                StopTimer();
+
+                logService.Log(LogType.Debug, "The update service was terminated!");
+
+                this.saveguardSema?.Release();
+
+                // Clean-up resources used by the event handler.
+                this.saveguardSema?.Dispose();
+                this.saveguardSema = null;
+
+                this.IsRunning = false;
             }
-
-            // Wait until a running update process is finished.
-
-            logService.Log(LogType.Debug, "Attempting to terminate the update service...");
-
-            this.saveguardSema?.WaitOne();
-
-            StopTimer();
-
-            logService.Log(LogType.Debug, "The update service was terminated!");
-
-            this.saveguardSema?.Release();
-
-            // Clean-up resources used by the event handler.
-            this.saveguardSema?.Dispose();
-            this.saveguardSema = null;
         }
 
         private void StopTimer()
         {
-            lock (this.timerLock)
+            if (this.periodicTimerRawSource != null)
             {
-                if (this.periodicTimerRawSource != null)
-                {
-                    this.periodicTimerRawSource.Dispose();
-                    this.periodicTimerRawSource = null;
-                }
+                this.periodicTimerRawSource.Dispose();
+                this.periodicTimerRawSource = null;
             }
         }
 
         private async void OnTimerEllapsed(object? state)
         {
 #if DEBUG
-            ChapterProfileModel chapterProfileModel = new ChapterProfileModel()
+            var chapterProfileModel = new ChapterProfileModel()
             {
                 Number = 1600,
                 Title = "Hello World1234567",

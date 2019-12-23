@@ -8,6 +8,8 @@ namespace ATG_Notifier.ViewModels.Services
     {
         event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
+        bool IsRunning { get; }
+
         void Start();
 
         void Stop();

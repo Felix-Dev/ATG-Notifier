@@ -1,6 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
-using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WinForms;
 using System;
 using System.Drawing;
@@ -14,7 +14,7 @@ namespace ATG_Notifier.Desktop.Components
 
         private NotifyIcon notifyIcon;
 
-        private SettingsViewModel settingsViewModel;
+        private readonly SettingsViewModel settingsViewModel;
 
         public NotificationIcon(Icon icon, string tooltipText)
         {
@@ -33,7 +33,10 @@ namespace ATG_Notifier.Desktop.Components
 
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            App.MainWindow.BringIntoView();
+            if (e.Button == MouseButtons.Left)
+            {
+                App.Current.Activate();
+            } 
         }
 
         public void Show()
@@ -48,11 +51,9 @@ namespace ATG_Notifier.Desktop.Components
 
         public void Dispose()
         {
-            if (!this.isDisposed)
-            {
-                this.notifyIcon.Dispose();
-                this.isDisposed = true;
-            }
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         public void UpdateBadge(int number)
@@ -124,6 +125,22 @@ namespace ATG_Notifier.Desktop.Components
             }
 
             CommonHelpers.RunOnUIThread(() => this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon()));
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (this.isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                this.notifyIcon.Dispose();
+                this.notifyIcon = null!;
+            }
+
+            this.isDisposed = true;
         }
 
         private ContextMenuStrip GetContextMenu()

@@ -30,8 +30,7 @@ namespace ATG_Notifier.Desktop.Configuration
         public static string BaseDirectory { get; } = ApplicationData.Current.LocalFolder.Path;
 #else
         /// <summary>The path to the directory all app files will be written to.</summary>
-        public static string BaseDirectory { get; } =
-            Path.Combine(
+        public static string BaseDirectory { get; } = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
                 + $@"\{AppId}\");
 #endif

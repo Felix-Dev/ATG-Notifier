@@ -37,9 +37,9 @@ namespace ATG_Notifier.Desktop.Helpers
                 NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_FRAMECHANGED);
         }
 
-        public static void SendMessage(string windowTitle, int msgId)
+        public static bool SendMessage(string windowTitle, int msgId)
         {
-            SendMessage(windowTitle, msgId, IntPtr.Zero, IntPtr.Zero);
+            return SendMessage(windowTitle, msgId, IntPtr.Zero, IntPtr.Zero);
         }
 
         public static bool SendMessage(string windowTitle, int msgId, IntPtr wParam, IntPtr lParam)
@@ -51,7 +51,7 @@ namespace ATG_Notifier.Desktop.Helpers
             }
 
             long result = NativeMethods.SendMessage(handle, msgId, wParam, lParam);
-            return result == 0;
+            return result == 1;
         }
     }
 }

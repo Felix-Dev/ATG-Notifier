@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
-             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:converters="clr-namespace:ATG_Notifier.Desktop.WPF.Converters"
              x:ClassModifier="internal"
              mc:Ignorable="d" 

@@ -2,6 +2,7 @@
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Utilities;
+using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Services;

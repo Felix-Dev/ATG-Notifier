@@ -27,7 +27,7 @@ namespace ATG_Notifier.ViewModels.Networking
         public RawSourceChecker(IWebService webService, ILogService logService)
         {
             this.webService = webService;
-            this.logService = logService; ;
+            this.logService = logService;
         }
 
         public async Task<ChapterSourceCheckResult?> GetUpdateAsync(string mostRecentChapterId)

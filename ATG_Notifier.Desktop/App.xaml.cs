@@ -1,9 +1,8 @@
-using ATG_Notifier.Desktop.Components;
 using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
-using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
+using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Services;
 using System;
@@ -23,11 +22,12 @@ namespace ATG_Notifier.Desktop
 {
     internal partial class App : Application
     {
-        private static ILogService logService;
-        private static DialogService dialogService;
-        private static TaskbarButtonService taskbarButtonService;
+        private ILogService logService = null!;
+        private DialogService dialogService = null!;
 
-        public static new MainView MainWindow => (MainView)Application.Current.MainWindow;
+        private AppShell appShell = null!;
+
+        public const string AppExitCmd = "Exit";
 
         // TODO: Implement IDisposable?
         private readonly AutoResetEvent appActivatedResetEvent;
@@ -58,63 +58,47 @@ namespace ATG_Notifier.Desktop
 
         public void Activate()
         {
-            App.MainWindow?.BringIntoView();
-        }
-
-        public bool HandleArguments(string[] args)
-        {
-            if (args.Length > 0)
-            {
-                switch (args[0])
-                {
-                    case JumplistManager.ActionExit:
-                        WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
-                        return true;
-                }
-            }
-
-            return false;
+            AppShell.Current?.BringIntoView();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-
             ServiceLocator.Configure();
 
-            logService = ServiceLocator.Current.GetService<ILogService>();
-            dialogService = ServiceLocator.Current.GetService<DialogService>();
-            taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
+            this.logService = ServiceLocator.Current.GetService<ILogService>();
+            this.dialogService = ServiceLocator.Current.GetService<DialogService>();
 
-            JumplistManager.BuildJumplist();
+            this.appShell = new AppShell();
+            this.appShell.Show();
 
-            var mainView = new MainView();
-            mainView.Show();
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
 
-            SaveAndCleanup();
+            PrepareForExit();
         }
 
         private void OnSessionEnding(object? sender, SessionEndingCancelEventArgs e)
         {
-            SaveAndCleanup();
+            AppShell.Current?.SaveAndCleanup();
+            PrepareForExit();
 
             Environment.Exit(0);
         }
 
-        private void SaveAndCleanup()
+        private void PrepareForExit()
         {
             // Stop the update service
-            ServiceLocator.Current.GetService<IUpdateService>().Stop();
-
-            // clear jumplist from added custom entries
-            JumplistManager.ClearJumplist();
+            var updateService = ServiceLocator.Current.GetService<IUpdateService>();
+            if (updateService.IsRunning)
+            {
+                updateService.Stop();
+            }
 
             // Save user data
             ServiceLocator.Current.GetService<SettingsViewModel>().Save();
@@ -122,27 +106,30 @@ namespace ATG_Notifier.Desktop
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
+            this.logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
-            App.Current.SaveAndCleanup();
+            // Stop the update service
+            var updateService = ServiceLocator.Current.GetService<IUpdateService>();
+            if (updateService.IsRunning)
+            {
+                updateService.Stop();
+            }
 
             // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention.
-            CommonHelpers.RunOnUIThread(() =>
+            if (!this.appShell.IsVisible)
             {
-                if (Application.Current.MainWindow.Visibility == Visibility.Hidden)
-                {
-                    Application.Current.MainWindow.Visibility = Visibility.Visible;
-                }
-            });
+                CommonHelpers.RunOnUIThread(() => this.appShell.Show());
+            }
 
-            taskbarButtonService.SetErrorMode();
+            this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.Error);
 
             // Wait for the notifier app to enter the foreground.
-            App.Current.appActivatedResetEvent.WaitOne();
+            this.appActivatedResetEvent.WaitOne();
 
             // As soon as we are the foreground app, clear the error mode of the taskbar button
             // and show our error message.
-            taskbarButtonService.ClearButton();
+            this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.None);
+
             ShowAndProcessErrorDialog();
 
             void ShowAndProcessErrorDialog()
@@ -163,6 +150,9 @@ namespace ATG_Notifier.Desktop
                     Process.Start(psi);
                 }
 
+                CommonHelpers.RunOnUIThread(() => AppShell.Current?.SaveAndCleanup());
+                PrepareForExit();
+
                 // Process the reply of the user about whether or not to restart the notifier app.
                 if (result == MessageDialogResult.Yes)
                 {
@@ -170,6 +160,7 @@ namespace ATG_Notifier.Desktop
                 }
                 else
                 {
+                    //AppShell.Current?.Close(false);
                     Environment.Exit(1);
                 }
             }
@@ -180,7 +171,6 @@ namespace ATG_Notifier.Desktop
             int appType;
 
 #if DesktopPackage
-            /*  Start watchdog which restarts the notifier. */
             string restarterPath = Path.Combine(Package.Current.InstalledLocation.Path, @"ATG_Notifier.Restarter\ATG_Notifier.Restarter.exe");
             string notifierStartString = Package.Current.Id.FamilyName;
 
@@ -191,7 +181,7 @@ namespace ATG_Notifier.Desktop
             string? notifierDir = Path.GetDirectoryName(notifierPath);
             if (notifierDir == null)
             {
-                logService.Log(LogType.Error, $"The notifier could not be restarted! Failed to retrieve the parent directory of the notifier executable with path <{notifierPath}>.");
+                this.logService.Log(LogType.Error, $"The notifier could not be restarted! Failed to retrieve the parent directory of the notifier executable with path <{notifierPath}>.");
                 Environment.Exit(1);
             }
 
@@ -199,20 +189,21 @@ namespace ATG_Notifier.Desktop
             string notifierStartString = notifierPath.Replace(".dll", ".exe");
             appType = 0;
 #endif
-            var proc = Process.GetCurrentProcess();
+            var currentProcess = Process.GetCurrentProcess();
 
             var restarterProcess = new Process();
             restarterProcess.StartInfo.FileName = restarterPath;
-            restarterProcess.StartInfo.Arguments = $"{proc.Id};{appType};{notifierStartString}";
+            restarterProcess.StartInfo.Arguments = $"{currentProcess.Id};{appType};{notifierStartString}";
 
             bool started = restarterProcess.Start();
             if (!started)
             {
-                logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.\n Additional info:\n" +
+                this.logService.Log(LogType.Error, "The notifier could not be restarted! The restart process could not be started.\n Additional info:\n" +
                     $"Restarter path: [{restarterPath}]\n" +
                     $"Restarter args: [{restarterProcess.StartInfo.Arguments}]");
             }
 
+            //Application.Current.Shutdown();
             Environment.Exit(1);
         }
     }

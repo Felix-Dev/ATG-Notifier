@@ -1,8 +1,9 @@
-﻿using ATG_Notifier.Desktop.Views.ToastNotification;
+﻿using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.ViewModels.Infrastructure;
 using System;
 
-namespace ATG_Notifier.Desktop.Models
+namespace ATG_Notifier.Desktop.ViewModels
 {
     internal class SettingsViewModel : ObservableObject
     {

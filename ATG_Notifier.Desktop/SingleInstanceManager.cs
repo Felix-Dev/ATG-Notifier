@@ -1,17 +1,17 @@
-﻿using System.Threading;
+﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Helpers;
+using System.Threading;
 
 namespace ATG_Notifier.Desktop
 {
     internal class SingleInstanceManager
     {
-        private App app = null!;
-
         public void Run(string[] args)
         {
 #if DEBUG
-            using (Mutex mtx = new Mutex(true, "ATG-Notfier.Debug.OneInstanceCheck", out bool firstInstance))
+            using (var singleInstanceMtx = new Mutex(true, "ATG-Notfier.Debug.OneInstanceCheck", out bool firstInstance))
 #else
-            using (Mutex mtx = new Mutex(true, "ATG-Notfier.OneInstanceCheck", out bool firstInstance))
+            using (var singleInstanceMtx = new Mutex(true, "ATG-Notfier.OneInstanceCheck", out bool firstInstance))
 #endif
             {
                 if (firstInstance)
@@ -27,16 +27,40 @@ namespace ATG_Notifier.Desktop
 
         private void OnStartup(string[] args)
         {
-            this.app = new App();
+            var app = new App();
             app.Run();
         }
 
         private void OnStartupNextInstance(string[] args)
         {
-            bool handled = app.HandleArguments(args);
+            var activationHelper = new SingleInstanceActivationHelper();
+
+            bool handled = activationHelper.RequestHandleArguments(args);
             if (!handled)
             {
-                app.Activate();
+                activationHelper.RequestAppActivation();
+            }
+        }
+
+        private class SingleInstanceActivationHelper
+        {
+            public bool RequestHandleArguments(string[] args)
+            {
+                if (args.Length > 0)
+                {
+                    switch (args[0])
+                    {
+                        case App.AppExitCmd:
+                            return WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
+                    }
+                }
+
+                return false;
+            }
+
+            public bool RequestAppActivation()
+            {
+                return WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_SHOWINSTANCE);
             }
         }
     }

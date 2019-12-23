@@ -37,6 +37,8 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Views\AppShell.xaml" />
+    <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MessageDialog\MessageDialog.xaml" />
     <None Remove="Views\ToastNotification\ToastNotificationView.xaml" />

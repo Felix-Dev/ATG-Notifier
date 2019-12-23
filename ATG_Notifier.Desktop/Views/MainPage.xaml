@@ -1,0 +1,211 @@
+﻿<Page x:Class="ATG_Notifier.Desktop.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
+      xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
+      x:ClassModifier="internal"
+      mc:Ignorable="d" 
+      SnapsToDevicePixels="True"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="OnLoaded">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/MenuItem.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--#region Brushes -->
+
+            <SolidColorBrush x:Key="MainViewBackgroundLight" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="MainViewBackgroundDark" Color="#FF303030"/>
+
+            <SolidColorBrush x:Key="MenuBackgroundLight" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="MenuBackgroundDark" Color="#FF484848" />
+
+            <SolidColorBrush x:Key="MenuForegroundLight" Color="#FF000000"/>
+            <SolidColorBrush x:Key="MenuForegroundDark" Color="#FFD0D0D0"/>
+
+            <!--#endregion-->
+
+            <!--#region Icons -->
+
+            <!-- update-check-status-ok icon -->
+            <Viewbox x:Key="IconWarning" Width="14" Height="14">
+                <Path Fill="#FF000000"
+                      Stretch="UniformToFill"
+                      Data="M960,960L0,960L480,0ZM103.5,896L856.5,896L480,143ZM512,384L512,704L448,704L448,384ZM448,768L512,768L512,832L448,832Z"/>
+            </Viewbox>
+
+            <!--#endregion-->
+
+            <!--#region Styles -->
+
+            <Style x:Key="InfoBannerHyperlinkStyle" TargetType="Hyperlink">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--#endregion-->
+
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MainViewBackgroundLight}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Top-level app menu -->
+        <Menu Grid.Row="0" 
+              Background="{StaticResource MenuBackgroundLight}">
+            <MenuItem Header="Options"
+                      TabIndex="0">
+                <MenuItem Header="Keep Running on Close"
+                          IsCheckable="True"
+                          IsChecked="{Binding SettingsViewModel.KeepRunningOnClose, Mode=TwoWay}"/>
+                <Separator />
+                <MenuItem x:Name="MenuItemClose" 
+                          Header="Close"
+                          InputGestureText="Alt+F4"
+                          Click="OnMenuItemCloseClick"/>
+            </MenuItem>
+            <MenuItem Header="Notifications"
+                      TabIndex="1">
+                <MenuItem Header="Play Sound"
+                          IsCheckable="True"
+                          IsChecked="{Binding SettingsViewModel.IsSoundEnabled, Mode=TwoWay}"/>
+                <Separator />
+                <MenuItem Header="Disable On Fullscreen"
+                          IsCheckable="True" 
+                          IsChecked="{Binding SettingsViewModel.IsDisabledOnFullscreen, Mode=TwoWay}"/>
+                <MenuItem Header="Do Not Disturb"
+                          IsCheckable="True"
+                          IsChecked="{Binding SettingsViewModel.IsInFocusMode, Mode=TwoWay}"/>
+                <Separator />
+                <MenuItem Header="Position">
+                    <MenuItem x:Name="MenuItemTopLeft" 
+                              Header="Top-Left" 
+                              IsCheckable="True" 
+                              IsChecked="False"
+                              Template="{StaticResource MenuItemRadioButtonControlTemplateKey}"
+                              Click="OnMenuItemTopLeftClick"/>
+                    <MenuItem x:Name="MenuItemTopRight" 
+                              Header="Top-Right"
+                              IsChecked="False"
+                              IsCheckable="True" 
+                              Template="{StaticResource MenuItemRadioButtonControlTemplateKey}"
+                              Click="OnMenuItemTopRightClick"/>
+                    <MenuItem x:Name="MenuItemBottomLeft" 
+                              Header="Bottom-Left"
+                              IsCheckable="True"
+                              IsChecked="False"
+                              Template="{StaticResource MenuItemRadioButtonControlTemplateKey}"
+                              Click="OnMenuItemBottomLeftClick"/>
+                    <MenuItem x:Name="MenuItemBottomRight" 
+                              Header="Bottom-Right"
+                              IsCheckable="True"
+                              IsChecked="False"
+                              Template="{StaticResource MenuItemRadioButtonControlTemplateKey}"
+                              Click="OnMenuItemBottomRightClick"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Help"
+                      TabIndex="3">
+                <MenuItem x:Name="MenuItemAbout" 
+                          Header="About Notifier"
+                          Click="OnMenuItemAboutClick"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Info banner -->
+        <Border Grid.Row="1" 
+                Background="#FFFEFCC8"
+                BorderBrush="Transparent"
+                Visibility="Collapsed">
+            <Grid Margin="5,5,5,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"
+                      HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Grid.Column="0"
+                                      Content="{StaticResource IconWarning}" 
+                                      VerticalAlignment="Top"
+                                      Margin="0,2,5,0"/>
+                    <ScrollViewer Grid.Column="1" 
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  MaxHeight="120">
+                        <TextBlock Grid.Column="1" 
+                               Text="The notifier currently cannot successfully check for updates! You might not be connected to the internet or the website is currently unavailable."
+                               TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    <TextBlock Grid.Column="2" 
+                               Margin="15,0,15,0">
+                        <Hyperlink Style="{StaticResource InfoBannerHyperlinkStyle}">
+                            Disable update checks
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+
+                <Button Grid.Column="2" 
+                        VerticalAlignment="Top"
+                        Content="✖"
+                        Cursor="Hand"
+                        FontFamily="Segoe UI Symbol"
+                        FontSize="12"
+                        BorderBrush="Transparent"
+                        ToolTip="Close"
+                        ToolTipService.InitialShowDelay="1000"
+                        ToolTipService.ShowDuration="2000">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="#FF8C8C8D"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            Focusable="{TemplateBinding Focusable}"
+                                                            />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="#FF4A4A4A" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Foreground" Value="#FF000000" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Chapter profiles view -->
+        <controls:ChapterProfilesView x:Name="ChapterProfilesViewControl" 
+                                      Grid.Row="2"/>
+    </Grid>
+</Page>
