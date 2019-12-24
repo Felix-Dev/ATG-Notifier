@@ -32,6 +32,7 @@ namespace ATG_Notifier.Desktop.Native.Win32
         public uint dwTimeout;
     }
 
+    [Flags]
     internal enum FlashWindow : uint
     {
         /// <summary>

@@ -121,15 +121,12 @@ namespace ATG_Notifier.Desktop
                 CommonHelpers.RunOnUIThread(() => this.appShell.Show());
             }
 
-            this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.Error);
+            this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.Error, TaskbarButtonResetMode.AppActivated);
 
             // Wait for the notifier app to enter the foreground.
             this.appActivatedResetEvent.WaitOne();
 
-            // As soon as we are the foreground app, clear the error mode of the taskbar button
-            // and show our error message.
-            this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.None);
-
+            // Show our error message as soon as we are the foreground app.
             ShowAndProcessErrorDialog();
 
             void ShowAndProcessErrorDialog()

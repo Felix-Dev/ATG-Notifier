@@ -7,6 +7,7 @@ using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -24,6 +25,9 @@ namespace ATG_Notifier.Desktop.Views
         private bool canCancel = true;
 
         private NotificationIcon notificationIcon = null!;
+
+        private AppTaskbarButtonMode currentTaskbarButtonMode;
+        private TaskbarButtonResetMode currentTaskbarButtonResetMode;
 
         public AppShell()
         {
@@ -72,22 +76,42 @@ namespace ATG_Notifier.Desktop.Views
             CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
         }
 
-        public void SetTaskbarButtonMode(AppTaskbarButtonMode mode)
+        public void SetTaskbarButtonMode(AppTaskbarButtonMode mode, TaskbarButtonResetMode resetMode = TaskbarButtonResetMode.AppActivated)
         {
             switch (mode)
             {
                 case AppTaskbarButtonMode.None:
-                    this.taskbarButtonService.ClearButton();
+                    this.taskbarButtonService.SetButtonState(TaskbarButtonState.None);
                     break;
                 case AppTaskbarButtonMode.Attention:
                     this.taskbarButtonService.FlashButton();
                     break;
+                case AppTaskbarButtonMode.Paused:
+                    if (resetMode == TaskbarButtonResetMode.AppActivated && CommonHelpers.RunOnUIThread(() => this.IsActive))
+                    {
+                        this.currentTaskbarButtonMode = AppTaskbarButtonMode.None;
+                        this.taskbarButtonService.SetButtonState(TaskbarButtonState.None);
+                        return;
+                    }
+
+                    this.taskbarButtonService.SetButtonState(TaskbarButtonState.Paused);
+                    break;
                 case AppTaskbarButtonMode.Error:
-                    this.taskbarButtonService.SetErrorMode();
+                    if (resetMode == TaskbarButtonResetMode.AppActivated && CommonHelpers.RunOnUIThread(() => this.IsActive))
+                    {
+                        this.currentTaskbarButtonMode = AppTaskbarButtonMode.None;
+                        this.taskbarButtonService.SetButtonState(TaskbarButtonState.None);
+                        return;
+                    }
+
+                    this.taskbarButtonService.SetButtonState(TaskbarButtonState.Error);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
+
+            this.currentTaskbarButtonMode = mode;
+            this.currentTaskbarButtonResetMode = resetMode;
         }
 
         public void SaveAndCleanup()
@@ -116,6 +140,18 @@ namespace ATG_Notifier.Desktop.Views
 
             var source = PresentationSource.FromVisual(this) as HwndSource;
             source?.AddHook(WndProc);
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            if (this.currentTaskbarButtonResetMode == TaskbarButtonResetMode.AppActivated
+                && (this.currentTaskbarButtonMode == AppTaskbarButtonMode.Paused || this.currentTaskbarButtonMode == AppTaskbarButtonMode.Error))
+            {
+                this.taskbarButtonService.SetButtonState(TaskbarButtonState.None);
+                this.currentTaskbarButtonResetMode = TaskbarButtonResetMode.None;
+            }
+
+            base.OnActivated(e);
         }
 
         protected override void OnClosing(CancelEventArgs e)

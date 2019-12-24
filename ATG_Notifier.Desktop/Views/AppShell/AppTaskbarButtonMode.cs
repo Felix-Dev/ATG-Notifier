@@ -4,6 +4,7 @@
     {
         None = 0,
         Attention = 1,
-        Error = 2
+        Paused = 2,
+        Error = 3,
     }
 }

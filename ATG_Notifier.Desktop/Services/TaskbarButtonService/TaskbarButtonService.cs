@@ -59,30 +59,33 @@ namespace ATG_Notifier.Desktop.Services
         }
 
         /// <summary>
-        /// Remove any background color set for the taskbar button.
+        /// Set the state of the taskbar button.
         /// </summary>
-        public void ClearButton()
+        /// <param name="state">The new state of the taskbar button.</param>
+        public void SetButtonState(TaskbarButtonState state)
         {
             CommonHelpers.RunOnUIThread(() =>
             {
                 TaskbarItemInfo taskbarItemInfo = GetTaskbarItemInfoInstance() ?? throw new InvalidOperationException("The window has not yet been initialized!");
 
-                taskbarItemInfo.ProgressValue = 0;
-                taskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-            });
-        }
+                switch (state)
+                {
+                    case TaskbarButtonState.None:
+                        taskbarItemInfo.ProgressValue = 0;
+                        taskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                        break;
+                    case TaskbarButtonState.Paused:
+                        taskbarItemInfo.ProgressValue = 1;
+                        taskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused;
+                        break;
+                    case TaskbarButtonState.Error:
+                        taskbarItemInfo.ProgressValue = 1;
+                        taskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(state));
 
-        /// <summary>
-        /// Set the taskbar button background to red.
-        /// </summary>
-        public void SetErrorMode()
-        {
-            CommonHelpers.RunOnUIThread(() =>
-            {
-                TaskbarItemInfo taskbarItemInfo = GetTaskbarItemInfoInstance() ?? throw new InvalidOperationException("The window has not yet been initialized!");
-
-                taskbarItemInfo.ProgressValue = 1;
-                taskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
+                }
             });
         }
 
