@@ -36,7 +36,12 @@ namespace ATG_Notifier.Desktop.Configuration
 
             serviceCollection.AddSingleton<ChapterProfilesListViewModel>();
             serviceCollection.AddSingleton<ChapterProfilesViewModel>();
-            serviceCollection.AddSingleton<MainViewModel>();
+            serviceCollection.AddSingleton<MainPageViewModel>();
+
+            serviceCollection.AddSingleton<NetworkService>();
+#if DesktopPackage
+            serviceCollection.AddSingleton<NetworkService>();
+#endif
 
             rootServiceProvider = serviceCollection.BuildServiceProvider();
         }
@@ -72,7 +77,7 @@ namespace ATG_Notifier.Desktop.Configuration
             return serviceScope.ServiceProvider.GetService<T>();
         }
 
-        #region Dispose
+#region Dispose
 
         public void Dispose()
         {
@@ -92,6 +97,6 @@ namespace ATG_Notifier.Desktop.Configuration
             }
         }
 
-        #endregion // Dispose
+#endregion // Dispose
     }
 }

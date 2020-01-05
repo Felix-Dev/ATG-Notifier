@@ -20,7 +20,7 @@
     <Setting Name="WindowSetting" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="IsUpdateServiceRunning" Type="System.Boolean" Scope="User">
+    <Setting Name="WasUpdateServiceRunning" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MostRecentChapterInfo" Type="System.String" Scope="User">

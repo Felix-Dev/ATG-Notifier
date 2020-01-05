@@ -25,6 +25,8 @@ namespace ATG_Notifier.Desktop
         private ILogService logService = null!;
         private DialogService dialogService = null!;
 
+        private SettingsViewModel settingsViewModel = null!;
+
         private AppShell appShell = null!;
 
         public const string AppExitCmd = "Exit";
@@ -69,6 +71,7 @@ namespace ATG_Notifier.Desktop
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
+            this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             this.appShell = new AppShell();
             this.appShell.Show();
@@ -95,6 +98,8 @@ namespace ATG_Notifier.Desktop
         {
             // Stop the update service
             var updateService = ServiceLocator.Current.GetService<IUpdateService>();
+
+            this.settingsViewModel.WasUpdateServiceRunning = updateService.IsRunning;
             if (updateService.IsRunning)
             {
                 updateService.Stop();

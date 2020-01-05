@@ -22,19 +22,6 @@ namespace ATG_Notifier.Desktop.ViewModels
             }
         }
 
-        public bool IsUpdateServiceRunning
-        {
-            get => Properties.Settings.Default.IsUpdateServiceRunning;
-            set
-            {
-                if (value != Properties.Settings.Default.IsUpdateServiceRunning)
-                {
-                    Properties.Settings.Default.IsUpdateServiceRunning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         public bool IsInFocusMode
         {
             get => Properties.Settings.Default.DoNotDisturb;
@@ -168,6 +155,12 @@ namespace ATG_Notifier.Desktop.ViewModels
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        public bool WasUpdateServiceRunning
+        {
+            get => Properties.Settings.Default.WasUpdateServiceRunning;
+            set => Properties.Settings.Default.WasUpdateServiceRunning = value;
         }
 
         public void Load()

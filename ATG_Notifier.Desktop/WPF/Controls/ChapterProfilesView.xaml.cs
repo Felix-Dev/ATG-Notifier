@@ -13,12 +13,17 @@ namespace ATG_Notifier.Desktop.WPF.Controls
     {
         public ChapterProfilesView()
         {
-            this.DataContext = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
+            this.DataContext = this;
+
+            this.ViewModel = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
+            this.SettingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             InitializeComponent();
         }
 
-        public ChapterProfilesViewModel ViewModel => (ChapterProfilesViewModel)this.DataContext;
+        public ChapterProfilesViewModel ViewModel { get; }
+
+        public SettingsViewModel SettingsViewModel { get; }
 
         private async void OnChapterProfilesViewKeyDown(object sender, KeyEventArgs e)
         {

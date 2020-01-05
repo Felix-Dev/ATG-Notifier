@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.ViewModels
@@ -22,6 +23,8 @@ namespace ATG_Notifier.Desktop.ViewModels
     {
         private readonly IChapterProfileService chapterProfileService;
         private readonly IUpdateService updateService;
+
+        private readonly object itemsLock = new object();
 
         private int chapterProfilesUnreadCount;
 
@@ -33,6 +36,7 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.AppSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             this.Items = new ObservableCollection<ChapterProfileViewModel>();
+            BindingOperations.EnableCollectionSynchronization(this.Items, this.itemsLock);
 
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
 
@@ -51,7 +55,8 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             foreach (var model in chapterProfileModels)
             {
-                CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
+                //CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
+                Add(new ChapterProfileViewModel(model));
 
                 if (!model.IsRead)
                 {
@@ -92,7 +97,9 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         private async void OnChapterUpdateAsync(object? sender, ChapterUpdateEventArgs e)
         {
-            CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfile));
+            //CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfile));
+
+            Add(e.ChapterProfile);
 
             this.chapterProfilesUnreadCount++;
             ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));

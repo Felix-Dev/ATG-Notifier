@@ -50,6 +50,10 @@ namespace ATG_Notifier.Desktop.Services
 
         public event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
+        public event EventHandler Started;
+
+        public event EventHandler Stopped;
+
         public bool IsRunning { get; private set; } = false;
 
         public void Start()
@@ -62,8 +66,11 @@ namespace ATG_Notifier.Desktop.Services
                 }
 
                 this.saveguardSema = new Semaphore(1, 1);
+
                 this.periodicTimerRawSource = new Timer(OnTimerEllapsed, null, 0, Timeout.Infinite);
+
                 this.IsRunning = true;
+                Started?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -92,6 +99,7 @@ namespace ATG_Notifier.Desktop.Services
                 this.saveguardSema = null;
 
                 this.IsRunning = false;
+                Stopped?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -172,11 +180,11 @@ namespace ATG_Notifier.Desktop.Services
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:
-            await Task.Delay(7000);
+//            await Task.Delay(7000);
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            string? s = null; int i = s.Length;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+//#pragma warning disable CS8602 // Dereference of a possibly null reference.
+//            string? s = null; int i = s.Length;
+//#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             lock (this.timerLock)
             {

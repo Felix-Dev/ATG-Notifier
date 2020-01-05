@@ -70,7 +70,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         private void OnChapterTitleTextBoxPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            this.ChapterNumberAndTitleTextBox.SelectAll();
+            //this.ChapterNumberAndTitleTextBox.SelectAll();
             e.Handled = true;
         }
     }

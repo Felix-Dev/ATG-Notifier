@@ -29,8 +29,6 @@ namespace ATG_Notifier.Desktop.Native.Win32
             SWP_NOZORDER = 0x0004,
             SWP_FRAMECHANGED = 0x0020;
 
-
-
         #region Window 
 
         /// <devdoc>https://msdn.microsoft.com/en-us/library/windows/desktop/ms679347(v=vs.85).aspx</devdoc>

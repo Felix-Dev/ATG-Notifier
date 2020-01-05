@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ATG_Notifier.Desktop.WPF.Converters">
+    <local:BoolToVisibilityConverter x:Key="BoolToVisibilityVisibleCollapsedConverter"
+                                                  TrueVisibility="Visible"
+                                                  FalseVisibility="Collapsed"/>
+
+    <local:BoolToVisibilityConverter x:Key="BoolToVisibilityCollapsedVisibleConverter"
+                                                  TrueVisibility="Collapsed"
+                                                  FalseVisibility="Visible"/>
+
+    <local:CollectionCountToVisibilityConverter x:Key="CountToVisibilityVisibleCollapsedConverter"
+                                                VisibilityZero="Collapsed"
+                                                VisibilityNonZero="Visible" />
+
+    <local:NullToBoolConverter x:Key="NullToBoolFalseTrueConverter"
+                               NullValue="False"
+                               NonNullValue="True" />
+
+</ResourceDictionary>

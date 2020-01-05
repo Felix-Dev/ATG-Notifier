@@ -65,6 +65,9 @@ namespace ATG_Notifier.UWP.Services
 
         public event EventHandler<ChapterUpdateEventArgs> ChapterUpdated;
 
+        public event EventHandler Started;
+        public event EventHandler Stopped;
+
         public bool IsRunning => session != null;
 
         public async void Start()
@@ -86,8 +89,11 @@ namespace ATG_Notifier.UWP.Services
             {
                 case ExtendedExecutionResult.Allowed:
                     this.session = newSession;
+
                     this.periodicTimerRawSource = new Timer(OnRawTimerEllapsed, null, 0, Timeout.Infinite);
                     this.periodicTimerMTLSource = new Timer(OnMTLTimerEllapsed, null, 0, Timeout.Infinite);
+
+                    Started?.Invoke(this, EventArgs.Empty);
                     break;
 
                 default:
@@ -102,6 +108,8 @@ namespace ATG_Notifier.UWP.Services
         public void Stop()
         {
             ClearExtendedExecution();
+
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         private void ClearExtendedExecution()

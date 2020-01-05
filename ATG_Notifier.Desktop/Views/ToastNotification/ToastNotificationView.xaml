@@ -13,7 +13,6 @@
         WindowStartupLocation="Manual"
         ResizeMode="NoResize"
         AllowsTransparency="True"
-        Title="ToastNotificationView" 
         SnapsToDevicePixels="True"
         RenderOptions.ClearTypeHint="Enabled"    
         TextOptions.TextFormattingMode="Display"
@@ -102,14 +101,14 @@
         <Style TargetType="Window">
             <Style.Triggers>
 
-                <!-- Animates the button's opacity on mouse over. -->
+                <!-- Animates the notification's opacity on mouse over. -->
                 <EventTrigger RoutedEvent="Window.Loaded">
                     <EventTrigger.Actions>
                         <BeginStoryboard Storyboard="{StaticResource FadeOutStoryboard}"/>
                     </EventTrigger.Actions>
                 </EventTrigger>
 
-                <!-- Returns the button's opacity to 1 when the mouse leaves. -->
+                <!-- Returns the notification's opacity to 1 when the mouse leaves. -->
                 <EventTrigger RoutedEvent="Window.MouseEnter">
                     <EventTrigger.Actions>
                         <BeginStoryboard Storyboard="{StaticResource FadeOutResetStoryboard}"/>

@@ -7,7 +7,6 @@ using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
 using System;
 using System.ComponentModel;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 

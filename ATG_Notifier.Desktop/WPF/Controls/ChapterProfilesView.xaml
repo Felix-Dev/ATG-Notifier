@@ -16,22 +16,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Converters/Converters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!--#region Converters-->
-
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityVisibleCollapsedConverter"
-                                                  TrueVisibility="Visible"
-                                                  FalseVisibility="Collapsed" />
-
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityCollapsedVisibleConverter"
-                                                  TrueVisibility="Collapsed"
-                                                  FalseVisibility="Visible" />
-
-            <converters:NullToBoolConverter x:Key="NullToBoolFalseTrueConverter"
-                                            NullValue="False"
-                                            NonNullValue="True" />
 
             <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
 
@@ -292,9 +281,9 @@
                     <!-- stop/resume update checks button -->
                     <ToggleButton Style="{StaticResource ToolbarUpdatesToggleButtonStyle}"
                                   TabIndex="4"
-                                  Command="{Binding ChangeUpdateServiceStatusCommand}"
-                                  IsEnabled="{Binding CanChangeUpdateServiceStatus}"
-                                  IsChecked="{Binding AppSettings.IsUpdateServiceRunning, Mode=OneWay}"/>
+                                  Command="{Binding ViewModel.ChangeUpdateServiceStatusCommand}"
+                                  IsEnabled="{Binding ViewModel.CanChangeUpdateServiceStatus}"
+                                  IsChecked="{Binding ViewModel.IsUpdateServiceRunning}"/>
                     <!-- separator-->
                     <!--<Rectangle Style="{StaticResource VerticalSeparator}"
                                Fill="LightGray"/>-->
@@ -310,7 +299,7 @@
                             ToolTipService.ShowDuration="2000"
                             TabIndex="5"
                             Click="OnLatestChapterButtonClick"
-                            IsEnabled="{Binding AppSettings.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}}">
+                            IsEnabled="{Binding SettingsViewModel.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}}">
                         <Button.Content>
                             <StackPanel>
                                 <ContentPresenter Content="{StaticResource IconMostRecentUpdate}"/>
@@ -324,7 +313,7 @@
                                             Background="#FFF8F8F8"
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
-                                            <TextBlock Text="{Binding AppSettings.MostRecentChapterInfo.NumberAndTitle}"
+                                            <TextBlock Text="{Binding SettingsViewModel.MostRecentChapterInfo.NumberAndTitle}"
                                                        HorizontalAlignment="Center" TextAlignment="Center"
                                                        FontSize="12"
                                                        Foreground="#FF6A6A6A"
@@ -337,8 +326,8 @@
                                                        Foreground="#FF6A6A6A">
                                                 <TextBlock.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
-                                                        <Binding Path="AppSettings.MostRecentChapterInfo.WordCount"/>
-                                                        <Binding Path="AppSettings.MostRecentChapterInfo.ReleaseTime"/>
+                                                        <Binding Path="SettingsViewModel.MostRecentChapterInfo.WordCount"/>
+                                                        <Binding Path="SettingsViewModel.MostRecentChapterInfo.ReleaseTime"/>
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -358,7 +347,7 @@
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
                             TabIndex="6"
-                            Command="{Binding ListViewModel.SetListAsReadCommand}"/>
+                            Command="{Binding ViewModel.ListViewModel.SetListAsReadCommand}"/>
                 </StackPanel>
                 
                 <!-- right toolbar buttons -->
@@ -372,7 +361,7 @@
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
                             TabIndex="7"
-                            Command="{Binding ListViewModel.ClearCommand}"/>
+                            Command="{Binding ViewModel.ListViewModel.ClearCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -384,11 +373,11 @@
                    TextAlignment="Center"
                    FontSize="20"
                    Foreground="Black"
-                   Visibility="{Binding ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
+                   Visibility="{Binding ViewModel.ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
 
         <controls:ChapterProfileList x:Name="ChapterProfileList" 
                                      Grid.Row="1"
-                                     DataContext="{Binding ListViewModel}"
+                                     DataContext="{Binding ViewModel.ListViewModel}"
                                      ItemClickCommand="{Binding ViewModel.OpenChapterProfileCommand, ElementName=ChapterProfilesViewControl}"
                                      ItemLostFocusCommand="{Binding ViewModel.ChapterProfileLostFocusCommand, ElementName=ChapterProfilesViewControl}"
                                      Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"/>

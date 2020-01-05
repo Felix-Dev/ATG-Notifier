@@ -10,11 +10,17 @@ namespace ATG_Notifier.Desktop.Views
     internal partial class MainPage : Page
     {
         private readonly DialogService dialogService;
+        private readonly NetworkService networkService;
+
+        private readonly MainPageViewModel viewModel;
         private readonly SettingsViewModel settingsViewModel;
 
         public MainPage()
         {
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
+            this.networkService = ServiceLocator.Current.GetService<NetworkService>();
+
+            this.viewModel = ServiceLocator.Current.GetService<MainPageViewModel>();
             this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             this.DataContext = this;
@@ -22,6 +28,8 @@ namespace ATG_Notifier.Desktop.Views
             InitializeComponent();
             InitializeNotificationDisplayPositionMenu();
         }
+
+        public MainPageViewModel ViewModel => this.viewModel;
 
         public SettingsViewModel SettingsViewModel => this.settingsViewModel;
 
@@ -60,9 +68,9 @@ namespace ATG_Notifier.Desktop.Views
             // load chapter profiles from database 
             await chapterProfilesViewModel.ListViewModel.LoadAsync();
 
-            if (this.settingsViewModel.IsUpdateServiceRunning)
+            if (this.settingsViewModel.WasUpdateServiceRunning && !this.networkService.IsMeteredConnection)
             {
-                ServiceLocator.Current.GetService<IUpdateService>().Start();
+                ServiceLocator.Current.GetService<IUpdateService>().Start();           
             }
         }
 
@@ -91,7 +99,7 @@ namespace ATG_Notifier.Desktop.Views
             this.MenuItemBottomLeft.IsChecked = false;
             this.MenuItemBottomRight.IsChecked = false;
 
-            this.settingsViewModel.NotificationDisplayPosition = Views.ToastNotification.DisplayPosition.TopLeft;
+            this.settingsViewModel.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopLeft;
         }
 
         private void OnMenuItemTopRightClick(object sender, RoutedEventArgs e)
@@ -109,7 +117,7 @@ namespace ATG_Notifier.Desktop.Views
             this.MenuItemBottomLeft.IsChecked = false;
             this.MenuItemBottomRight.IsChecked = false;
 
-            this.settingsViewModel.NotificationDisplayPosition = Views.ToastNotification.DisplayPosition.TopRight;
+            this.settingsViewModel.NotificationDisplayPosition = ToastNotification.DisplayPosition.TopRight;
         }
 
         private void OnMenuItemBottomLeftClick(object sender, RoutedEventArgs e)
@@ -127,7 +135,7 @@ namespace ATG_Notifier.Desktop.Views
             this.MenuItemTopRight.IsChecked = false;
             this.MenuItemBottomRight.IsChecked = false;
 
-            this.settingsViewModel.NotificationDisplayPosition = Views.ToastNotification.DisplayPosition.BottomLeft;
+            this.settingsViewModel.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomLeft;
         }
 
         private void OnMenuItemBottomRightClick(object sender, RoutedEventArgs e)
@@ -145,7 +153,7 @@ namespace ATG_Notifier.Desktop.Views
             this.MenuItemTopRight.IsChecked = false;
             this.MenuItemBottomLeft.IsChecked = false;
 
-            this.settingsViewModel.NotificationDisplayPosition = Views.ToastNotification.DisplayPosition.BottomRight;
+            this.settingsViewModel.NotificationDisplayPosition = ToastNotification.DisplayPosition.BottomRight;
         }
     }
 }

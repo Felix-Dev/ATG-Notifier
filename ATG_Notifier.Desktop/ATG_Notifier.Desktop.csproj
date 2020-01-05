@@ -37,10 +37,13 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Themes\Generic.xaml" />
     <None Remove="Views\AppShell.xaml" />
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\MessageDialog\MessageDialog.xaml" />
     <None Remove="Views\ToastNotification\ToastNotificationView.xaml" />
+    <None Remove="WPF\Controls\MessageBoard.xaml" />
+    <None Remove="WPF\Converters\Converters.xaml" />
     <None Remove="WPF\Themes\MenuItem.xaml" />
   </ItemGroup>
 
