@@ -86,7 +86,12 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnMenuItemAboutClick(object sender, RoutedEventArgs e)
         {
-            dialogService.ShowDialog($"Version: {AppConfiguration.AppVersion}", $"About {AppConfiguration.AppId}", MessageDialogButton.OK);
+            var aboutView = new AboutView()
+            {
+                Owner = AppShell.Current,
+            };
+
+            aboutView.ShowDialog();
         }
 
         private void OnMenuItemTopLeftClick(object sender, RoutedEventArgs e)

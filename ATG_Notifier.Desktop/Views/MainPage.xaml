@@ -14,9 +14,7 @@
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Converters/Converters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/MenuItem.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!--#region Brushes -->

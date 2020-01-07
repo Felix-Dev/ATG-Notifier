@@ -22,6 +22,12 @@ namespace ATG_Notifier.Desktop.Configuration
         /// <summary>The current app version. </summary>
         public static readonly string AppVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "ERROR";
 
+        /// <summary>The link to the app's source code.</summary>
+        public const string SourceCodeUri = "https://github.com/Felix-Dev/ATG-Notifier";
+
+        /// <summary>The link to the app's feedback hub.</summary>
+        public const string FeedbackUri = "https://github.com/Felix-Dev/ATG-Notifier/issues";
+
         /// <summary>The database's file name.</summary>
         private static readonly string fullDatabaseName = $"{databaseName}.{databaseVersion}.db";
 

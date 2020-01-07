@@ -1,5 +1,7 @@
 ﻿using ATG_Notifier.Desktop.Native.Win32;
 using System;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace ATG_Notifier.Desktop.Helpers
 {
@@ -14,26 +16,41 @@ namespace ATG_Notifier.Desktop.Helpers
             WM_SHOWINSTANCE = NativeMethods.RegisterWindowMessage(nameof(WM_SHOWINSTANCE));
         }
 
-        public static void DisableCloseButton(IntPtr handle)
+        public static IntPtr GetHwnd(Window window)
         {
-            IntPtr menuHandle = NativeMethods.GetSystemMenu(handle, false);
+            return new WindowInteropHelper(window).Handle;
+        }
+
+        public static void DisableCloseButton(Window window)
+        {
+            DisableCloseButton(GetHwnd(window));
+        }
+
+        public static void DisableCloseButton(IntPtr hWnd)
+        {
+            IntPtr menuHandle = NativeMethods.GetSystemMenu(hWnd, false);
             if (menuHandle != IntPtr.Zero)
             {
                 NativeMethods.EnableMenuItem(menuHandle, NativeMethods.SC_CLOSE, NativeMethods.MF_BYCOMMAND | NativeMethods.MF_GRAYED);
             }
         }
 
-        public static void CollapseIcon(IntPtr handle)
+        public static void HideIcon(Window window)
+        {
+            HideIcon(new WindowInteropHelper(window).Handle);
+        }
+
+        public static void HideIcon(IntPtr hWnd)
         {
             // Change the extended window style to not show a window icon
-            int extendedStyle = NativeMethods.GetWindowLong(handle, NativeMethods.GWL_EXSTYLE);
-            NativeMethods.SetWindowLong(handle, NativeMethods.GWL_EXSTYLE, extendedStyle | NativeMethods.WS_EX_DLGMODALFRAME);
+            int extendedStyle = NativeMethods.GetWindowLong(hWnd, NativeMethods.GWL_EXSTYLE);
+            NativeMethods.SetWindowLong(hWnd, NativeMethods.GWL_EXSTYLE, extendedStyle | NativeMethods.WS_EX_DLGMODALFRAME);
 
-            NativeMethods.SendMessage(handle, (int)WM.SETICON, NativeMethods.ICON_SMALL, IntPtr.Zero);
-            NativeMethods.SendMessage(handle, (int)WM.SETICON, NativeMethods.ICON_BIG, IntPtr.Zero);
+            NativeMethods.SendMessage(hWnd, (int)WM.SETICON, NativeMethods.ICON_SMALL, IntPtr.Zero);
+            NativeMethods.SendMessage(hWnd, (int)WM.SETICON, NativeMethods.ICON_BIG, IntPtr.Zero);
 
             // Update the window's non-client area to reflect the changes
-            NativeMethods.SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0,
+            NativeMethods.SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0,
                 NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_FRAMECHANGED);
         }
 
@@ -44,13 +61,13 @@ namespace ATG_Notifier.Desktop.Helpers
 
         public static bool SendMessage(string windowTitle, int msgId, IntPtr wParam, IntPtr lParam)
         {
-            IntPtr handle = NativeMethods.FindWindow(null, windowTitle);
-            if (handle == IntPtr.Zero)
+            IntPtr hWnd = NativeMethods.FindWindow(null, windowTitle);
+            if (hWnd == IntPtr.Zero)
             {
                 return false;
             }
 
-            long result = NativeMethods.SendMessage(handle, msgId, wParam, lParam);
+            long result = NativeMethods.SendMessage(hWnd, msgId, wParam, lParam);
             return result == 1;
         }
     }

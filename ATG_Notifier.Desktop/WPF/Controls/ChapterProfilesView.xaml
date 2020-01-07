@@ -13,249 +13,243 @@
              FontFamily="Segoe UI"
              Loaded="OnLoaded">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Converters/Converters.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
-            </ResourceDictionary.MergedDictionaries>
 
-            <!--#region Converters-->
+        <!--#region Converters-->
 
             <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
 
             <!--#endregion-->
             
-            <!--#region Icons -->
+        <!--#region Icons -->
             
-            <!-- update-check-status-ok icon -->
-            <Viewbox x:Key="IconUpdateCheckOK" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M813,45L278.5,580L0,301L45,256L278.5,489L768,0Z"/>
-            </Viewbox>
+        <!-- update-check-status-ok icon -->
+        <Viewbox x:Key="IconUpdateCheckOK" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M813,45L278.5,580L0,301L45,256L278.5,489L768,0Z"/>
+        </Viewbox>
 
-            <!-- update-check-status-not-running icon -->
-            <Viewbox x:Key="IconUpdateCheckNotRunning" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M448,0L448,64L0,64L0,0Z"/>
-            </Viewbox>
+        <!-- update-check-status-not-running icon -->
+        <Viewbox x:Key="IconUpdateCheckNotRunning" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M448,0L448,64L0,64L0,0Z"/>
+        </Viewbox>
 
-            <!-- update-check-status-error icon -->
-            <Viewbox x:Key="IconUpdateCheckError" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M960,960L0,960L480,0ZM103.5,896L856.5,896L480,143ZM512,384L512,704L448,704L448,384ZM448,768L512,768L512,832L448,832Z"/>
-            </Viewbox>
+        <!-- update-check-status-error icon -->
+        <Viewbox x:Key="IconUpdateCheckError" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M960,960L0,960L480,0ZM103.5,896L856.5,896L480,143ZM512,384L512,704L448,704L448,384ZM448,768L512,768L512,832L448,832Z"/>
+        </Viewbox>
 
-            <!-- updates-restore icon -->
-            <Viewbox x:Key="IconUpdatesRestore" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.5,47.5834 770.5,69.75C808.5,91.9167 843.083,118.583 874.25,149.75C905.417,180.917 932.083,215.5 954.25,253.5C976.417,291.5 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,559 1017.92,604.333 1005.75,648C993.583,691.667 976.417,732.5 954.25,770.5C932.083,808.5 905.417,843.083 874.25,874.25C843.083,905.417 808.5,932.083 770.5,954.25C732.5,976.417 691.667,993.583 648,1005.75C604.333,1017.92 559,1024 512,1024C454.667,1024 399.583,1014.83 346.75,996.5C293.917,978.167 245.75,952.417 202.25,919.25C158.75,886.083 121.083,846.5 89.25,800.5C57.4167,754.5 34,703.833 19,648.5L80.5,631.5C93.8333,679.833 114.417,724.083 142.25,764.25C170.083,804.417 203,839 241,868C279,897 321.167,919.583 367.5,935.75C413.833,951.917 462,960 512,960C553,960 592.583,954.667 630.75,944C668.917,933.333 704.583,918.25 737.75,898.75C770.917,879.25 801.167,855.833 828.5,828.5C855.833,801.167 879.25,770.917 898.75,737.75C918.25,704.583 933.333,669 944,631C954.667,593 960,553.333 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C469,64.0001 427.167,70.0001 386.5,82C345.833,94.0001 307.917,111.167 272.75,133.5C237.583,155.833 205.833,182.75 177.5,214.25C149.167,245.75 125.833,281 107.5,320L256,320L256,384L0,384L0,128L64,128L64,265C86.3333,224 113.5,187.167 145.5,154.5C177.5,121.833 212.917,94.0834 251.75,71.25C290.583,48.4168 332,30.8334 376,18.5C420,6.16669 465.333,0 512,0Z"/>
-            </Viewbox>
+        <!-- updates-restore icon -->
+        <Viewbox x:Key="IconUpdatesRestore" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.5,47.5834 770.5,69.75C808.5,91.9167 843.083,118.583 874.25,149.75C905.417,180.917 932.083,215.5 954.25,253.5C976.417,291.5 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,559 1017.92,604.333 1005.75,648C993.583,691.667 976.417,732.5 954.25,770.5C932.083,808.5 905.417,843.083 874.25,874.25C843.083,905.417 808.5,932.083 770.5,954.25C732.5,976.417 691.667,993.583 648,1005.75C604.333,1017.92 559,1024 512,1024C454.667,1024 399.583,1014.83 346.75,996.5C293.917,978.167 245.75,952.417 202.25,919.25C158.75,886.083 121.083,846.5 89.25,800.5C57.4167,754.5 34,703.833 19,648.5L80.5,631.5C93.8333,679.833 114.417,724.083 142.25,764.25C170.083,804.417 203,839 241,868C279,897 321.167,919.583 367.5,935.75C413.833,951.917 462,960 512,960C553,960 592.583,954.667 630.75,944C668.917,933.333 704.583,918.25 737.75,898.75C770.917,879.25 801.167,855.833 828.5,828.5C855.833,801.167 879.25,770.917 898.75,737.75C918.25,704.583 933.333,669 944,631C954.667,593 960,553.333 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C469,64.0001 427.167,70.0001 386.5,82C345.833,94.0001 307.917,111.167 272.75,133.5C237.583,155.833 205.833,182.75 177.5,214.25C149.167,245.75 125.833,281 107.5,320L256,320L256,384L0,384L0,128L64,128L64,265C86.3333,224 113.5,187.167 145.5,154.5C177.5,121.833 212.917,94.0834 251.75,71.25C290.583,48.4168 332,30.8334 376,18.5C420,6.16669 465.333,0 512,0Z"/>
+        </Viewbox>
 
-            <!-- updates-disable icon -->
-            <Viewbox x:Key="IconUpdatesDisable" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M800,576C831,576 860.083,581.833 887.25,593.5C914.417,605.167 938.167,621.167 958.5,641.5C978.833,661.833 994.833,685.583 1006.5,712.75C1018.17,739.917 1024,769 1024,800C1024,831 1018.17,860.083 1006.5,887.25C994.833,914.417 978.833,938.167 958.5,958.5C938.167,978.833 914.417,994.833 887.25,1006.5C860.083,1018.17 831,1024 800,1024C769,1024 739.917,1018.17 712.75,1006.5C685.583,994.833 661.833,978.833 641.5,958.5C621.167,938.167 605.167,914.417 593.5,887.25C581.833,860.083 576,831 576,800C576,769 581.833,739.917 593.5,712.75C605.167,685.583 621.167,661.833 641.5,641.5C661.833,621.167 685.583,605.167 712.75,593.5C739.917,581.833 769,576 800,576ZM640,800C640,822 644.167,842.75 652.5,862.25C660.833,881.75 672.25,898.75 686.75,913.25C701.25,927.75 718.25,939.167 737.75,947.5C757.25,955.833 778,960 800,960C815.667,960 831,957.75 846,953.25C861,948.75 875,942.167 888,933.5L666.5,712C657.833,725 651.25,739 646.75,754C642.25,769 640,784.333 640,800ZM933.5,888C942.167,875 948.75,861 953.25,846C957.75,831 960,815.667 960,800C960,778 955.75,757.333 947.25,738C938.75,718.667 927.25,701.75 912.75,687.25C898.25,672.75 881.333,661.25 862,652.75C842.667,644.25 822,640 800,640C784.333,640 769,642.25 754,646.75C739,651.25 725,657.833 712,666.5ZM256,384L0,384L0,128L64,128L64,265.5C86.3333,224.833 113.583,188.083 145.75,155.25C177.917,122.417 213.333,94.5001 252,71.5C290.667,48.5001 332,30.8334 376,18.5C420,6.16669 465.333,0 512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.417,47.6667 770.25,70C808.083,92.3334 842.583,119.083 873.75,150.25C904.917,181.417 931.667,215.917 954,253.75C976.333,291.583 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,525 1023.42,538 1022.25,551C1021.08,564 1019.5,576.833 1017.5,589.5C1008.83,580.5 999.5,571.917 989.5,563.75C979.5,555.583 969.167,548.167 958.5,541.5C958.833,536.5 959.167,531.583 959.5,526.75C959.833,521.917 960,517 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C469,64.0001 427.25,70.0834 386.75,82.25C346.25,94.4167 308.5,111.583 273.5,133.75C238.5,155.917 206.917,182.75 178.75,214.25C150.583,245.75 127.333,281 109,320L256,320ZM541.5,958.5C548.167,969.167 555.583,979.5 563.75,989.5C571.917,999.5 580.5,1008.83 589.5,1017.5C576.833,1019.5 564,1021.08 551,1022.25C538,1023.42 525,1024 512,1024C474,1024 436.75,1019.83 400.25,1011.5C363.75,1003.17 329,991.25 296,975.75C263,960.25 231.833,941.333 202.5,919C173.167,896.667 146.667,871.583 123,843.75C99.3333,815.917 78.5833,785.583 60.75,752.75C42.9167,719.917 29,685.167 19,648.5L80.5,631.5C93.8333,679.833 114.417,724.083 142.25,764.25C170.083,804.417 203,839 241,868C279,897 321.167,919.583 367.5,935.75C413.833,951.917 462,960 512,960C517,960 521.917,959.833 526.75,959.5C531.583,959.167 536.5,958.833 541.5,958.5Z"/>
-            </Viewbox>
+        <!-- updates-disable icon -->
+        <Viewbox x:Key="IconUpdatesDisable" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M800,576C831,576 860.083,581.833 887.25,593.5C914.417,605.167 938.167,621.167 958.5,641.5C978.833,661.833 994.833,685.583 1006.5,712.75C1018.17,739.917 1024,769 1024,800C1024,831 1018.17,860.083 1006.5,887.25C994.833,914.417 978.833,938.167 958.5,958.5C938.167,978.833 914.417,994.833 887.25,1006.5C860.083,1018.17 831,1024 800,1024C769,1024 739.917,1018.17 712.75,1006.5C685.583,994.833 661.833,978.833 641.5,958.5C621.167,938.167 605.167,914.417 593.5,887.25C581.833,860.083 576,831 576,800C576,769 581.833,739.917 593.5,712.75C605.167,685.583 621.167,661.833 641.5,641.5C661.833,621.167 685.583,605.167 712.75,593.5C739.917,581.833 769,576 800,576ZM640,800C640,822 644.167,842.75 652.5,862.25C660.833,881.75 672.25,898.75 686.75,913.25C701.25,927.75 718.25,939.167 737.75,947.5C757.25,955.833 778,960 800,960C815.667,960 831,957.75 846,953.25C861,948.75 875,942.167 888,933.5L666.5,712C657.833,725 651.25,739 646.75,754C642.25,769 640,784.333 640,800ZM933.5,888C942.167,875 948.75,861 953.25,846C957.75,831 960,815.667 960,800C960,778 955.75,757.333 947.25,738C938.75,718.667 927.25,701.75 912.75,687.25C898.25,672.75 881.333,661.25 862,652.75C842.667,644.25 822,640 800,640C784.333,640 769,642.25 754,646.75C739,651.25 725,657.833 712,666.5ZM256,384L0,384L0,128L64,128L64,265.5C86.3333,224.833 113.583,188.083 145.75,155.25C177.917,122.417 213.333,94.5001 252,71.5C290.667,48.5001 332,30.8334 376,18.5C420,6.16669 465.333,0 512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.417,47.6667 770.25,70C808.083,92.3334 842.583,119.083 873.75,150.25C904.917,181.417 931.667,215.917 954,253.75C976.333,291.583 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,525 1023.42,538 1022.25,551C1021.08,564 1019.5,576.833 1017.5,589.5C1008.83,580.5 999.5,571.917 989.5,563.75C979.5,555.583 969.167,548.167 958.5,541.5C958.833,536.5 959.167,531.583 959.5,526.75C959.833,521.917 960,517 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C469,64.0001 427.25,70.0834 386.75,82.25C346.25,94.4167 308.5,111.583 273.5,133.75C238.5,155.917 206.917,182.75 178.75,214.25C150.583,245.75 127.333,281 109,320L256,320ZM541.5,958.5C548.167,969.167 555.583,979.5 563.75,989.5C571.917,999.5 580.5,1008.83 589.5,1017.5C576.833,1019.5 564,1021.08 551,1022.25C538,1023.42 525,1024 512,1024C474,1024 436.75,1019.83 400.25,1011.5C363.75,1003.17 329,991.25 296,975.75C263,960.25 231.833,941.333 202.5,919C173.167,896.667 146.667,871.583 123,843.75C99.3333,815.917 78.5833,785.583 60.75,752.75C42.9167,719.917 29,685.167 19,648.5L80.5,631.5C93.8333,679.833 114.417,724.083 142.25,764.25C170.083,804.417 203,839 241,868C279,897 321.167,919.583 367.5,935.75C413.833,951.917 462,960 512,960C517,960 521.917,959.833 526.75,959.5C531.583,959.167 536.5,958.833 541.5,958.5Z"/>
+        </Viewbox>
 
-            <!-- most-recent-update icon -->
-            <Viewbox x:Key="IconMostRecentUpdate" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M480,960C435.667,960 393.083,954.333 352.25,943C311.417,931.667 273.167,915.583 237.5,894.75C201.833,873.917 169.417,848.917 140.25,819.75C111.083,790.583 86.0833,758.167 65.25,722.5C44.4167,686.833 28.3333,648.583 17,607.75C5.66667,566.917 0,524.333 0,480C0,435.667 5.66667,393.083 17,352.25C28.3333,311.417 44.4167,273.167 65.25,237.5C86.0833,201.833 111.083,169.417 140.25,140.25C169.417,111.083 201.833,86.0834 237.5,65.25C273.167,44.4168 311.417,28.3334 352.25,17C393.083,5.66669 435.667,0 480,0C524.333,0 566.917,5.66669 607.75,17C648.583,28.3334 686.833,44.4168 722.5,65.25C758.167,86.0834 790.583,111.083 819.75,140.25C848.917,169.417 873.917,201.833 894.75,237.5C915.583,273.167 931.667,311.417 943,352.25C954.333,393.083 960,435.667 960,480C960,524.333 954.333,566.917 943,607.75C931.667,648.583 915.583,686.833 894.75,722.5C873.917,758.167 848.917,790.583 819.75,819.75C790.583,848.917 758.167,873.917 722.5,894.75C686.833,915.583 648.583,931.667 607.75,943C566.917,954.333 524.333,960 480,960ZM480,64C441.667,64.0001 404.833,69.0001 369.5,79C334.167,89.0001 301.083,103 270.25,121C239.417,139 211.333,160.667 186,186C160.667,211.333 139,239.417 121,270.25C103,301.083 89,334.25 79,369.75C69,405.25 64,442 64,480C64,518 69,554.75 79,590.25C89,625.75 103,658.917 121,689.75C139,720.583 160.667,748.667 186,774C211.333,799.333 239.417,821 270.25,839C301.083,857 334.167,871 369.5,881C404.833,891 441.667,896 480,896C518,896 554.75,891 590.25,881C625.75,871 658.917,857 689.75,839C720.583,821 748.667,799.333 774,774C799.333,748.667 821,720.583 839,689.75C857,658.917 871,625.833 881,590.5C891,555.167 896,518.333 896,480C896,442 891,405.25 881,369.75C871,334.25 857,301.083 839,270.25C821,239.417 799.333,211.333 774,186C748.667,160.667 720.583,139 689.75,121C658.917,103 625.75,89.0001 590.25,79C554.75,69.0001 518,64.0001 480,64ZM448,384L512,384L512,704L448,704ZM448,256L512,256L512,320L448,320Z"/>
-            </Viewbox>
+        <!-- most-recent-update icon -->
+        <Viewbox x:Key="IconMostRecentUpdate" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M480,960C435.667,960 393.083,954.333 352.25,943C311.417,931.667 273.167,915.583 237.5,894.75C201.833,873.917 169.417,848.917 140.25,819.75C111.083,790.583 86.0833,758.167 65.25,722.5C44.4167,686.833 28.3333,648.583 17,607.75C5.66667,566.917 0,524.333 0,480C0,435.667 5.66667,393.083 17,352.25C28.3333,311.417 44.4167,273.167 65.25,237.5C86.0833,201.833 111.083,169.417 140.25,140.25C169.417,111.083 201.833,86.0834 237.5,65.25C273.167,44.4168 311.417,28.3334 352.25,17C393.083,5.66669 435.667,0 480,0C524.333,0 566.917,5.66669 607.75,17C648.583,28.3334 686.833,44.4168 722.5,65.25C758.167,86.0834 790.583,111.083 819.75,140.25C848.917,169.417 873.917,201.833 894.75,237.5C915.583,273.167 931.667,311.417 943,352.25C954.333,393.083 960,435.667 960,480C960,524.333 954.333,566.917 943,607.75C931.667,648.583 915.583,686.833 894.75,722.5C873.917,758.167 848.917,790.583 819.75,819.75C790.583,848.917 758.167,873.917 722.5,894.75C686.833,915.583 648.583,931.667 607.75,943C566.917,954.333 524.333,960 480,960ZM480,64C441.667,64.0001 404.833,69.0001 369.5,79C334.167,89.0001 301.083,103 270.25,121C239.417,139 211.333,160.667 186,186C160.667,211.333 139,239.417 121,270.25C103,301.083 89,334.25 79,369.75C69,405.25 64,442 64,480C64,518 69,554.75 79,590.25C89,625.75 103,658.917 121,689.75C139,720.583 160.667,748.667 186,774C211.333,799.333 239.417,821 270.25,839C301.083,857 334.167,871 369.5,881C404.833,891 441.667,896 480,896C518,896 554.75,891 590.25,881C625.75,871 658.917,857 689.75,839C720.583,821 748.667,799.333 774,774C799.333,748.667 821,720.583 839,689.75C857,658.917 871,625.833 881,590.5C891,555.167 896,518.333 896,480C896,442 891,405.25 881,369.75C871,334.25 857,301.083 839,270.25C821,239.417 799.333,211.333 774,186C748.667,160.667 720.583,139 689.75,121C658.917,103 625.75,89.0001 590.25,79C554.75,69.0001 518,64.0001 480,64ZM448,384L512,384L512,704L448,704ZM448,256L512,256L512,320L448,320Z"/>
+        </Viewbox>
 
-            <!-- clear-list icon -->
-            <Viewbox  x:Key="IconClear" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M832,192L768,192L768,928C768,941.333 765.5,953.833 760.5,965.5C755.5,977.167 748.667,987.333 740,996C731.333,1004.67 721.167,1011.5 709.5,1016.5C697.833,1021.5 685.333,1024 672,1024L160,1024C146.667,1024 134.167,1021.5 122.5,1016.5C110.833,1011.5 100.667,1004.67 92,996C83.3333,987.333 76.5,977.167 71.5,965.5C66.5,953.833 64,941.333 64,928L64,192L0,192L0,128L256,128L256,64C256,55.0001 257.667,46.6668 261,39C264.333,31.3334 268.917,24.5834 274.75,18.75C280.583,12.9167 287.333,8.33337 295,5C302.667,1.66669 311,0 320,0L512,0C521,0 529.333,1.66669 537,5C544.667,8.33337 551.417,12.9167 557.25,18.75C563.083,24.5834 567.667,31.3334 571,39C574.333,46.6668 576,55.0001 576,64L576,128L832,128ZM320,128L512,128L512,64L320,64ZM704,192L128,192L128,928C128,936.667 131.167,944.167 137.5,950.5C143.833,956.833 151.333,960 160,960L672,960C680.667,960 688.167,956.833 694.5,950.5C700.833,944.167 704,936.667 704,928ZM320,832L256,832L256,320L320,320ZM448,832L384,832L384,320L448,320ZM576,832L512,832L512,320L576,320Z"/>
-            </Viewbox>
+        <!-- clear-list icon -->
+        <Viewbox  x:Key="IconClear" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M832,192L768,192L768,928C768,941.333 765.5,953.833 760.5,965.5C755.5,977.167 748.667,987.333 740,996C731.333,1004.67 721.167,1011.5 709.5,1016.5C697.833,1021.5 685.333,1024 672,1024L160,1024C146.667,1024 134.167,1021.5 122.5,1016.5C110.833,1011.5 100.667,1004.67 92,996C83.3333,987.333 76.5,977.167 71.5,965.5C66.5,953.833 64,941.333 64,928L64,192L0,192L0,128L256,128L256,64C256,55.0001 257.667,46.6668 261,39C264.333,31.3334 268.917,24.5834 274.75,18.75C280.583,12.9167 287.333,8.33337 295,5C302.667,1.66669 311,0 320,0L512,0C521,0 529.333,1.66669 537,5C544.667,8.33337 551.417,12.9167 557.25,18.75C563.083,24.5834 567.667,31.3334 571,39C574.333,46.6668 576,55.0001 576,64L576,128L832,128ZM320,128L512,128L512,64L320,64ZM704,192L128,192L128,928C128,936.667 131.167,944.167 137.5,950.5C143.833,956.833 151.333,960 160,960L672,960C680.667,960 688.167,956.833 694.5,950.5C700.833,944.167 704,936.667 704,928ZM320,832L256,832L256,320L320,320ZM448,832L384,832L384,320L448,320ZM576,832L512,832L512,320L576,320Z"/>
+        </Viewbox>
 
-            <!-- Set-as-read icon -->
-            <Viewbox  x:Key="IconSetAsRead" Width="16" Height="16">
-                <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                      Stretch="UniformToFill"
-                      Data="M745.5,297.5L790.5,342.5L416,717L233.5,534.5L278.5,489.5L416,627ZM512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.5,47.5834 770.5,69.75C808.5,91.9167 843.083,118.583 874.25,149.75C905.417,180.917 932.083,215.5 954.25,253.5C976.417,291.5 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,559 1017.92,604.333 1005.75,648C993.583,691.667 976.417,732.5 954.25,770.5C932.083,808.5 905.417,843.083 874.25,874.25C843.083,905.417 808.5,932.083 770.5,954.25C732.5,976.417 691.667,993.583 648,1005.75C604.333,1017.92 559,1024 512,1024C465,1024 419.667,1017.92 376,1005.75C332.333,993.583 291.5,976.417 253.5,954.25C215.5,932.083 180.917,905.417 149.75,874.25C118.583,843.083 91.9167,808.5 69.75,770.5C47.5833,732.5 30.4167,691.75 18.25,648.25C6.08333,604.75 0,559.333 0,512C0,465 6.08333,419.667 18.25,376C30.4167,332.333 47.5833,291.5 69.75,253.5C91.9167,215.5 118.583,180.917 149.75,149.75C180.917,118.583 215.5,91.9167 253.5,69.75C291.5,47.5834 332.25,30.4167 375.75,18.25C419.25,6.08337 464.667,0 512,0ZM512,960C553,960 592.583,954.667 630.75,944C668.917,933.333 704.583,918.25 737.75,898.75C770.917,879.25 801.167,855.833 828.5,828.5C855.833,801.167 879.25,770.917 898.75,737.75C918.25,704.583 933.333,669 944,631C954.667,593 960,553.333 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C471,64.0001 431.417,69.3334 393.25,80C355.083,90.6667 319.417,105.75 286.25,125.25C253.083,144.75 222.833,168.167 195.5,195.5C168.167,222.833 144.75,253.083 125.25,286.25C105.75,319.417 90.6667,355.083 80,393.25C69.3333,431.417 64,471 64,512C64,553 69.3333,592.583 80,630.75C90.6667,668.917 105.75,704.583 125.25,737.75C144.75,770.917 168.167,801.167 195.5,828.5C222.833,855.833 253.083,879.25 286.25,898.75C319.417,918.25 355,933.333 393,944C431,954.667 470.667,960 512,960Z"/>
-            </Viewbox>
+        <!-- Set-as-read icon -->
+        <Viewbox  x:Key="IconSetAsRead" Width="16" Height="16">
+            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    Stretch="UniformToFill"
+                    Data="M745.5,297.5L790.5,342.5L416,717L233.5,534.5L278.5,489.5L416,627ZM512,0C559,0 604.333,6.08337 648,18.25C691.667,30.4167 732.5,47.5834 770.5,69.75C808.5,91.9167 843.083,118.583 874.25,149.75C905.417,180.917 932.083,215.5 954.25,253.5C976.417,291.5 993.583,332.333 1005.75,376C1017.92,419.667 1024,465 1024,512C1024,559 1017.92,604.333 1005.75,648C993.583,691.667 976.417,732.5 954.25,770.5C932.083,808.5 905.417,843.083 874.25,874.25C843.083,905.417 808.5,932.083 770.5,954.25C732.5,976.417 691.667,993.583 648,1005.75C604.333,1017.92 559,1024 512,1024C465,1024 419.667,1017.92 376,1005.75C332.333,993.583 291.5,976.417 253.5,954.25C215.5,932.083 180.917,905.417 149.75,874.25C118.583,843.083 91.9167,808.5 69.75,770.5C47.5833,732.5 30.4167,691.75 18.25,648.25C6.08333,604.75 0,559.333 0,512C0,465 6.08333,419.667 18.25,376C30.4167,332.333 47.5833,291.5 69.75,253.5C91.9167,215.5 118.583,180.917 149.75,149.75C180.917,118.583 215.5,91.9167 253.5,69.75C291.5,47.5834 332.25,30.4167 375.75,18.25C419.25,6.08337 464.667,0 512,0ZM512,960C553,960 592.583,954.667 630.75,944C668.917,933.333 704.583,918.25 737.75,898.75C770.917,879.25 801.167,855.833 828.5,828.5C855.833,801.167 879.25,770.917 898.75,737.75C918.25,704.583 933.333,669 944,631C954.667,593 960,553.333 960,512C960,471 954.667,431.417 944,393.25C933.333,355.083 918.25,319.417 898.75,286.25C879.25,253.083 855.833,222.833 828.5,195.5C801.167,168.167 770.917,144.75 737.75,125.25C704.583,105.75 668.917,90.6667 630.75,80C592.583,69.3334 553,64.0001 512,64C471,64.0001 431.417,69.3334 393.25,80C355.083,90.6667 319.417,105.75 286.25,125.25C253.083,144.75 222.833,168.167 195.5,195.5C168.167,222.833 144.75,253.083 125.25,286.25C105.75,319.417 90.6667,355.083 80,393.25C69.3333,431.417 64,471 64,512C64,553 69.3333,592.583 80,630.75C90.6667,668.917 105.75,704.583 125.25,737.75C144.75,770.917 168.167,801.167 195.5,828.5C222.833,855.833 253.083,879.25 286.25,898.75C319.417,918.25 355,933.333 393,944C431,954.667 470.667,960 512,960Z"/>
+        </Viewbox>
 
-            <!--#endregion-->
+        <!--#endregion-->
             
-            <!--#region Brushes -->
+        <!--#region Brushes -->
 
-            <SolidColorBrush x:Key="ToolbarButtonForeground" Color="#FF000000"/>
-            <SolidColorBrush x:Key="ToolbarButtonForegroundDisabled" Color="#FF7D7D7D"/>
-            <SolidColorBrush x:Key="ToolbarButtonBackground" Color="Transparent"/>
-            <SolidColorBrush x:Key="ToolbarButtonBackgroundMouseOver" Color="#FFE6E6E6"/>
-            <SolidColorBrush x:Key="ToolbarButtonBackgroundPressed" Color="#FFC2C2C2"/>
+        <SolidColorBrush x:Key="ToolbarButtonForeground" Color="#FF000000"/>
+        <SolidColorBrush x:Key="ToolbarButtonForegroundDisabled" Color="#FF7D7D7D"/>
+        <SolidColorBrush x:Key="ToolbarButtonBackground" Color="Transparent"/>
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundMouseOver" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundPressed" Color="#FFC2C2C2"/>
 
-            <SolidColorBrush x:Key="ToolbarButtonForegroundError" Color="#FFFF0000" />
+        <SolidColorBrush x:Key="ToolbarButtonForegroundError" Color="#FFFF0000" />
 
-            <SolidColorBrush x:Key="ToolbarSeparatorForeground" Color="LightGray"/>
+        <SolidColorBrush x:Key="ToolbarSeparatorForeground" Color="LightGray"/>
 
-            <!--#endregion-->
+        <!--#endregion-->
 
-            <!--#region Styles -->
+        <!--#region Styles -->
 
-            <Style x:Key="VerticalSeparator" TargetType="Rectangle">
-                <Setter Property="Width" Value="1"/>
-                <Setter Property="VerticalAlignment" Value="Stretch"/>
-                <Setter Property="Margin" Value="5,3,5,3" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-            </Style>
+        <Style x:Key="VerticalSeparator" TargetType="Rectangle">
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="5,3,5,3" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
 
-            <Style x:Key="ToolbarButtonStyle" TargetType="Button">
-                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
-                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
-                <Setter Property="BorderBrush" Value="LightGray"/>
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border CornerRadius="0" 
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    Margin="{TemplateBinding Margin}">
-                                <ContentControl x:Name="IconPresenter" 
-                                                Margin="{TemplateBinding Padding}"
-                                                HorizontalAlignment="Center" 
-                                                VerticalAlignment="Center"
-                                                Content="{TemplateBinding Content}" 
-                                                Foreground="{TemplateBinding Foreground}"
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                IsTabStop="False"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
+            <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="0" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="{TemplateBinding Margin}">
+                            <ContentControl x:Name="IconPresenter" 
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding Content}" 
+                                            Foreground="{TemplateBinding Foreground}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            IsTabStop="False"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Style x:Key="ToolbarUpdatesToggleButtonStyle" TargetType="ToggleButton">
-                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
-                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
-                <Setter Property="BorderBrush" Value="LightGray"/>
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="IsThreeState" Value="False"/>
-                <Setter Property="Content" Value="{StaticResource IconUpdatesDisable}"/>
-                <Setter Property="ToolTip" Value="Stop Update Checks"/>
-                <Setter Property="IsChecked" Value="True"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border CornerRadius="0" 
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    Margin="{TemplateBinding Margin}">
-                                <ContentControl x:Name="IconPresenter" 
-                                                Margin="{TemplateBinding Padding}"
-                                                HorizontalAlignment="Center" 
-                                                VerticalAlignment="Center"
-                                                Content="{TemplateBinding Content}" 
-                                                Foreground="{TemplateBinding Foreground}"
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                IsTabStop="False"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdatesRestore}"/>
-                                    <Setter Property="ToolTip" Value="Resume Update Checks"/>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <Style x:Key="ToolbarUpdatesToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
+            <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="IsThreeState" Value="False"/>
+            <Setter Property="Content" Value="{StaticResource IconUpdatesDisable}"/>
+            <Setter Property="ToolTip" Value="Stop Update Checks"/>
+            <Setter Property="IsChecked" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="0" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="{TemplateBinding Margin}">
+                            <ContentControl x:Name="IconPresenter" 
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding Content}" 
+                                            Foreground="{TemplateBinding Foreground}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            IsTabStop="False"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdatesRestore}"/>
+                                <Setter Property="ToolTip" Value="Resume Update Checks"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Style x:Key="ToolbarUpdateCheckStatusToggleButtonStyle" TargetType="ToggleButton">
-                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
-                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
-                <Setter Property="BorderBrush" Value="LightGray"/>
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="IsThreeState" Value="True"/>
-                <Setter Property="Content" Value="{StaticResource IconUpdateCheckOK}"/>
-                <Setter Property="ToolTip" Value="Update checks are running without any issues."/>
-                <Setter Property="IsChecked" Value="True"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border CornerRadius="0" 
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    Margin="{TemplateBinding Margin}">
-                                <ContentControl x:Name="IconPresenter" 
-                                                Margin="{TemplateBinding Padding}"
-                                                HorizontalAlignment="Center" 
-                                                VerticalAlignment="Center"
-                                                Content="{TemplateBinding Content}" 
-                                                Foreground="{TemplateBinding Foreground}"
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                IsTabStop="False"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdateCheckError}"/>
-                                    <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundError}"/>
-                                    <Setter Property="ToolTip" Value="Issues occured while checking for chapter updates. Possible reasons: \n\n- You are not connected to the Internet.\n- The raw-chapter website is currently unavailable."/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="{x:Null}">
-                                    <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdateCheckNotRunning}"/>
-                                    <Setter Property="ToolTip" Value="You have disabled update checks." />
-                                </Trigger>
-                                <!--<Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
-                                </Trigger>-->
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <Style x:Key="ToolbarUpdateCheckStatusToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForeground}"/>
+            <Setter Property="Background" Value="{StaticResource ToolbarButtonBackground}"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="IsThreeState" Value="True"/>
+            <Setter Property="Content" Value="{StaticResource IconUpdateCheckOK}"/>
+            <Setter Property="ToolTip" Value="Update checks are running without any issues."/>
+            <Setter Property="IsChecked" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="0" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="{TemplateBinding Margin}">
+                            <ContentControl x:Name="IconPresenter" 
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding Content}" 
+                                            Foreground="{TemplateBinding Foreground}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            IsTabStop="False"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundMouseOver}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ToolbarButtonBackgroundPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdateCheckError}"/>
+                                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundError}"/>
+                                <Setter Property="ToolTip" Value="Issues occured while checking for chapter updates. Possible reasons: \n\n- You are not connected to the Internet.\n- The raw-chapter website is currently unavailable."/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter TargetName="IconPresenter" Property="Content" Value="{StaticResource IconUpdateCheckNotRunning}"/>
+                                <Setter Property="ToolTip" Value="You have disabled update checks." />
+                            </Trigger>
+                            <!--<Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ToolbarButtonForegroundDisabled}"/>
+                            </Trigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <!--#endregion-->
+        <!--#endregion-->
 
-        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch"

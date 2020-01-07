@@ -10,7 +10,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!--#region Brushes -->

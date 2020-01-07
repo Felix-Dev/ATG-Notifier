@@ -84,7 +84,7 @@
         
         <!--#endregion-->
 
-        <CollectionViewSource x:Key="NotificationsSortView"
+        <CollectionViewSource x:Key="ChapterProfilesSortedView"
                               Source="{Binding Items}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="ArrivalTime" Direction="Descending" />
@@ -99,7 +99,7 @@
              Background="Transparent"
              KeyboardNavigation.DirectionalNavigation="Cycle"
              ItemContainerStyle="{StaticResource ChapterProfileListBoxItemStyle}"
-             ItemsSource="{Binding Source={StaticResource NotificationsSortView}}"
+             ItemsSource="{Binding Source={StaticResource ChapterProfilesSortedView}}"
              SelectionMode="Single"
              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
              SelectionChanged="OnChapterListSelectionChanged"

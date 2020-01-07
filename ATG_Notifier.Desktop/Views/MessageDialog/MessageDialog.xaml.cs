@@ -47,13 +47,13 @@ namespace ATG_Notifier.Desktop.Views
 
         private void OnSourceInitialized(object sender, EventArgs e)
         {
-            IntPtr handle = new WindowInteropHelper(this).Handle;
+            IntPtr hWnd = WindowWin32InteropHelper.GetHwnd(this);
 
-            WindowWin32InteropHelper.CollapseIcon(handle);
+            WindowWin32InteropHelper.HideIcon(hWnd);
 
             if (this.button == MessageDialogButton.YesNo)
             {
-                WindowWin32InteropHelper.DisableCloseButton(handle);
+                WindowWin32InteropHelper.DisableCloseButton(hWnd);
             }
         }
 

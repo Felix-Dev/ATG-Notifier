@@ -23,8 +23,8 @@
     <SolidColorBrush x:Key="SuccessMessageBackground" Color="#FFDFF6DD"/>
     <SolidColorBrush x:Key="SuccessMessageIconForeground" Color="#FF107C10"/>
 
-    <SolidColorBrush x:Key="ActionTextForegound" Color="#FF005A9E"/>
-    <SolidColorBrush x:Key="ActionTextForegoundMouseOver" Color="#FF004578"/>
+    <SolidColorBrush x:Key="ActionTextForeground" Color="#FF005A9E"/>
+    <SolidColorBrush x:Key="ActionTextForegroundMouseOver" Color="#FF004578"/>
 
     <!--#endregion-->
 
@@ -70,11 +70,11 @@
     <!--#endregion-->
 
     <Style x:Key="InfoBannerHyperlinkStyle" TargetType="Hyperlink">
-        <Setter Property="Foreground" Value="{StaticResource ActionTextForegound}"/>
+        <Setter Property="Foreground" Value="{StaticResource ActionTextForeground}"/>
         <Setter Property="TextDecorations" Value="None"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ActionTextForegoundMouseOver}" />
+                <Setter Property="Foreground" Value="{StaticResource ActionTextForegroundMouseOver}" />
                 <Setter Property="TextDecorations" Value="Underline"/>
             </Trigger>
         </Style.Triggers>
