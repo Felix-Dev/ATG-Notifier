@@ -11,8 +11,7 @@
              x:Name="ChapterProfilesViewControl"
              HorizontalContentAlignment="Stretch"
              FontFamily="Segoe UI"
-             Loaded="OnLoaded"
-             KeyDown="OnChapterProfilesViewKeyDown">
+             Loaded="OnLoaded">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -25,7 +25,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         public SettingsViewModel SettingsViewModel { get; }
 
-        private void OnChapterProfilesViewKeyDown(object sender, KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             // TODO: Remove, this is Focus testing code
             //if (e.Key == Key.Tab)
@@ -34,7 +34,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             //    Console.WriteLine(item?.ToString() ?? "");
             //}
 
-            if (e.Key == Key.Delete 
+            if (e.Key == Key.Delete
                 && Keyboard.FocusedElement is UIElement uiElement
                 && this.ChapterProfileList.GetDataItem(uiElement) is ChapterProfileViewModel chapterProfileViewModel)
             {
@@ -54,6 +54,8 @@ namespace ATG_Notifier.Desktop.WPF.Controls
                 // Delete the specified chapter profile from the database.
                 this.ViewModel.ListViewModel.DeleteChapterProfileAsync(chapterProfileViewModel);
             }
+
+            base.OnKeyDown(e);
         }
 
         private void OnLatestChapterButtonClick(object sender, RoutedEventArgs e)
