@@ -1,7 +1,6 @@
 ﻿using ATG_Notifier.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace ATG_Notifier.ViewModels.ViewModels

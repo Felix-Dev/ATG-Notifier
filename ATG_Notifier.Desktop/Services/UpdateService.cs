@@ -27,7 +27,7 @@ namespace ATG_Notifier.Desktop.Services
 
         private readonly RawSourceChecker rawSourceChecker; 
 
-        private readonly ToastNotificationManager notifier = ToastNotificationManager.Instance;
+        private readonly ToastNotificationManager notificationManager = ToastNotificationManager.Instance;
 
         private readonly object runningLock = new object();
         private readonly object timerLock = new object();
@@ -50,9 +50,9 @@ namespace ATG_Notifier.Desktop.Services
 
         public event EventHandler<ChapterUpdateEventArgs>? ChapterUpdated;
 
-        public event EventHandler Started;
+        public event EventHandler? Started;
 
-        public event EventHandler Stopped;
+        public event EventHandler? Stopped;
 
         public bool IsRunning { get; private set; } = false;
 
@@ -136,9 +136,9 @@ namespace ATG_Notifier.Desktop.Services
 
             this.taskbarButtonService.FlashButton();
 
-            if (!settingsViewModel.IsInFocusMode)
+            if (!this.settingsViewModel.IsInFocusMode)
             {
-                notifier.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
+                this.notificationManager.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
             }
 #else
             ChapterSourceCheckResult? checkResult = null;
@@ -171,20 +171,20 @@ namespace ATG_Notifier.Desktop.Services
 
                 this.taskbarButtonService.FlashButton();
 
-                if (!settingsViewModel.IsInFocusMode)
+                if (!this.settingsViewModel.IsInFocusMode)
                 {
-                    notifier.Show(NotificationTitle, chapterProfileViewModel);
+                    this.notificationManager.Show(NotificationTitle, chapterProfileViewModel);
                 }
 
                 this.saveguardSema?.Release();
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:
-//            await Task.Delay(7000);
+            //            await Task.Delay(7000);
 
-//#pragma warning disable CS8602 // Dereference of a possibly null reference.
-//            string? s = null; int i = s.Length;
-//#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            //#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            //            string? s = null; int i = s.Length;
+            //#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             lock (this.timerLock)
             {

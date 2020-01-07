@@ -23,7 +23,7 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.updateService.Started += (s, e) => this.IsUpdateServiceRunning = true;
             this.updateService.Stopped += (s, e) => this.IsUpdateServiceRunning = false;
 
-            this.ChangeUpdateServiceStatusCommand = new RelayCommand(OnChangeChapterUpdateModel);
+            this.ChangeUpdateServiceStatusCommand = new RelayCommand(OnChangeChapterUpdateMode);
             this.OpenChapterProfileCommand = new RelayCommand<ChapterProfileViewModel>(OnOpenChapterProfile);
             this.ChapterProfileLostFocusCommand = new RelayCommand<ChapterProfileViewModel>(OnChapterProfileLostFocus);
 
@@ -51,7 +51,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public ICommand ChapterProfileLostFocusCommand { get; }
 
-        private void OnChangeChapterUpdateModel()
+        private void OnChangeChapterUpdateMode()
         {
             if (this.updateService.IsRunning)
             {

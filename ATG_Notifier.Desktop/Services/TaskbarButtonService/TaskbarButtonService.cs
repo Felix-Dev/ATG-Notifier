@@ -116,7 +116,7 @@ namespace ATG_Notifier.Desktop.Services
             IntPtr handle = this.OwnerHandle;
             if (handle == IntPtr.Zero)
             {
-                throw new InvalidOperationException("The window has not yet been initialized!");
+                return false;
             }
 
             FLASHWINFO fi = CreateFlashInfoStruct(handle, FlashWindow.FLASHW_TRAY | FlashWindow.FLASHW_TIMERNOFG, (uint)count, 0);

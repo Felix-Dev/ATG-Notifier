@@ -162,9 +162,8 @@ namespace ATG_Notifier.Desktop.WPF.Controls
         private void Close()
         {
             this.Visibility = Visibility.Collapsed;
-            Closed?.Invoke(this, EventArgs.Empty);
-        }
 
-        
+            Closed?.Invoke(this, EventArgs.Empty);
+        }  
     }
 }

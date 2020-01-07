@@ -1,8 +1,4 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
-using ATG_Notifier.Desktop.Helpers;
-using ATG_Notifier.Desktop.Models;
-using ATG_Notifier.Desktop.Utilities;
-using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Services;
@@ -11,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -55,7 +50,6 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             foreach (var model in chapterProfileModels)
             {
-                //CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
                 Add(new ChapterProfileViewModel(model));
 
                 if (!model.IsRead)
