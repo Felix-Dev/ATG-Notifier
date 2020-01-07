@@ -72,6 +72,7 @@ namespace ATG_Notifier.Desktop.Views
         /// </summary>
         public void UpdateBadge(int number)
         {
+            // TODO: This code might throw a NullReference exception for this.notificationIcon when the timing is bad.
             CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
         }
 

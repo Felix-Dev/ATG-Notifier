@@ -4,6 +4,7 @@ using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.Views
 {
@@ -51,7 +52,6 @@ namespace ATG_Notifier.Desktop.Views
                     break;
             }
         }
-
 
         /// <summary>
         /// Load chapters from database and start the update service.

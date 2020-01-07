@@ -6,15 +6,27 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 using ATG_Notifier.ViewModels.Helpers.Extensions;
+using ATG_Notifier.Desktop.Helpers;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
     internal partial class ChapterProfileList : UserControl
     {
+        private readonly ScrollViewer chapterListScrollViewer;
+
         public ChapterProfileList()
         {
             InitializeComponent();
-        }
+
+            if (VisualTreeHelperEx.FindDescendantByType<ScrollViewer>(this) is ScrollViewer scrollViewer)
+            {
+                this.chapterListScrollViewer = scrollViewer;
+            }
+            else
+            {
+                throw new InvalidOperationException("Error: ChapterProfileList does not have a ScrollViewer.");
+            }
+        }          
 
         public ChapterProfilesListViewModel? ViewModel => this.DataContext as ChapterProfilesListViewModel;
 
@@ -60,6 +72,34 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             }
 
             return index == this.ChapterList.Items.Count - 1;
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            if (e.Key == Key.Home
+                || (e.Key == Key.Up && e.KeyboardDevice.Modifiers == ModifierKeys.Control))
+            {
+                this.chapterListScrollViewer.ScrollToHome();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.End
+                || (e.Key == Key.Down && e.KeyboardDevice.Modifiers == ModifierKeys.Control))
+            {
+                this.chapterListScrollViewer.ScrollToEnd();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.PageUp)
+            {
+                this.chapterListScrollViewer.PageUp();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.PageDown)
+            {
+                this.chapterListScrollViewer.PageDown();
+                e.Handled = true;
+            }
         }
 
         private void OnChapterListSelectionChanged(object sender, SelectionChangedEventArgs e)
