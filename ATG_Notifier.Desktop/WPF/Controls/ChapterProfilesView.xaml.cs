@@ -1,8 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.ViewModels;
-using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,13 +25,6 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            // TODO: Remove, this is Focus testing code
-            //if (e.Key == Key.Tab)
-            //{
-            //    var item = Keyboard.FocusedElement;
-            //    Console.WriteLine(item?.ToString() ?? "");
-            //}
-
             if (e.Key == Key.Delete
                 && Keyboard.FocusedElement is UIElement uiElement
                 && this.ChapterProfileList.GetDataItem(uiElement) is ChapterProfileViewModel chapterProfileViewModel)
