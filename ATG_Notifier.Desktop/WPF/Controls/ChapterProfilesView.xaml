@@ -284,10 +284,6 @@
                                   Command="{Binding ViewModel.ChangeUpdateServiceStatusCommand}"
                                   IsEnabled="{Binding ViewModel.CanChangeUpdateServiceStatus}"
                                   IsChecked="{Binding ViewModel.IsUpdateServiceRunning}"/>
-                    <!-- separator-->
-                    <!--<Rectangle Style="{StaticResource VerticalSeparator}"
-                               Fill="LightGray"/>-->
-
                 </StackPanel>
                 <StackPanel Grid.Column="1" 
                             Orientation="Horizontal"
@@ -347,7 +343,8 @@
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
                             TabIndex="6"
-                            Command="{Binding ViewModel.ListViewModel.SetListAsReadCommand}"/>
+                            Command="{Binding ViewModel.ListViewModel.SetListAsReadCommand}"
+                            IsEnabled="{Binding ViewModel.ListViewModel.HasUnreadChapters}"/>
                 </StackPanel>
                 
                 <!-- right toolbar buttons -->
@@ -361,11 +358,13 @@
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
                             TabIndex="7"
-                            Command="{Binding ViewModel.ListViewModel.ClearCommand}"/>
+                            Command="{Binding ViewModel.ListViewModel.ClearCommand}"
+                            IsEnabled="{Binding ViewModel.ListViewModel.IsEmpty, Converter={StaticResource BoolNegationConverter}}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
+        <!-- No updates available message -->
         <TextBlock Grid.Row="1" 
                    x:Name="NoChapterTextBlock"
                    Text="No new updates"
@@ -375,6 +374,7 @@
                    Foreground="Black"
                    Visibility="{Binding ViewModel.ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
 
+        <!-- Chapter profile collection -->
         <controls:ChapterProfileList x:Name="ChapterProfileList" 
                                      Grid.Row="1"
                                      DataContext="{Binding ViewModel.ListViewModel}"

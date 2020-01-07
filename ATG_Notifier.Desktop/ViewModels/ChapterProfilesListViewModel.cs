@@ -36,7 +36,10 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
 
             this.updateService.ChapterUpdated += OnChapterUpdateAsync;
+            ChapterProfilesUnreadCountChanged += (s, e) => NotifyPropertyChanged(nameof(HasUnreadChapters));
         }
+
+        public bool HasUnreadChapters => this.chapterProfilesUnreadCount > 0;
 
         public event EventHandler<ChapterProfilesUnreadCountChangedEventArgs>? ChapterProfilesUnreadCountChanged;
 
