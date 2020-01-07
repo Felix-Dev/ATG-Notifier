@@ -10,7 +10,7 @@ namespace ATG_Notifier.Desktop.Views
     internal partial class MainPage : Page
     {
         private readonly DialogService dialogService;
-        private readonly NetworkService networkService;
+        //private readonly NetworkService networkService;
 
         private readonly MainPageViewModel viewModel;
         private readonly SettingsViewModel settingsViewModel;
@@ -18,7 +18,7 @@ namespace ATG_Notifier.Desktop.Views
         public MainPage()
         {
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.networkService = ServiceLocator.Current.GetService<NetworkService>();
+            //this.networkService = ServiceLocator.Current.GetService<NetworkService>();
 
             this.viewModel = ServiceLocator.Current.GetService<MainPageViewModel>();
             this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
@@ -68,7 +68,12 @@ namespace ATG_Notifier.Desktop.Views
             // load chapter profiles from database 
             await chapterProfilesViewModel.ListViewModel.LoadAsync();
 
-            if (this.settingsViewModel.WasUpdateServiceRunning && !this.networkService.IsMeteredConnection)
+            //if (this.settingsViewModel.WasUpdateServiceRunning && !this.networkService.IsMeteredConnection)
+            //{
+            //    ServiceLocator.Current.GetService<IUpdateService>().Start();
+            //}
+
+            if (this.settingsViewModel.WasUpdateServiceRunning)
             {
                 ServiceLocator.Current.GetService<IUpdateService>().Start();           
             }

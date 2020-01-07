@@ -38,9 +38,9 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<ChapterProfilesViewModel>();
             serviceCollection.AddSingleton<MainPageViewModel>();
 
-            serviceCollection.AddSingleton<NetworkService>();
+            //serviceCollection.AddSingleton<NetworkService>();
 #if DesktopPackage
-            serviceCollection.AddSingleton<NetworkService>();
+            //serviceCollection.AddSingleton<NetworkService>();
 #endif
 
             rootServiceProvider = serviceCollection.BuildServiceProvider();
@@ -48,11 +48,7 @@ namespace ATG_Notifier.Desktop.Configuration
 
         public static void DisposeCurrent()
         {
-            //int currentViewId = ApplicationView.GetForCurrentView().Id;
-            //if (_serviceLocators.TryRemove(currentViewId, out ServiceLocator current))
-            //{
-            //    current.Dispose();
-            //}
+            throw new NotImplementedException();
         }
 
         private readonly IServiceScope serviceScope = null!;
