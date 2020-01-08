@@ -113,8 +113,8 @@
     <Content Include="logo_16_ld4_icon.ico" />
     <Content Include="Resources\logo_16_ld4_icon.ico" />
     <Content Include="Resources\testLogo.ico" />
-    <Content Include="Resources\Windows Notify Messaging.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Assets\Sound\Notification.wav">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="testLogo.ico" />
   </ItemGroup>

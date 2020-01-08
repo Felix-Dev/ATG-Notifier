@@ -126,7 +126,7 @@ namespace ATG_Notifier.Desktop.Services
 
                 if (this.appSettings.IsSoundEnabled)
                 {
-                    Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
+                    Utility.PlaySound(Properties.Resources.Notification);
                 }
             };
 
@@ -169,7 +169,7 @@ namespace ATG_Notifier.Desktop.Services
         {
             if (this.appSettings.IsSoundEnabled)
             {
-                Utility.PlaySound(Properties.Resources.Windows_Notify_Messaging);
+                Utility.PlaySound(Properties.Resources.Notification);
             }
         }
 

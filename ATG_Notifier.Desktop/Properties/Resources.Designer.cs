@@ -69,7 +69,18 @@ namespace ATG_Notifier.Desktop.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.MemoryStream Notification
+        {
+            get
+            {
+                return (System.IO.MemoryStream)ResourceManager.GetObject("Notification", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
@@ -77,15 +88,6 @@ namespace ATG_Notifier.Desktop.Properties {
             get {
                 object obj = ResourceManager.GetObject("testLogo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.MemoryStream Windows_Notify_Messaging {
-            get {
-                return (System.IO.MemoryStream)ResourceManager.GetObject("Windows_Notify_Messaging", resourceCulture);
             }
         }
     }
