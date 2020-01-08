@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
         xmlns:configuration="clr-namespace:ATG_Notifier.Desktop.Configuration"
+        x:ClassModifier="internal"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"

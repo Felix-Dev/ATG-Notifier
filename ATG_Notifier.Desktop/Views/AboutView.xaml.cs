@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    public partial class AboutView : Window
+    internal partial class AboutView : Window
     {
         public AboutView()
         {
