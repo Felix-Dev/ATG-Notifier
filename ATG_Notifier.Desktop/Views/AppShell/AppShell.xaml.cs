@@ -125,7 +125,7 @@ namespace ATG_Notifier.Desktop.Views
             JumplistManager.BuildJumplist();
 
             // show program icon in Windows notification area
-            this.notificationIcon = new NotificationIcon(Properties.Resources.logo_16_ld4_icon, AppConfiguration.AppId);
+            this.notificationIcon = new NotificationIcon(Properties.Resources.AppLogo16x16, AppConfiguration.AppId);
             this.notificationIcon.Show();
         }
 

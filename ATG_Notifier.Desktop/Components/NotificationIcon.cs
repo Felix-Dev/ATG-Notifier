@@ -64,7 +64,7 @@ namespace ATG_Notifier.Desktop.Components
             canvas.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             //canvas.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-            canvas.DrawIcon(Properties.Resources.logo_16_ld4_icon, 0, 0);
+            canvas.DrawIcon(this.notifyIcon.Icon, 0, 0);
 
             // draw badge if number is positive
             if (number > 0)

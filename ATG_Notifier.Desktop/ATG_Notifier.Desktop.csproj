@@ -19,7 +19,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationIcon>testLogo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Images\AppLogo.ico</ApplicationIcon>
     <StartupObject>ATG_Notifier.Desktop.Startup</StartupObject>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -110,13 +110,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="logo_16_ld4_icon.ico" />
-    <Content Include="Resources\logo_16_ld4_icon.ico" />
-    <Content Include="Resources\testLogo.ico" />
-    <Content Include="Assets\Sound\Notification.wav">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="testLogo.ico" />
+    <Content Include="Assets\Images\AppLogo16x16.ico" />
+    <Content Include="Assets\Sound\Notification.wav" />
+    <Content Include="Assets\Images\AppLogo.ico" />
   </ItemGroup>
   
   <ItemGroup>
