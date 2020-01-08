@@ -111,13 +111,12 @@
              VirtualizingPanel.ScrollUnit="Pixel"
              Focusable="False"
              IsTabStop="False"
-             Tag="{Binding}"
              KeyDown="OnChapterListKeyDown"
              MouseLeftButtonUp="OnChapterListMouseLeftButtonUp">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <controls:ChapterProfileCard ChapterProfileViewModel="{Binding}" 
-                                             DeleteCommand="{Binding Path=Tag.DeleteCommand, ElementName=ChapterList}"/>
+                                             DeleteCommand="{Binding DataContext.DeleteCommand, ElementName=ChapterList}"/>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
