@@ -92,6 +92,10 @@
 
         <SolidColorBrush x:Key="ToolbarSeparatorForeground" Color="LightGray"/>
 
+        <SolidColorBrush x:Key="ToolbarPopupForeground" Color="#FF6A6A6A"/>
+        <SolidColorBrush x:Key="ToolbarPopupBackground" Color="#FFF8F8F8"/>
+        <SolidColorBrush x:Key="ToolbarPopupBorderBrush" Color="DarkGray"/>
+
         <!--#endregion-->
 
         <!--#region Styles -->
@@ -282,7 +286,7 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <!-- most-recent-update button -->
-                    <Button x:Name="LatestChapterButton" Style="{StaticResource ToolbarButtonStyle}"
+                    <Button Style="{StaticResource ToolbarButtonStyle}"
                             ToolTip="Show latest chapter info"
                             ToolTipService.InitialShowDelay="1000"
                             ToolTipService.ShowDuration="2000"
@@ -296,23 +300,24 @@
                                        Placement="Bottom"
                                        VerticalOffset="12"
                                        StaysOpen="False"
-                                       PopupAnimation="Slide">
-                                    <Border BorderBrush="DarkGray"
+                                       PopupAnimation="Slide"
+                                       SnapsToDevicePixels="True">
+                                    <Border BorderBrush="{StaticResource ToolbarPopupBorderBrush}"
                                             BorderThickness="1"
-                                            Background="#FFF8F8F8"
+                                            Background="{StaticResource ToolbarPopupBackground}"
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
                                             <TextBlock Text="{Binding SettingsViewModel.MostRecentChapterInfo.NumberAndTitle}"
                                                        HorizontalAlignment="Center" TextAlignment="Center"
                                                        FontSize="12"
-                                                       Foreground="#FF6A6A6A"
+                                                       Foreground="{StaticResource ToolbarPopupForeground}"
                                                        TextWrapping="Wrap"/>
                                             <TextBlock Margin="0,5,0,0" 
                                                        HorizontalAlignment="Center"
                                                        TextAlignment="Center"
                                                        TextWrapping="Wrap"
                                                        FontSize="11"
-                                                       Foreground="#FF6A6A6A">
+                                                       Foreground="{StaticResource ToolbarPopupForeground}">
                                                 <TextBlock.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                                                         <Binding Path="SettingsViewModel.MostRecentChapterInfo.WordCount"/>

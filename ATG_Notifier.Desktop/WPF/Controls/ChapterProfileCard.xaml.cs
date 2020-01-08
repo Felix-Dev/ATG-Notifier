@@ -1,26 +1,19 @@
-﻿using ATG_Notifier.ViewModels.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ATG_Notifier.ViewModels.Helpers.Extensions;
+using ATG_Notifier.ViewModels.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using ATG_Notifier.ViewModels.Helpers.Extensions;
 
 namespace ATG_Notifier.Desktop.WPF.Controls
 {
     public partial class ChapterProfileCard : UserControl
     {
-        #region ChapterProfileViewModel
+        public ChapterProfileCard()
+        {
+            InitializeComponent();
+        }
+
+        #region ChapterProfileViewModelProperty
 
         public static readonly DependencyProperty ChapterProfileViewModelProperty =
             DependencyProperty.Register(nameof(ChapterProfileViewModel), typeof(ChapterProfileViewModel), typeof(ChapterProfileCard), new PropertyMetadata(null));
@@ -31,9 +24,9 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             set => SetValue(ChapterProfileViewModelProperty, value);
         }
 
-        #endregion // ChapterProfileViewModel
+        #endregion // ChapterProfileViewModelProperty
 
-        #region DeleteCommand
+        #region DeleteCommandProperty
 
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register(nameof(DeleteCommand), typeof(ICommand), typeof(ChapterProfileCard), new PropertyMetadata(null));
@@ -44,12 +37,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
             set => SetValue(DeleteCommandProperty, value);
         }
 
-        #endregion // DeleteCommand
-
-        public ChapterProfileCard()
-        {
-            InitializeComponent();
-        }
+        #endregion // DeleteCommandProperty
 
         private void OnCloseButtonClick(object sender, RoutedEventArgs e)
         {

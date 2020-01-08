@@ -16,8 +16,7 @@
         <SolidColorBrush x:Key="WindowBackground" Color="#FFF0F0F0" />
     </Window.Resources>
 
-    <Grid x:Name="RootGrid" 
-          Background="{StaticResource WindowBackground}">
+    <Grid Background="{StaticResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -37,8 +36,7 @@
                            Click="OnSourceCodeHyperlinkClick">Github</Hyperlink><Run Text="." />
             </TextBlock>
         </StackPanel>
-        <Button x:Name="CloseButton"
-                Grid.Row="1"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Right"
                 Margin="0,0,7,7"
                 Padding="25,1,25,1"
