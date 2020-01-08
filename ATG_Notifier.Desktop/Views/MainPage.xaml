@@ -30,17 +30,6 @@
 
             <!--#endregion-->
 
-            <!--#region Icons -->
-
-            <!-- update-check-status-ok icon -->
-            <Viewbox x:Key="IconWarning" Width="14" Height="14">
-                <Path Fill="#FF000000"
-                      Stretch="UniformToFill"
-                      Data="M960,960L0,960L480,0ZM103.5,896L856.5,896L480,143ZM512,384L512,704L448,704L448,384ZM448,768L512,768L512,832L448,832Z"/>
-            </Viewbox>
-
-            <!--#endregion-->
-
         </ResourceDictionary>
     </Page.Resources>
 
@@ -54,22 +43,28 @@
         <!-- Top-level app menu -->
         <Menu Grid.Row="0" 
               Background="{StaticResource MenuBackgroundLight}">
+            <!-- App Options -->
             <MenuItem Header="Options"
                       TabIndex="0">
+                <!-- Keep app running on close-->
                 <MenuItem Header="Keep Running on Close"
                           IsCheckable="True"
                           IsChecked="{Binding SettingsViewModel.KeepRunningOnClose, Mode=TwoWay}"/>
+                <!-- Separator -->
                 <Separator />
-                <MenuItem x:Name="MenuItemClose" 
-                          Header="Close"
+                <!-- Close App -->
+                <MenuItem Header="Close"
                           InputGestureText="Alt+F4"
                           Click="OnMenuItemCloseClick"/>
             </MenuItem>
+            <!-- Notification Options -->
             <MenuItem Header="Notifications"
                       TabIndex="1">
+                <!-- Play Sound -->
                 <MenuItem Header="Play Sound"
                           IsCheckable="True"
                           IsChecked="{Binding SettingsViewModel.IsSoundEnabled, Mode=TwoWay}"/>
+                <!-- Separator -->
                 <Separator />
                 <MenuItem Header="Disable On Fullscreen"
                           IsCheckable="True" 
@@ -78,6 +73,7 @@
                           IsCheckable="True"
                           IsChecked="{Binding SettingsViewModel.IsInFocusMode, Mode=TwoWay}"/>
                 <Separator />
+                <!-- Notification Display Position -->
                 <MenuItem Header="Position">
                     <MenuItem x:Name="MenuItemTopLeft" 
                               Header="Top-Left" 
@@ -105,15 +101,21 @@
                               Click="OnMenuItemBottomRightClick"/>
                 </MenuItem>
             </MenuItem>
+            <!-- Help -->
             <MenuItem Header="Help"
                       TabIndex="3">
-                <MenuItem x:Name="MenuItemAbout" 
-                          Header="About Notifier"
+                <!-- Send Feedback -->
+                <MenuItem Header="Send Feedback"
+                          Click="OnMenuItemFeedbackClick" />
+                <!-- Separator -->
+                <Separator />
+                <!-- About -->
+                <MenuItem Header="About Notifier"
                           Click="OnMenuItemAboutClick"/>
             </MenuItem>
         </Menu>
 
-        <!-- Info banner -->
+        <!-- message board for app status messages -->
         <controls:MessageBoard x:Name="MessageBoard"
                                Grid.Row="1" 
                                MaxHeight="150"
