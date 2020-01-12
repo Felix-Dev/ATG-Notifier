@@ -52,6 +52,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17763.1000" />
+    <PackageReference Include="ModernWpfUI" Version="0.7.4" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.0.2" />
   </ItemGroup>
@@ -62,6 +63,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\AppState.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppState.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\AppStateAppWindowLocation.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppStateAppWindowLocation.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\AppStateMostRecentChapterInfo.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppStateMostRecentChapterInfo.settings</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -72,10 +88,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\UserPreferences.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
+      <DependentUpon>UserPreferences.settings</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -83,9 +99,21 @@
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="Properties\Settings.settings">
+    <None Update="Properties\AppState.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <LastGenOutput>AppState.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Properties\AppStateAppWindowLocation.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AppStateAppWindowLocation.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Properties\AppStateMostRecentChapterInfo.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AppStateMostRecentChapterInfo.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Properties\UserPreferences.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserPreferences.Designer.cs</LastGenOutput>
     </None>
     <None Update="WPF\Controls\ChapterProfileCard.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -106,13 +134,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="Assets\Images\AppLogo16x16.ico" />
     <Content Include="Assets\Sound\Notification.wav" />
-    <Content Include="Assets\Images\AppLogo.ico" />
+    <Content Include="Assets\Images\AppLogo.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
   <ItemGroup>

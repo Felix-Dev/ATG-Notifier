@@ -1,12 +1,10 @@
 ﻿using ATG_Notifier.Data.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.ViewModels.Services
 {
     public interface IDataServiceFactory
     {
-        IDataService CreateDataService();
+        Task<IDataService> CreateDataServiceAsync();
     }
 }

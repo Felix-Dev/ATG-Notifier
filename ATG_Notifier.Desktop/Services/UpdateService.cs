@@ -1,6 +1,5 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Models;
-using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Networking;
 using ATG_Notifier.ViewModels.Services;
@@ -11,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
+    // TODO: Design the update service mre flexible by
+    //      - passing the current cource chapter Id to it instead of querrying the AppState
+    //      - make the update interval configurable
     internal class UpdateService : IUpdateService
     {
 #if DEBUG
@@ -19,15 +21,10 @@ namespace ATG_Notifier.Desktop.Services
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif
 
-        private const string NotificationTitle = "ATG Chapter Update!";
-
         private readonly ILogService logService;
         private readonly IWebService webService;
-        private readonly TaskbarButtonService taskbarButtonService;
 
         private readonly RawSourceChecker rawSourceChecker; 
-
-        private readonly ToastNotificationManager notificationManager = ToastNotificationManager.Instance;
 
         private readonly object runningLock = new object();
         private readonly object timerLock = new object();
@@ -36,14 +33,15 @@ namespace ATG_Notifier.Desktop.Services
 
         private Semaphore? saveguardSema;
 
-        private SettingsViewModel settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
+        private string currentChapterId;
 
         public UpdateService(IWebService webService, ILogService logService)
         {
             this.webService = webService;
             this.logService = logService;
 
-            this.taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
+            var appState = ServiceLocator.Current.GetService<AppState>();
+            this.currentChapterId = appState.CurrentChapterId ?? "";
 
             this.rawSourceChecker = new RawSourceChecker(this.webService, this.logService);
         }
@@ -127,24 +125,13 @@ namespace ATG_Notifier.Desktop.Services
             };
 
             var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
-            ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
+            ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs("", chapterProfileViewModel));
 
-            this.settingsViewModel.MostRecentChapterInfo = new MostRecentChapterInfo(chapterProfileViewModel.NumberAndTitleDisplayString, chapterProfileViewModel.WordCount)
-            {
-                ReleaseTime = chapterProfileViewModel.ReleaseTime,
-            };
-
-            this.taskbarButtonService.FlashButton();
-
-            if (!this.settingsViewModel.IsInFocusMode)
-            {
-                this.notificationManager.Show("ATG Chapter Update! (Debug)", chapterProfileViewModel);
-            }
 #else
             ChapterSourceCheckResult? checkResult = null;
             try
             {
-                checkResult = await rawSourceChecker.GetUpdateAsync(this.settingsViewModel.CurrentChapterId);
+                checkResult = await rawSourceChecker.GetUpdateAsync(this.currentChapterId);
             }
             catch (SourceCheckerOperationFailedException ex)
             {
@@ -156,25 +143,10 @@ namespace ATG_Notifier.Desktop.Services
             {
                 this.saveguardSema?.WaitOne();
 
-                // Store the [number and title] of the new chapter.
-                this.settingsViewModel.CurrentChapterId = checkResult.ChapterId;
+                this.currentChapterId = checkResult.SourceChapterId;
 
-                ChapterProfileModel chapterProfileModel = checkResult.ChapterProfileModel;
-
-                var chapterProfileViewModel = new ChapterProfileViewModel(chapterProfileModel);
-                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileViewModel));
-
-                this.settingsViewModel.MostRecentChapterInfo = new MostRecentChapterInfo(chapterProfileViewModel.NumberAndTitleDisplayString, chapterProfileViewModel.WordCount)
-                {
-                    ReleaseTime = chapterProfileViewModel.ReleaseTime,
-                };
-
-                this.taskbarButtonService.FlashButton();
-
-                if (!this.settingsViewModel.IsInFocusMode)
-                {
-                    this.notificationManager.Show(NotificationTitle, chapterProfileViewModel);
-                }
+                var chapterProfileViewModel = new ChapterProfileViewModel(checkResult.ChapterProfileModel);
+                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(this.currentChapterId, chapterProfileViewModel));
 
                 this.saveguardSema?.Release();
             }

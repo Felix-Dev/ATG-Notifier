@@ -1,17 +1,18 @@
 ﻿using ATG_Notifier.ViewModels.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ATG_Notifier.ViewModels.Services
 {
     public class ChapterUpdateEventArgs : EventArgs
     {
-        public ChapterUpdateEventArgs(ChapterProfileViewModel chapterProfile)
+        public ChapterUpdateEventArgs(string sourceChapterId, ChapterProfileViewModel chapterProfile)
         {
-            this.ChapterProfile = chapterProfile;
+            this.SourceChapterId = sourceChapterId;
+            this.ChapterProfileViewModel = chapterProfile;
         }
 
-        public ChapterProfileViewModel ChapterProfile { get; set; }
+        public string SourceChapterId { get; }
+
+        public ChapterProfileViewModel ChapterProfileViewModel { get; }
     }
 }

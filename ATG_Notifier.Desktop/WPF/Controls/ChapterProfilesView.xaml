@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
              xmlns:converters="clr-namespace:ATG_Notifier.Desktop.WPF.Converters"
+             xmlns:modernWPFUI="http://schemas.modernwpf.com/2019"
              x:ClassModifier="internal"
              mc:Ignorable="d" 
              d:DesignHeight="310" d:DesignWidth="120"
@@ -362,22 +363,49 @@
             </Grid>
         </Border>
 
-        <!-- No updates available message -->
-        <TextBlock Grid.Row="1" 
-                   x:Name="NoChapterTextBlock"
-                   Text="No new updates"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                   TextAlignment="Center"
-                   FontSize="20"
-                   Foreground="Black"
-                   Visibility="{Binding ViewModel.ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
+        <!-- Loading content placeholder panel -->
+        <StackPanel Grid.Row="1"
+                    Visibility="{Binding ViewModel.IsLoaded, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock Text="Loading"
+                       FontFamily="Segoe UI"
+                       FontSize="20"
+                       HorizontalAlignment="Center"
+                       Padding="60,0,60,0"/>
+            <ProgressBar IsIndeterminate="True"
+                         Margin="0,10,0,0">
+                <ProgressBar.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <modernWPFUI:ThemeResources />
+                            <modernWPFUI:XamlControlsResources />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </ProgressBar.Resources>
+            </ProgressBar>
 
-        <!-- Chapter profile collection -->
-        <controls:ChapterProfileList x:Name="ChapterProfileList" 
-                                     Grid.Row="1"
-                                     DataContext="{Binding ViewModel.ListViewModel}"
-                                     ItemClickCommand="{Binding ViewModel.OpenChapterProfileCommand, ElementName=ChapterProfilesViewControl}"
-                                     ItemLostFocusCommand="{Binding ViewModel.ChapterProfileLostFocusCommand, ElementName=ChapterProfilesViewControl}"
-                                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"/>
+        </StackPanel>
+
+        <!-- chapter profile cards content panel -->
+        <Grid Grid.Row="1"
+              Visibility="{Binding ViewModel.IsLoaded, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}">
+            
+            <!-- No updates available message -->
+            <TextBlock x:Name="NoChapterTextBlock"
+                       Text="No new updates"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       FontSize="20"
+                       Foreground="Black"
+                       Visibility="{Binding ViewModel.ListViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityVisibleCollapsedConverter}}" />
+
+            <!-- Chapter profile card collection -->
+            <controls:ChapterProfileList x:Name="ChapterProfileList" 
+                                         DataContext="{Binding ViewModel.ListViewModel}"
+                                         ItemClickCommand="{Binding ViewModel.OpenChapterProfileCommand, ElementName=ChapterProfilesViewControl}"
+                                         ItemLostFocusCommand="{Binding ViewModel.ChapterProfileLostFocusCommand, ElementName=ChapterProfilesViewControl}"
+                                         Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityCollapsedVisibleConverter}}"/>
+        </Grid>
     </Grid>
 </UserControl>

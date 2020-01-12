@@ -1,20 +1,26 @@
 ﻿using ATG_Notifier.Data.DataContexts;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.Data.Services
 {
     public class SQLiteDataService : DataServiceBase
     {
-        public SQLiteDataService(string connectionString)
-               : base(new SQLiteDb(connectionString))
+        private SQLiteDataService(SQLiteDb dataSource)
+            : base(dataSource)
         {
-            using (var db = new SQLiteDb(connectionString))
-            {
-                db.Database.EnsureCreated();
-            }
+            dataSource.Database.EnsureCreated();
         }
 
+        public static async Task<SQLiteDataService> CreateDataServiceAsync(string connectionString)
+        {
+            return await Task.Run(() =>
+            {
+                var db = new SQLiteDb(connectionString);
+
+                return new SQLiteDataService(db);
+            }).ConfigureAwait(false);
+            
+            
+        }
     }
 }

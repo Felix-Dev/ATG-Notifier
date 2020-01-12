@@ -1,4 +1,5 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Services;
@@ -19,7 +20,7 @@ namespace ATG_Notifier.Desktop.ViewModels
         private readonly IChapterProfileService chapterProfileService;
         private readonly IUpdateService updateService;
 
-        private readonly object itemsLock = new object();
+        //private readonly object itemsLock = new object();
 
         private int chapterProfilesUnreadCount;
 
@@ -31,11 +32,11 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.AppSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             this.Items = new ObservableCollection<ChapterProfileViewModel>();
-            BindingOperations.EnableCollectionSynchronization(this.Items, this.itemsLock);
+            //BindingOperations.EnableCollectionSynchronization(this.Items, this.itemsLock);
 
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
 
-            this.updateService.ChapterUpdated += OnChapterUpdateAsync;
+            this.updateService.ChapterUpdated += OnChapterUpdate;
             ChapterProfilesUnreadCountChanged += (s, e) => NotifyPropertyChanged(nameof(HasUnreadChapters));
         }
 
@@ -53,7 +54,9 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             foreach (var model in chapterProfileModels)
             {
-                Add(new ChapterProfileViewModel(model));
+                //Add(new ChapterProfileViewModel(model));
+                CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
+
 
                 if (!model.IsRead)
                 {
@@ -92,16 +95,13 @@ namespace ATG_Notifier.Desktop.ViewModels
             await this.chapterProfileService.UpdateChapterProfilesAsync(this.Items.Select(vm => vm.ChapterProfileModel).ToList());
         }
 
-        private async void OnChapterUpdateAsync(object? sender, ChapterUpdateEventArgs e)
+        private void OnChapterUpdate(object? sender, ChapterUpdateEventArgs e)
         {
-            //CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfile));
-
-            Add(e.ChapterProfile);
+            //Add(e.ChapterProfile);
+            CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfileViewModel));
 
             this.chapterProfilesUnreadCount++;
             ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
-
-            await this.chapterProfileService.UpdateChapterProfileAsync(e.ChapterProfile.ChapterProfileModel);
         }
 
         protected override async void OnRemove(ChapterProfileViewModel model)

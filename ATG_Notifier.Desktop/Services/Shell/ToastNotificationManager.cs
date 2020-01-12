@@ -34,22 +34,14 @@ namespace ATG_Notifier.Desktop.Services
         private const int Padding = 5;
 
         private readonly object notificationCounterLock = new object();
-
         private readonly Semaphore notificationSema;
 
         private readonly int[] displaySlots;
 
         private readonly SettingsViewModel appSettings;
-
         private readonly StaTaskScheduler taskScheduler;
 
-        #region Creation
-
-        private static readonly Lazy<ToastNotificationManager> lazy = new Lazy<ToastNotificationManager>(() => new ToastNotificationManager());
-
-        public static ToastNotificationManager Instance => lazy.Value;
-
-        private ToastNotificationManager()
+        public ToastNotificationManager()
         {
             int diffPositions = Enum.GetValues(typeof(DisplayPosition)).Length;
             this.displaySlots = new int[diffPositions];
@@ -58,10 +50,8 @@ namespace ATG_Notifier.Desktop.Services
 
             this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
-            this.taskScheduler = new StaTaskScheduler(3);
-        }
-
-        #endregion // Creation        
+            this.taskScheduler = new StaTaskScheduler(MaxDisplayedPopups);
+        }       
 
         public void Show(string title, ChapterProfileViewModel chapterProfileViewModel) 
         {

@@ -1,19 +1,16 @@
 ﻿using ATG_Notifier.ViewModels.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ATG_Notifier.ViewModels.Networking
 {
     public class ChapterSourceCheckResult
     {
-        public ChapterSourceCheckResult(string chapterId, ChapterProfileModel chapterProfileModel)
+        public ChapterSourceCheckResult(string sourceChapterId, ChapterProfileModel chapterProfileModel)
         {
-            this.ChapterId = chapterId;
+            this.SourceChapterId = sourceChapterId;
             this.ChapterProfileModel = chapterProfileModel;
         }
 
-        public string ChapterId { get; }
+        public string SourceChapterId { get; }
 
         public ChapterProfileModel ChapterProfileModel { get; }
     }

@@ -59,21 +59,7 @@ namespace ATG_Notifier.Desktop.WPF.Controls
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            //var vm = this.ViewModel.ListViewModel;
-
-            // load chapter profiles from database 
-            //await Task.Run(() => vm.LoadAsync());
-
-            //if (!this.ViewModel.ListViewModel.IsEmpty)
-            //{
-            //    //this.NoChapterTextBlock.Visibility = Visibility.Collapsed;
-            //    //this.ChapterProfileList.Visibility = Visibility.Visible;
-            //}
-
-            //if (this.appSettings.IsUpdateServiceRunning)
-            //{
-            //    this.updateService.Start();
-            //}
+            await this.ViewModel.LoadAsync();
         }
     }
 }

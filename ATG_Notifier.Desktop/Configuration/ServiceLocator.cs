@@ -8,14 +8,15 @@ using System;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
-    // TODO: Take a look at the ServiceLocator again, with example implementations from the internet.
+    // TODO: Take a look at the ServiceLocator again
     internal class ServiceLocator : IDisposable
     {
         private static readonly Lazy<ServiceLocator> lazy = new Lazy<ServiceLocator>(() => new ServiceLocator());
 
         private static ServiceProvider rootServiceProvider = null!;
 
-        private bool disposed = false;
+        private readonly IServiceScope serviceScope = null!;
+        private bool isDisposed = false;
 
         public static ServiceLocator Current => lazy.Value;
 
@@ -23,14 +24,26 @@ namespace ATG_Notifier.Desktop.Configuration
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
             serviceCollection.AddSingleton<ILogService>(new FileLogService(AppConfiguration.LogfilePath));
+            serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
+
+            var settingsService = new SettingsService();
+            serviceCollection.AddSingleton(settingsService);
+
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
+            serviceCollection.AddSingleton<ChapterUpdateListeningService>();
 
             serviceCollection.AddSingleton<DialogService>();
+            serviceCollection.AddSingleton<ToastNotificationManager>();
             serviceCollection.AddSingleton(TaskbarButtonService.GetForApp());
+
+            var appSettings = settingsService.GetAppSettings();
+            var appState = settingsService.GetAppState();
+
+            serviceCollection.AddSingleton(appSettings);
+            serviceCollection.AddSingleton(appState);
 
             serviceCollection.AddSingleton<SettingsViewModel>();
 
@@ -50,8 +63,6 @@ namespace ATG_Notifier.Desktop.Configuration
         {
             throw new NotImplementedException();
         }
-
-        private readonly IServiceScope serviceScope = null!;
 
         private ServiceLocator()
         {
@@ -73,7 +84,7 @@ namespace ATG_Notifier.Desktop.Configuration
             return serviceScope.ServiceProvider.GetService<T>();
         }
 
-#region Dispose
+        #region IDisposable
 
         public void Dispose()
         {
@@ -83,16 +94,18 @@ namespace ATG_Notifier.Desktop.Configuration
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed && disposing)
+            if (!this.isDisposed)
             {
-                if (this.serviceScope != null)
+                if (disposing)
                 {
                     this.serviceScope.Dispose();
-                    this.disposed = true;
+                    //this.serviceScope = null;                
                 }
+
+                this.isDisposed = true;
             }
         }
 
-#endregion // Dispose
+        #endregion // IDisposable
     }
 }

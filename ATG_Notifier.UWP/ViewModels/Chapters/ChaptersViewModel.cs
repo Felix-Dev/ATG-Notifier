@@ -45,7 +45,7 @@ namespace ATG_Notifier.UWP.ViewModels
 
         private void OnChapterUpdate(object sender, ChapterUpdateEventArgs e)
         {
-            CommonHelpers.RunOnUIThread(() => this.ChapterListViewModel.Add(e.ChapterProfile));
+            CommonHelpers.RunOnUIThread(() => this.ChapterListViewModel.Add(e.ChapterProfileViewModel));
         }
 
         private async void OpenChapter(ChapterProfileViewModel chapterProfileVM)

@@ -2,12 +2,11 @@
 
 namespace ATG_Notifier.Desktop.Models
 {
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    internal class WindowSetting
+    internal class WindowLocation
     {
-        public WindowSetting() {}
+        public WindowLocation() {}
 
-        public WindowSetting(double x, double y, double width, double height)
+        public WindowLocation(double x, double y, double width, double height)
         {
             this.X = x;
             this.Y = y;

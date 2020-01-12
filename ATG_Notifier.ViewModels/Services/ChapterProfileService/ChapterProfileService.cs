@@ -1,10 +1,8 @@
 ﻿using ATG_Notifier.Data.Entities;
-using ATG_Notifier.Data.Services;
 using ATG_Notifier.ViewModels.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ATG_Notifier.ViewModels.Services
@@ -24,7 +22,7 @@ namespace ATG_Notifier.ViewModels.Services
         {
             ChapterProfile? chapterProfile = null;
 
-            using (var dataService = this.dataServiceFactory.CreateDataService())
+            using (var dataService = await this.dataServiceFactory.CreateDataServiceAsync())
             {
                 chapterProfile = await dataService.GetChapterProfileAsync(id).ConfigureAwait(false);
             }
@@ -34,10 +32,10 @@ namespace ATG_Notifier.ViewModels.Services
                 : null;
         }
 
-        public async Task<IList<ChapterProfileModel>> GetChapterProfilesAsync(/*DataRequest<Order> request*/)
+        public async Task<IList<ChapterProfileModel>> GetChapterProfilesAsync()
         {
             IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
-            using (var dataService = this.dataServiceFactory.CreateDataService())
+            using (var dataService = await this.dataServiceFactory.CreateDataServiceAsync().ConfigureAwait(false))
             {
                 chapterProfiles = await dataService.GetChapterProfilesAsync().ConfigureAwait(false);
             }
@@ -55,7 +53,7 @@ namespace ATG_Notifier.ViewModels.Services
             }
 
             long id = model.ChapterProfileId;
-            using (var dataService = dataServiceFactory.CreateDataService())
+            using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
                 var chapterProfile = id > 0 
                     ? await dataService.GetChapterProfileAsync(model.ChapterProfileId).ConfigureAwait(false)
@@ -80,7 +78,7 @@ namespace ATG_Notifier.ViewModels.Services
                 throw new ArgumentNullException(nameof(models));
             }
 
-            using (var dataService = dataServiceFactory.CreateDataService())
+            using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
                 IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
 
@@ -117,7 +115,7 @@ namespace ATG_Notifier.ViewModels.Services
             }
 
             var chapterProfile = new ChapterProfile { ChapterProfileId = model.ChapterProfileId };
-            using (var dataService = dataServiceFactory.CreateDataService())
+            using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
                 return await dataService.DeleteChapterProfilesAsync(chapterProfile).ConfigureAwait(false);
             }
@@ -130,7 +128,7 @@ namespace ATG_Notifier.ViewModels.Services
                 throw new ArgumentNullException(nameof(models));
             }
 
-            using (var dataService = dataServiceFactory.CreateDataService())
+            using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
                 IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
 

@@ -167,7 +167,7 @@ namespace ATG_Notifier.Desktop.Components
             {
                 Text = "Do Not Disturb"
             };
-            menuItemFocus.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsInFocusMode), true, DataSourceUpdateMode.OnPropertyChanged));
+            menuItemFocus.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsFocusModeEnabled), true, DataSourceUpdateMode.OnPropertyChanged));
             menuItemFocus.Click += OnMenuItemFocusClick;
 
             contextMenu.Items.Add(menuItemFocus);

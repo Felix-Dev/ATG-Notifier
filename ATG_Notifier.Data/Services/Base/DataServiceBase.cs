@@ -5,17 +5,17 @@ namespace ATG_Notifier.Data.Services
 {
     public partial class DataServiceBase : IDataService
     {
-        private readonly IDataSource dataSource;
+        private IDataSource dataSource;
 
         // Track whether Dispose has been called.
-        private bool disposed = false;
+        private bool isDisposed = false;
 
         public DataServiceBase(IDataSource dataSource)
         {
             this.dataSource = dataSource;
         }
 
-        #region Dispose
+        #region IDisposable
 
         public void Dispose()
         {
@@ -29,13 +29,18 @@ namespace ATG_Notifier.Data.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed && disposing)
+            if (!this.isDisposed)
             {
-                this.dataSource.Dispose();
-                this.disposed = true;
+                if (disposing)
+                {
+                    this.dataSource.Dispose();
+                    this.dataSource = null!;
+
+                    this.isDisposed = true;
+                }         
             }
         }
 
-        #endregion // Dispose
+        #endregion // IDisposable
     }
 }

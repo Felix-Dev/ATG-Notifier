@@ -59,29 +59,17 @@ namespace ATG_Notifier.Desktop.Views
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             // TODO: Rethink the loading process and if the updater should have to wait until the database file has been loaded.
 
             var chapterProfilesViewModel = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
             chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged += (s, e) => AppShell.Current?.UpdateBadge(e.UnreadCount);
-
-            // load chapter profiles from database 
-            await chapterProfilesViewModel.ListViewModel.LoadAsync();
-
-            //if (this.settingsViewModel.WasUpdateServiceRunning && !this.networkService.IsMeteredConnection)
-            //{
-            //    ServiceLocator.Current.GetService<IUpdateService>().Start();
-            //}
-
-            if (this.settingsViewModel.WasUpdateServiceRunning)
-            {
-                ServiceLocator.Current.GetService<IUpdateService>().Start();           
-            }
         }
 
         private void OnMenuItemCloseClick(object sender, RoutedEventArgs e)
         {
+            // TODO: Use Application.MainWindow.Close() here (less coupling, i.e. the main page shouldn't know an appshell exists)?
             AppShell.Current?.Close();
         }
 

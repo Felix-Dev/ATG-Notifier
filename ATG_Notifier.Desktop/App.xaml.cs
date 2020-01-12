@@ -1,5 +1,6 @@
 using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
+using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.ViewModels;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -24,8 +26,10 @@ namespace ATG_Notifier.Desktop
     {
         private ILogService logService = null!;
         private DialogService dialogService = null!;
+        private SettingsService settingsService = null!;
 
-        private SettingsViewModel settingsViewModel = null!;
+        private AppSettings appSettings = null!;
+        private AppState appState = null!;
 
         private AppShell appShell = null!;
 
@@ -63,18 +67,18 @@ namespace ATG_Notifier.Desktop
             AppShell.Current?.BringIntoView();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected async override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            ServiceLocator.Configure();
+            await AppInitialization.InitializeAsync(e.Args);
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
+            this.settingsService = ServiceLocator.Current.GetService<SettingsService>();
 
-            this.appShell = new AppShell();
-            this.appShell.Show();
+            this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
+            this.appState = ServiceLocator.Current.GetService<AppState>();
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
         }
@@ -99,14 +103,15 @@ namespace ATG_Notifier.Desktop
             // Stop the update service
             var updateService = ServiceLocator.Current.GetService<IUpdateService>();
 
-            this.settingsViewModel.WasUpdateServiceRunning = updateService.IsRunning;
+            this.appState.WasUpdateServiceRunning = updateService.IsRunning;
             if (updateService.IsRunning)
             {
                 updateService.Stop();
             }
 
-            // Save user data
-            ServiceLocator.Current.GetService<SettingsViewModel>().Save();
+            // Save user preferences and app state
+            this.settingsService.SaveAppSettings(this.appSettings);
+            this.settingsService.SaveAppState(this.appState);
         }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

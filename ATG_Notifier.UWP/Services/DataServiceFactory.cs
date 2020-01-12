@@ -10,9 +10,9 @@ namespace ATG_Notifier.UWP.Services
 {
     public class DataServiceFactory : IDataServiceFactory
     {
-        public IDataService CreateDataService()
+        public async Task<IDataService> CreateDataServiceAsync()
         {
-            return new SQLiteDataService(App.DatabaseConnectionString);
+            return await SQLiteDataService.CreateDataServiceAsync(App.DatabaseConnectionString).ConfigureAwait(false);
         }
     }
 }

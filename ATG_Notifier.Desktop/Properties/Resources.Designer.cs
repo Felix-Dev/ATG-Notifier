@@ -63,9 +63,9 @@ namespace ATG_Notifier.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon AppLogo16x16 {
+        internal static System.Drawing.Icon AppLogo {
             get {
-                object obj = ResourceManager.GetObject("AppLogo16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("AppLogo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ATG_Notifier.Desktop.Properties" GeneratedClassName="UserPreferences">
+  <Profiles />
+  <Settings>
+    <Setting Name="DisableOnFullscreen" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NotificationDisplayPosition" Type="ATG_Notifier.Desktop.Views.ToastNotification.DisplayPosition" Scope="User">
+      <Value Profile="(Default)">TopRight</Value>
+    </Setting>
+    <Setting Name="KeepRunningOnClose" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="IsSoundEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="IsFocusModeEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

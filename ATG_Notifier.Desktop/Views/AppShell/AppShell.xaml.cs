@@ -5,22 +5,37 @@ using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
+using ATG_Notifier.ViewModels.Services;
 using System;
 using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
 namespace ATG_Notifier.Desktop.Views
 {
+    // TODO: 
+    //      - Listen to notification unread amount changes (and stop listening when we shutdown the app shell)
+    //        (perhaps we can use a weak event handling system for notification unread changes?)
     internal partial class AppShell : Window
     {
         private const int SurfaceAreaMinWidth = 100;
         private const int SurfaceAreaMinHeight = 100;
 
-        private readonly DialogService dialogService;
-        private readonly SettingsViewModel settingsViewModel;
-        private readonly TaskbarButtonService taskbarButtonService;
+#if DEBUG
+        private const string NotificationTitle = "ATG Chapter Update! (Debug)";
+#else
+        private const string NotificationTitle = "ATG Chapter Update!";
+#endif
 
+        private readonly DialogService dialogService;
+        private readonly ToastNotificationManager notificationManager;
+        private readonly TaskbarButtonService taskbarButtonService;
+        private readonly IUpdateService updateService;
+
+        private bool startAsMinimized;
         private bool canCancel = true;
 
         private NotificationIcon notificationIcon = null!;
@@ -28,13 +43,20 @@ namespace ATG_Notifier.Desktop.Views
         private AppTaskbarButtonMode currentTaskbarButtonMode;
         private TaskbarButtonResetMode currentTaskbarButtonResetMode;
 
+        private readonly AppSettings appSettings;
+        private readonly AppState appState;
+
         public AppShell()
         {
             Current = this;
 
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
+            this.notificationManager = ServiceLocator.Current.GetService<ToastNotificationManager>();
             this.taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
+            this.updateService = ServiceLocator.Current.GetService<IUpdateService>();
+
+            this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
+            this.appState = ServiceLocator.Current.GetService<AppState>();
 
             InitializeComponent();
 
@@ -42,6 +64,23 @@ namespace ATG_Notifier.Desktop.Views
         }
 
         public static AppShell? Current { get; private set; }
+
+        public Task InitializeAsync(bool showMinimized)
+        {
+            this.startAsMinimized = showMinimized;
+
+            if (showMinimized)
+            {
+                this.WindowState = WindowState.Minimized;
+                Hide();
+            }
+            else
+            {
+                Show();
+            }
+
+            return Task.CompletedTask;
+        }
 
         public new bool BringIntoView()
         {
@@ -120,13 +159,36 @@ namespace ATG_Notifier.Desktop.Views
             Cleanup();
         }
 
-        private void OnInitialized(object sender, EventArgs e)
-        {
+        private async void OnInitialized(object sender, EventArgs e)
+        {           
+            // build the jumplist for the app's taskbar button
             JumplistManager.BuildJumplist();
 
             // show program icon in Windows notification area
-            this.notificationIcon = new NotificationIcon(Properties.Resources.AppLogo16x16, AppConfiguration.AppId);
+            this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
+
+            // load database number of unread chapters
+            if (this.startAsMinimized)
+            {
+                var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
+                var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
+
+                int unreadChapterCount = 0;
+                foreach (var chapterProfile in chapterProfiles)
+                {
+                    if (!chapterProfile.IsRead)
+                    {
+                        unreadChapterCount++;
+                    }
+                }
+
+                this.notificationIcon.UpdateBadge(unreadChapterCount);
+            }
+
             this.notificationIcon.Show();
+
+            // start listening for chapter updates so we can notify the user
+            this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -156,7 +218,7 @@ namespace ATG_Notifier.Desktop.Views
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (this.canCancel && this.settingsViewModel.KeepRunningOnClose)
+            if (this.canCancel && this.appSettings.KeepRunningOnClose)
             {
                 this.WindowState = WindowState.Minimized;
                 Hide();
@@ -174,6 +236,8 @@ namespace ATG_Notifier.Desktop.Views
 
         private void Cleanup()
         {
+            this.updateService.ChapterUpdated -= OnUpdateServiceChapterUpdated;
+
             // clear jumplist from added custom entries
             JumplistManager.ClearJumplist();
 
@@ -204,42 +268,49 @@ namespace ATG_Notifier.Desktop.Views
         {
             if (this.WindowState == WindowState.Minimized || this.WindowState == WindowState.Maximized)
             {
-                this.settingsViewModel.WindowSetting = new WindowSetting(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
+                this.appState.WindowLocation = new WindowLocation(this.RestoreBounds.X, this.RestoreBounds.Y, this.RestoreBounds.Width, this.RestoreBounds.Height);
             }
             else
             {
-                this.settingsViewModel.WindowSetting = new WindowSetting(this.Left, this.Top, this.Width, this.Height);
+                this.appState.WindowLocation = new WindowLocation(this.Left, this.Top, this.Width, this.Height);
             }
         }
 
         private void SetWindowsPosition()
         {
-            if (!(this.settingsViewModel.WindowSetting is WindowSetting prevWindowSetting))
-            {
-                return;
-            }
-
             Rect? screenBoundsRef = this.GetScreenBounds();
             if (!screenBoundsRef.HasValue)
             {
                 return;
             }
 
+            WindowLocation previousWindowLocation = this.appState.WindowLocation;
+
             var screenBounds = screenBoundsRef.Value;
-            if (prevWindowSetting.X >= screenBounds.Width
-                || prevWindowSetting.Y < -8 || prevWindowSetting.Y >= screenBounds.Height
-                || prevWindowSetting.Width < this.MinWidth || prevWindowSetting.Height < this.MinHeight
-                || prevWindowSetting.X < 0 && prevWindowSetting.X + prevWindowSetting.Width < SurfaceAreaMinWidth
-                || screenBounds.Width - prevWindowSetting.X < SurfaceAreaMinWidth
-                || screenBounds.Height - prevWindowSetting.Y < SurfaceAreaMinHeight)
+            if (previousWindowLocation.X >= screenBounds.Width
+                || previousWindowLocation.Y < -8 || previousWindowLocation.Y >= screenBounds.Height
+                || previousWindowLocation.Width < this.MinWidth || previousWindowLocation.Height < this.MinHeight
+                || previousWindowLocation.X < 0 && previousWindowLocation.X + previousWindowLocation.Width < SurfaceAreaMinWidth
+                || screenBounds.Width - previousWindowLocation.X < SurfaceAreaMinWidth
+                || screenBounds.Height - previousWindowLocation.Y < SurfaceAreaMinHeight)
             {
                 return;
             }
 
-            this.Left = prevWindowSetting.X;
-            this.Top = prevWindowSetting.Y;
-            this.Width = prevWindowSetting.Width;
-            this.Height = prevWindowSetting.Height;
+            this.Left = previousWindowLocation.X;
+            this.Top = previousWindowLocation.Y;
+            this.Width = previousWindowLocation.Width;
+            this.Height = previousWindowLocation.Height;
+        }
+
+        private void OnUpdateServiceChapterUpdated(object? sender, ChapterUpdateEventArgs e)
+        {
+            SetTaskbarButtonMode(AppTaskbarButtonMode.Attention);
+
+            if (!this.appSettings.IsFocusModeEnabled)
+            {
+                this.notificationManager.Show(NotificationTitle, e.ChapterProfileViewModel);
+            }
         }
     }
 }

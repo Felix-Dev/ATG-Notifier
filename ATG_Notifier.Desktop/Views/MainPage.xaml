@@ -71,7 +71,7 @@
                           IsChecked="{Binding SettingsViewModel.IsDisabledOnFullscreen, Mode=TwoWay}"/>
                 <MenuItem Header="Do Not Disturb"
                           IsCheckable="True"
-                          IsChecked="{Binding SettingsViewModel.IsInFocusMode, Mode=TwoWay}"/>
+                          IsChecked="{Binding SettingsViewModel.IsFocusModeEnabled, Mode=TwoWay}"/>
                 <Separator />
                 <!-- Notification Display Position -->
                 <MenuItem Header="Position">

@@ -194,7 +194,7 @@ namespace ATG_Notifier.UWP.Services
 
                 var chapterProfileVM = new ChapterProfileViewModel(checkResult.ChapterProfileModel);
 
-                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileVM));
+                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(checkResult.SourceChapterId, chapterProfileVM));
 
                 ToastContent notificationContent = BuildRawSourceNotificationContent(chapterProfileVM);
                 toastNotificationService.ShowNotification(notificationContent, chapterProfileVM.ChapterProfileId);
@@ -231,7 +231,7 @@ namespace ATG_Notifier.UWP.Services
 
                 var chapterProfileVM = new ChapterProfileViewModel(checkResult.ChapterProfileModel);
 
-                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(chapterProfileVM));
+                ChapterUpdated?.Invoke(this, new ChapterUpdateEventArgs(checkResult.SourceChapterId, chapterProfileVM));
 
                 ToastContent notificationContent = BuildMTLSourceNotificationContent(chapterProfileVM);
                 toastNotificationService.ShowNotification(notificationContent, chapterProfileVM.ChapterProfileId);

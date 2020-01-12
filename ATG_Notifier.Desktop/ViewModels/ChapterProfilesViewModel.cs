@@ -3,6 +3,7 @@ using ATG_Notifier.ViewModels.Helpers.Extensions;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.ViewModels;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -14,6 +15,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         private bool canChangeUpdateServiceStatus;
         private bool isUpdateServiceRunning;
+        private bool isLoaded;
 
         public ChapterProfilesViewModel(ChapterProfilesListViewModel listViewModel, IUpdateService updateService)
         {
@@ -29,9 +31,16 @@ namespace ATG_Notifier.Desktop.ViewModels
 
             this.canChangeUpdateServiceStatus = true;
             this.IsUpdateServiceRunning = this.updateService.IsRunning;
+            this.IsLoaded = false;
         }
 
         public ChapterProfilesListViewModel ListViewModel { get; private set; }
+
+        public bool IsLoaded
+        {
+            get => this.isLoaded;
+            set => Set(ref this.isLoaded, value);
+        }
 
         public bool IsUpdateServiceRunning
         {
@@ -50,6 +59,13 @@ namespace ATG_Notifier.Desktop.ViewModels
         public ICommand OpenChapterProfileCommand { get; }
 
         public ICommand ChapterProfileLostFocusCommand { get; }
+
+        public async Task LoadAsync()
+        {
+            await this.ListViewModel.LoadAsync();
+
+            this.IsLoaded = true;
+        }
 
         private void OnChangeChapterUpdateMode()
         {
