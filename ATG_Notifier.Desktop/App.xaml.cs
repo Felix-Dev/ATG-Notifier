@@ -3,7 +3,6 @@ using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
-using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.ViewModels.Services;
 using System;
