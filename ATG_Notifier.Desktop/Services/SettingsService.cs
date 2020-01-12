@@ -79,9 +79,10 @@ namespace ATG_Notifier.Desktop.Services
                 Height = Properties.AppStateAppWindowLocation.Default.AppHeight
             };
 
+            // load most recent chapter update info 
+
             string numberAndTitle = Properties.AppStateMostRecentChapterInfo.Default.NumberAndTitle;
             int wordCount = Properties.AppStateMostRecentChapterInfo.Default.WordCount;
-
             if (numberAndTitle == "" && wordCount == 0)
             {
                 appState.MostRecentChapterInfo = null;
@@ -95,8 +96,6 @@ namespace ATG_Notifier.Desktop.Services
                     appState.MostRecentChapterInfo.ReleaseTime = releaseTime;
                 }
             }
-
-            appState.MostRecentChapterInfo = new MostRecentChapterInfo(Properties.AppStateMostRecentChapterInfo.Default.NumberAndTitle, Properties.AppStateMostRecentChapterInfo.Default.WordCount);
 
             return appState;
         }
