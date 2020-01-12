@@ -200,8 +200,17 @@ namespace ATG_Notifier.Desktop.Views
         {
             base.OnSourceInitialized(e);
 
-            var source = PresentationSource.FromVisual(this) as HwndSource;
-            source?.AddHook(WndProc);
+            if (PresentationSource.FromVisual(this) is HwndSource source)
+            {
+                source.AddHook(WndProc);
+
+                // Don't show the app icon in the titlebar. This mimics the behavior of UWP apps.
+                WindowWin32InteropHelper.HideIcon(source.Handle);
+            }
+            else
+            {
+                throw new InvalidOperationException("Critcal error: AppShell is not in a valid state! The AppShell window might not exist.");
+            }
         }
 
         protected override void OnActivated(EventArgs e)
