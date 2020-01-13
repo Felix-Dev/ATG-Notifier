@@ -209,7 +209,7 @@ namespace ATG_Notifier.Desktop.Views
             }
             else
             {
-                throw new InvalidOperationException("Critcal error: AppShell is not in a valid state! The AppShell window might not exist.");
+                throw new InvalidOperationException("Critical error: AppShell is not in a valid state! The AppShell window might not exist.");
             }
         }
 
