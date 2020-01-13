@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ATG_Notifier.Desktop.Models
 {
-    internal class MostRecentChapterInfoEqualityComparer : IEqualityComparer<MostRecentChapterInfo>
+    internal class LatestUpdateProfileEqualityComparer : IEqualityComparer<LatestUpdateProfile>
     {
-        public bool Equals([AllowNull] MostRecentChapterInfo chapterInfo1, [AllowNull] MostRecentChapterInfo chapterInfo2)
+        public bool Equals([AllowNull] LatestUpdateProfile chapterInfo1, [AllowNull] LatestUpdateProfile chapterInfo2)
         {
             if (chapterInfo1 == null && chapterInfo2 == null)
             {
@@ -30,7 +30,7 @@ namespace ATG_Notifier.Desktop.Models
                         : true);
         }
 
-        public int GetHashCode([DisallowNull] MostRecentChapterInfo chapterInfo)
+        public int GetHashCode([DisallowNull] LatestUpdateProfile chapterInfo)
         {
             int hashCode = HashCode.Combine(chapterInfo.NumberAndTitle, chapterInfo.WordCount);
             if (chapterInfo.ReleaseTime is DateTime releaseTime)

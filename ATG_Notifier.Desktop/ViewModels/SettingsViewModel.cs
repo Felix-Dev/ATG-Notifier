@@ -11,14 +11,14 @@ namespace ATG_Notifier.Desktop.ViewModels
         private readonly AppSettings appSettings;
         private readonly AppState appState;
 
-        private readonly IEqualityComparer<MostRecentChapterInfo> mostRecentChapterInfoEqualityComparer;
+        private readonly IEqualityComparer<LatestUpdateProfile> latestUpdateProfileEqualityComparer;
 
         public SettingsViewModel(AppSettings settings, AppState state) 
         {
             this.appSettings = settings;
             this.appState = state;
 
-            this.mostRecentChapterInfoEqualityComparer = new MostRecentChapterInfoEqualityComparer();
+            this.latestUpdateProfileEqualityComparer = new LatestUpdateProfileEqualityComparer();
         }
 
         public bool IsDisabledOnFullscreen
@@ -86,14 +86,14 @@ namespace ATG_Notifier.Desktop.ViewModels
             }
         }
 
-        public MostRecentChapterInfo? MostRecentChapterInfo
+        public LatestUpdateProfile? LatestUpdateProfile
         {
-            get => this.appState.MostRecentChapterInfo;
+            get => this.appState.LatestUpdateProfile;
             set
             {
-                if (!this.mostRecentChapterInfoEqualityComparer.Equals(value, this.appState.MostRecentChapterInfo))
+                if (!this.latestUpdateProfileEqualityComparer.Equals(value, this.appState.LatestUpdateProfile))
                 {
-                    this.appState.MostRecentChapterInfo = value;
+                    this.appState.LatestUpdateProfile = value;
                     NotifyPropertyChanged();
                 }
             }

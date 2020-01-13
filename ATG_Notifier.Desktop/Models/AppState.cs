@@ -2,12 +2,12 @@
 {
     internal class AppState
     {
-        public bool WasUpdateServiceRunning { get; set; }
+        public bool WasUpdateServiceRunning { get; set; } = false;
 
-        public string? CurrentChapterId { get; set; }
+        public string? CurrentChapterId { get; set; } = null;
 
-        public WindowLocation WindowLocation { get; set; } = null!;
+        public WindowLocation? WindowLocation { get; set; } = null;
 
-        public MostRecentChapterInfo? MostRecentChapterInfo { get; set; }
+        public LatestUpdateProfile? LatestUpdateProfile { get; set; } = null;
     }
 }

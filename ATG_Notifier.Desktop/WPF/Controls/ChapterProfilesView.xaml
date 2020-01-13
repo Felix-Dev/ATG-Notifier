@@ -293,7 +293,7 @@
                             ToolTipService.ShowDuration="2000"
                             TabIndex="5"
                             Click="OnLatestChapterButtonClick"
-                            IsEnabled="{Binding SettingsViewModel.MostRecentChapterInfo, Converter={StaticResource NullToBoolFalseTrueConverter}}">
+                            IsEnabled="{Binding SettingsViewModel.LatestUpdateProfile, Converter={StaticResource NullToBoolFalseTrueConverter}}">
                         <Button.Content>
                             <StackPanel>
                                 <ContentPresenter Content="{StaticResource IconMostRecentUpdate}"/>
@@ -308,7 +308,7 @@
                                             Background="{StaticResource ToolbarPopupBackground}"
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
-                                            <TextBlock Text="{Binding SettingsViewModel.MostRecentChapterInfo.NumberAndTitle}"
+                                            <TextBlock Text="{Binding SettingsViewModel.LatestUpdateProfile.NumberAndTitle}"
                                                        HorizontalAlignment="Center" TextAlignment="Center"
                                                        FontSize="12"
                                                        Foreground="{StaticResource ToolbarPopupForeground}"
@@ -321,8 +321,8 @@
                                                        Foreground="{StaticResource ToolbarPopupForeground}">
                                                 <TextBlock.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
-                                                        <Binding Path="SettingsViewModel.MostRecentChapterInfo.WordCount"/>
-                                                        <Binding Path="SettingsViewModel.MostRecentChapterInfo.ReleaseTime"/>
+                                                        <Binding Path="SettingsViewModel.LatestUpdateProfile.WordCount"/>
+                                                        <Binding Path="SettingsViewModel.LatestUpdateProfile.ReleaseTime"/>
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>

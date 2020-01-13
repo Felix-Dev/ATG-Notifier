@@ -15,7 +15,7 @@ namespace ATG_Notifier.Desktop
 
         public static async Task InitializeAsync(string[] args)
         {
-            ServiceLocator.Configure();
+            await ServiceLocator.ConfigureAsync();
 
             AppInitialization.logService = ServiceLocator.Current.GetService<ILogService>();
             AppInitialization.updateService = ServiceLocator.Current.GetService<IUpdateService>();

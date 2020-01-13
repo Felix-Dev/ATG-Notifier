@@ -25,7 +25,7 @@ namespace ATG_Notifier.Desktop
     {
         private ILogService logService = null!;
         private DialogService dialogService = null!;
-        private SettingsService settingsService = null!;
+        private SettingsService2 settingsService = null!;
 
         private AppSettings appSettings = null!;
         private AppState appState = null!;
@@ -74,7 +74,7 @@ namespace ATG_Notifier.Desktop
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.settingsService = ServiceLocator.Current.GetService<SettingsService>();
+            this.settingsService = ServiceLocator.Current.GetService<SettingsService2>();
 
             this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
             this.appState = ServiceLocator.Current.GetService<AppState>();
@@ -92,6 +92,7 @@ namespace ATG_Notifier.Desktop
         private void OnSessionEnding(object? sender, SessionEndingCancelEventArgs e)
         {
             AppShell.Current?.SaveAndCleanup();
+
             PrepareForExit();
 
             Environment.Exit(0);
@@ -109,8 +110,15 @@ namespace ATG_Notifier.Desktop
             }
 
             // Save user preferences and app state
-            this.settingsService.SaveAppSettings(this.appSettings);
-            this.settingsService.SaveAppState(this.appState);
+            try
+            {
+                this.settingsService.SaveAppSetings(this.appSettings);
+                this.settingsService.SaveAppState(this.appState);
+            }
+            catch (Exception ex)
+            {
+                this.logService.Log(LogType.Error, $"Could not save app state and/or user preferences.\nTechnical details: {ex.Message}");
+            }
         }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -136,39 +144,35 @@ namespace ATG_Notifier.Desktop
             this.appActivatedResetEvent.WaitOne();
 
             // Show our error message as soon as we are the foreground app.
-            ShowAndProcessErrorDialog();
 
-            void ShowAndProcessErrorDialog()
+            string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
+            MessageDialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
+                "Do you want to open the folder to the log file?", false, out bool openLogFileDirRequested);
+
+            // Open the directory of the log file in the file explorer.
+            if (openLogFileDirRequested)
             {
-                string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";
-                MessageDialogResult result = dialogService.ShowDialog(message, "Critical Error", MessageDialogButton.YesNo, MessageDialogIcon.Error,
-                    "Do you want to open the folder to the log file?", false, out bool openLogFileDirRequested);
-
-                // Open the directory of the log file in the file explorer.
-                if (openLogFileDirRequested)
+                var psi = new ProcessStartInfo
                 {
-                    var psi = new ProcessStartInfo
-                    {
-                        FileName = AppConfiguration.LogfileDirectory,
-                        UseShellExecute = true
-                    };
+                    FileName = AppConfiguration.LogfileDirectory,
+                    UseShellExecute = true
+                };
 
-                    Process.Start(psi);
-                }
+                Process.Start(psi);
+            }
 
-                CommonHelpers.RunOnUIThread(() => AppShell.Current?.SaveAndCleanup());
-                PrepareForExit();
+            CommonHelpers.RunOnUIThread(() => AppShell.Current?.SaveAndCleanup());
 
-                // Process the reply of the user about whether or not to restart the notifier app.
-                if (result == MessageDialogResult.Yes)
-                {
-                    RequestRestart();
-                }
-                else
-                {
-                    //AppShell.Current?.Close(false);
-                    Environment.Exit(1);
-                }
+            PrepareForExit();
+
+            // Process the reply of the user about whether or not to restart the notifier app.
+            if (result == MessageDialogResult.Yes)
+            {
+                RequestRestart();
+            }
+            else
+            {
+                Environment.Exit(1);
             }
         }
 

@@ -37,7 +37,7 @@ namespace ATG_Notifier.Desktop.Services
         private async void OnUpdateServiceChapterUpdated(object? sender, ChapterUpdateEventArgs e)
         {
             this.appState.CurrentChapterId = e.SourceChapterId;
-            this.settingsViewModel.MostRecentChapterInfo = new MostRecentChapterInfo(e.ChapterProfileViewModel.NumberAndTitleDisplayString, e.ChapterProfileViewModel.WordCount)
+            this.settingsViewModel.LatestUpdateProfile = new LatestUpdateProfile(e.ChapterProfileViewModel.NumberAndTitleDisplayString, e.ChapterProfileViewModel.WordCount)
             {
                 ReleaseTime = e.ChapterProfileViewModel.ReleaseTime,
             };

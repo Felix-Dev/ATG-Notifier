@@ -4,14 +4,14 @@ namespace ATG_Notifier.Desktop.Models
 {
     internal class AppSettings
     {
-        public bool IsDisabledOnFullscreen { get; set; }
+        public bool IsDisabledOnFullscreen { get; set; } = false;
 
-        public bool IsFocusModeEnabled { get; set; }
+        public bool IsFocusModeEnabled { get; set; } = false;
 
-        public bool IsSoundEnabled { get; set; }
+        public bool IsSoundEnabled { get; set; } = true;
 
-        public bool KeepRunningOnClose { get; set; }
+        public bool KeepRunningOnClose { get; set; } = true;
 
-        public DisplayPosition NotificationDisplayPosition { get; set; }
+        public DisplayPosition NotificationDisplayPosition { get; set; } = DisplayPosition.TopRight;
     }
 }

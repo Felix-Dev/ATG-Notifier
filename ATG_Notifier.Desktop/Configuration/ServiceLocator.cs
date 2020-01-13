@@ -5,6 +5,7 @@ using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.Services.Infrastructure.LogService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Configuration
 {
@@ -20,14 +21,14 @@ namespace ATG_Notifier.Desktop.Configuration
 
         public static ServiceLocator Current => lazy.Value;
 
-        public static void Configure()
+        public static async Task ConfigureAsync()
         {
             var serviceCollection = new ServiceCollection();
 
             serviceCollection.AddSingleton<ILogService>(new FileLogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
 
-            var settingsService = new SettingsService();
+            var settingsService = new SettingsService2(AppConfiguration.ConfigurationDirectory);
             serviceCollection.AddSingleton(settingsService);
 
             serviceCollection.AddSingleton<IWebService, WebService>();
@@ -39,8 +40,8 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<ToastNotificationManager>();
             serviceCollection.AddSingleton(TaskbarButtonService.GetForApp());
 
-            var appSettings = settingsService.GetAppSettings();
-            var appState = settingsService.GetAppState();
+            var appSettings = await settingsService.GetAppSettingsAsync();
+            var appState = await settingsService.GetAppStateAsync();
 
             serviceCollection.AddSingleton(appSettings);
             serviceCollection.AddSingleton(appState);

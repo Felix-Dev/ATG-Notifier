@@ -293,23 +293,24 @@ namespace ATG_Notifier.Desktop.Views
                 return;
             }
 
-            WindowLocation previousWindowLocation = this.appState.WindowLocation;
-
-            var screenBounds = screenBoundsRef.Value;
-            if (previousWindowLocation.X >= screenBounds.Width
-                || previousWindowLocation.Y < -8 || previousWindowLocation.Y >= screenBounds.Height
-                || previousWindowLocation.Width < this.MinWidth || previousWindowLocation.Height < this.MinHeight
-                || previousWindowLocation.X < 0 && previousWindowLocation.X + previousWindowLocation.Width < SurfaceAreaMinWidth
-                || screenBounds.Width - previousWindowLocation.X < SurfaceAreaMinWidth
-                || screenBounds.Height - previousWindowLocation.Y < SurfaceAreaMinHeight)
+            if (this.appState.WindowLocation is WindowLocation previousWindowLocation)
             {
-                return;
-            }
+                var screenBounds = screenBoundsRef.Value;
+                if (previousWindowLocation.X >= screenBounds.Width
+                    || previousWindowLocation.Y < -8 || previousWindowLocation.Y >= screenBounds.Height
+                    || previousWindowLocation.Width < this.MinWidth || previousWindowLocation.Height < this.MinHeight
+                    || previousWindowLocation.X < 0 && previousWindowLocation.X + previousWindowLocation.Width < SurfaceAreaMinWidth
+                    || screenBounds.Width - previousWindowLocation.X < SurfaceAreaMinWidth
+                    || screenBounds.Height - previousWindowLocation.Y < SurfaceAreaMinHeight)
+                {
+                    return;
+                }
 
-            this.Left = previousWindowLocation.X;
-            this.Top = previousWindowLocation.Y;
-            this.Width = previousWindowLocation.Width;
-            this.Height = previousWindowLocation.Height;
+                this.Left = previousWindowLocation.X;
+                this.Top = previousWindowLocation.Y;
+                this.Width = previousWindowLocation.Width;
+                this.Height = previousWindowLocation.Height;
+            }          
         }
 
         private void OnUpdateServiceChapterUpdated(object? sender, ChapterUpdateEventArgs e)
