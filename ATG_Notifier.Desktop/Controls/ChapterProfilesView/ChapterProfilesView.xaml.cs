@@ -1,6 +1,7 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.ViewModels;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +18,9 @@ namespace ATG_Notifier.Desktop.Controls
             this.SettingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
 
             InitializeComponent();
+
+            // prevents the popup from closing when clicking its content
+            this.LatestChapterPopup.MouseDown += (s, e) => e.Handled = true;
         }
 
         public ChapterProfilesViewModel ViewModel { get; }
