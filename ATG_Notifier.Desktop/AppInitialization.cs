@@ -20,7 +20,7 @@ namespace ATG_Notifier.Desktop
             AppInitialization.logService = ServiceLocator.Current.GetService<ILogService>();
             AppInitialization.updateService = ServiceLocator.Current.GetService<IUpdateService>();
             AppInitialization.appState = ServiceLocator.Current.GetService<AppState>();
-            
+
             var appShell = new AppShell();
 
             // check if app needs to be started minimized

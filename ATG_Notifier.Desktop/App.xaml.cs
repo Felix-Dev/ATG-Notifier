@@ -25,7 +25,7 @@ namespace ATG_Notifier.Desktop
     {
         private ILogService logService = null!;
         private DialogService dialogService = null!;
-        private SettingsService2 settingsService = null!;
+        private SettingsService settingsService = null!;
 
         private AppSettings appSettings = null!;
         private AppState appState = null!;
@@ -74,7 +74,7 @@ namespace ATG_Notifier.Desktop
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.settingsService = ServiceLocator.Current.GetService<SettingsService2>();
+            this.settingsService = ServiceLocator.Current.GetService<SettingsService>();
 
             this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
             this.appState = ServiceLocator.Current.GetService<AppState>();

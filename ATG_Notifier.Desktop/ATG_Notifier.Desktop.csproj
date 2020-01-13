@@ -63,21 +63,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\AppState.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AppState.settings</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\AppStateAppWindowLocation.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AppStateAppWindowLocation.settings</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\AppStateMostRecentChapterInfo.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AppStateMostRecentChapterInfo.settings</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -88,32 +73,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Properties\UserPreferences.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UserPreferences.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Properties\AppState.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>AppState.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Properties\AppStateAppWindowLocation.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>AppStateAppWindowLocation.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Properties\AppStateMostRecentChapterInfo.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>AppStateMostRecentChapterInfo.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Properties\UserPreferences.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>UserPreferences.Designer.cs</LastGenOutput>
     </None>
     <None Update="WPF\Controls\ChapterProfileCard.xaml">
       <Generator>MSBuild:Compile</Generator>

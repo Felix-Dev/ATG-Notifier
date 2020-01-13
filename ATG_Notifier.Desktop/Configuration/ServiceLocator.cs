@@ -28,7 +28,7 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<ILogService>(new FileLogService(AppConfiguration.LogfilePath));
             serviceCollection.AddSingleton<IDataServiceFactory, DataServiceFactory>();
 
-            var settingsService = new SettingsService2(AppConfiguration.ConfigurationDirectory);
+            var settingsService = new SettingsService(AppConfiguration.ConfigurationDirectory);
             serviceCollection.AddSingleton(settingsService);
 
             serviceCollection.AddSingleton<IWebService, WebService>();

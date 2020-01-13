@@ -1,135 +1,64 @@
 ﻿using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Services.Serialization;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    //internal class SettingsService
-    //{
-    //    private readonly object appSettingsLock = new object();
-    //    private readonly object appStateLock = new object();
+    internal class SettingsService
+    {
+        private const string appSettingsFileName = "appsettings.json";
+        private const string appStateFileName = "appstate.json";
 
-    //    public AppSettings GetAppSettings()
-    //    {
-    //        lock(this.appSettingsLock)
-    //        {
-    //            return GetSettings();
-    //        }
-    //    }
+        private readonly string appSettingsFilePath;
+        private readonly string appStateFilePath;
 
-    //    public AppState GetAppState()
-    //    {
-    //        lock(this.appStateLock)
-    //        {
-    //            return GetState();
-    //        }
-    //    }
+        private readonly JsonService jsonService;
 
-    //    public void SaveAppSettings(AppSettings userSettings)
-    //    {
-    //        lock(this.appSettingsLock)
-    //        {
-    //            SaveSettings(userSettings);
-    //        }
-    //    }
+        public SettingsService(string baseDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(baseDirectory))
+            {
+                throw new ArgumentException("The directory path is empty or invalid.", nameof(baseDirectory));
+            }
 
-    //    public void SaveAppState(AppState state)
-    //    {
-    //        lock (this.appStateLock)
-    //        {
-    //            SaveState(state);
-    //        }
-    //    }
+            this.appSettingsFilePath = Path.Combine(baseDirectory, SettingsService.appSettingsFileName);
+            this.appStateFilePath = Path.Combine(baseDirectory, SettingsService.appStateFileName);
 
-    //    private AppSettings GetSettings()
-    //    {
-    //        return new AppSettings
-    //        {
-    //            IsDisabledOnFullscreen = Properties.UserPreferences.Default.DisableOnFullscreen,
-    //            IsFocusModeEnabled = Properties.UserPreferences.Default.IsFocusModeEnabled,
-    //            IsSoundEnabled = Properties.UserPreferences.Default.IsSoundEnabled,
-    //            KeepRunningOnClose = Properties.UserPreferences.Default.KeepRunningOnClose,
-    //            NotificationDisplayPosition = Properties.UserPreferences.Default.NotificationDisplayPosition
-    //        };
-    //    }
+            this.jsonService = new JsonService();
+        }
 
-    //    private void SaveSettings(AppSettings settings)
-    //    {
-    //        Properties.UserPreferences.Default.DisableOnFullscreen = settings.IsDisabledOnFullscreen;
-    //        Properties.UserPreferences.Default.IsFocusModeEnabled = settings.IsFocusModeEnabled;
-    //        Properties.UserPreferences.Default.IsSoundEnabled = settings.IsSoundEnabled;
-    //        Properties.UserPreferences.Default.KeepRunningOnClose = settings.KeepRunningOnClose;
-    //        Properties.UserPreferences.Default.NotificationDisplayPosition = settings.NotificationDisplayPosition;
+        public async Task<AppSettings> GetAppSettingsAsync()
+        {
+            return await this.jsonService.ReadJsonFileAsync<AppSettings>(this.appSettingsFilePath).ConfigureAwait(false)
+                ?? new AppSettings();
+        }
 
-    //        Properties.UserPreferences.Default.Save();
-    //    }
+        public async Task<AppState> GetAppStateAsync()
+        {
+            return await this.jsonService.ReadJsonFileAsync<AppState>(this.appStateFilePath).ConfigureAwait(false)
+                ?? new AppState();
+        }
 
-    //    private AppState GetState()
-    //    {
-    //        var appState = new AppState
-    //        {
-    //            CurrentChapterId = Properties.AppState.Default.CurrentChapterId,
-    //            WasUpdateServiceRunning = Properties.AppState.Default.WasUpdateServiceRunning,
-    //        };
+        public void SaveAppSetings(AppSettings settings)
+        {
+            this.jsonService.WriteJsonFile(this.appSettingsFilePath, settings);
+        }
 
-    //        appState.WindowLocation = new WindowLocation()
-    //        {
-    //            X = Properties.AppStateAppWindowLocation.Default.AppPositionX,
-    //            Y = Properties.AppStateAppWindowLocation.Default.AppPositionY,
-    //            Width = Properties.AppStateAppWindowLocation.Default.AppWidth,
-    //            Height = Properties.AppStateAppWindowLocation.Default.AppHeight
-    //        };
+        public async Task SaveAppSettingsAsync(AppSettings settings)
+        {
+            await this.jsonService.WriteJsonFileAsync(this.appSettingsFilePath, settings).ConfigureAwait(false);
+        }
 
-    //        // load most recent chapter update info 
+        public void SaveAppState(AppState state)
+        {
+            this.jsonService.WriteJsonFile(this.appStateFilePath, state);
+        }
 
-    //        string numberAndTitle = Properties.AppStateMostRecentChapterInfo.Default.NumberAndTitle;
-    //        int wordCount = Properties.AppStateMostRecentChapterInfo.Default.WordCount;
-    //        if (numberAndTitle == "" && wordCount == 0)
-    //        {
-    //            appState.MostRecentChapterInfo = null;
-    //        }
-    //        else
-    //        {
-    //            appState.MostRecentChapterInfo = new MostRecentChapterInfo(numberAndTitle, wordCount);
-
-    //            if (DateTime.TryParse(Properties.AppStateMostRecentChapterInfo.Default.ReleaseTime, out DateTime releaseTime))
-    //            {
-    //                appState.MostRecentChapterInfo.ReleaseTime = releaseTime;
-    //            }
-    //        }
-
-    //        return appState;
-    //    }
-
-    //    private void SaveState(AppState state)
-    //    {
-    //        Properties.AppState.Default.CurrentChapterId = state.CurrentChapterId;
-    //        Properties.AppState.Default.WasUpdateServiceRunning = state.WasUpdateServiceRunning;
-
-    //        // App Window Location
-    //        Properties.AppStateAppWindowLocation.Default.AppPositionX = state.WindowLocation.X;
-    //        Properties.AppStateAppWindowLocation.Default.AppPositionY = state.WindowLocation.Y;
-    //        Properties.AppStateAppWindowLocation.Default.AppWidth = state.WindowLocation.Width;
-    //        Properties.AppStateAppWindowLocation.Default.AppHeight = state.WindowLocation.Height;
-
-    //        // most recent chapter info
-    //        if (state.MostRecentChapterInfo == null)
-    //        {
-    //            Properties.AppStateMostRecentChapterInfo.Default.NumberAndTitle = "";
-    //            Properties.AppStateMostRecentChapterInfo.Default.WordCount = 0;
-    //            Properties.AppStateMostRecentChapterInfo.Default.ReleaseTime = "";
-    //        }
-    //        else
-    //        {
-    //            Properties.AppStateMostRecentChapterInfo.Default.NumberAndTitle = state.MostRecentChapterInfo.NumberAndTitle;
-    //            Properties.AppStateMostRecentChapterInfo.Default.WordCount = state.MostRecentChapterInfo.WordCount;
-    //            Properties.AppStateMostRecentChapterInfo.Default.ReleaseTime = state.MostRecentChapterInfo.ReleaseTime.HasValue
-    //                ? state.MostRecentChapterInfo.ReleaseTime.Value.ToString()
-    //                : "";
-    //        }
-
-    //        Properties.AppState.Default.Save();
-    //        Properties.AppStateAppWindowLocation.Default.Save();
-    //        Properties.AppStateMostRecentChapterInfo.Default.Save();
-    //    }
-    //}
+        public async Task SaveAppStateAsync(AppState state)
+        {
+            await this.jsonService.WriteJsonFileAsync(this.appStateFilePath, state).ConfigureAwait(false);
+        }
+    }
 }
