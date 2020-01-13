@@ -1,5 +1,5 @@
 ﻿using ATG_Notifier.Desktop.Helpers;
-using ATG_Notifier.Desktop.WPF.Helpers.Extensions;
+using ATG_Notifier.Desktop.Helpers.Extensions;
 using System;
 using System.Drawing;
 using System.Windows;

@@ -1,12 +1,8 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
-using ATG_Notifier.Desktop.Services;
-using ATG_Notifier.Desktop.Views;
-using ATG_Notifier.Desktop.WPF.Controls;
+using ATG_Notifier.Desktop.Controls;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Services;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Data;
 
 namespace ATG_Notifier.Desktop.ViewModels

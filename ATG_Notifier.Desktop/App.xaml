@@ -11,10 +11,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Converters/Converters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Converters/Converters.xaml" />
                 
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/Hyperlink.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/ToolTip.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/Hyperlink.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/MenuItem.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/ToolTip.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

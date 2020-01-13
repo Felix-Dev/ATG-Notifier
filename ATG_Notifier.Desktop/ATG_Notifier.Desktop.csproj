@@ -37,16 +37,14 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Themes\Controls\MessageCard.xaml" />
     <None Remove="Themes\Generic.xaml" />
     <None Remove="Views\AboutView.xaml" />
     <None Remove="Views\AppShell.xaml" />
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\MessageDialog\MessageDialog.xaml" />
     <None Remove="Views\ToastNotification\ToastNotificationView.xaml" />
-    <None Remove="WPF\Controls\MessageBoard.xaml" />
-    <None Remove="WPF\Converters\Converters.xaml" />
-    <None Remove="WPF\Themes\Hyperlink.xaml" />
-    <None Remove="WPF\Themes\MenuItem.xaml" />
+    <None Remove="Converters\Converters.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,19 +77,19 @@
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Controls\ChapterProfileCard.xaml">
+    <None Update="Controls\ChapterProfileCard\ChapterProfileCard.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Controls\ChapterProfileList.xaml">
+    <None Update="Controls\ChapterProfileList\ChapterProfileList.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Controls\ChapterProfilesView.xaml">
+    <None Update="Controls\ChapterProfilesView\ChapterProfilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Themes\TextBox.xaml">
+    <None Update="Styles\TextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <None Update="WPF\Themes\ToolTip.xaml">
+    <None Update="Styles\ToolTip.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
     

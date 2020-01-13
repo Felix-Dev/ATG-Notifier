@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace ATG_Notifier.Desktop.WPF.Controls
+namespace ATG_Notifier.Desktop.Controls
 {
     [TemplatePart(Name = CloseButtonName, Type = typeof(Button))]
     [TemplatePart(Name = ActionHyperlinkName, Type = typeof(Hyperlink))]

@@ -19,82 +19,87 @@
         Height="75" Width="310"
         MouseLeftButtonUp="OnMouseLeftButtonUp">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+        <!--#region Brushes -->
+        
+        <SolidColorBrush x:Key="ToastNotificationForeground" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ToastNotificationBackground" Color="#FF094AB2" />
+        <SolidColorBrush x:Key="ToastNotificationBorderBrush" Color="#FF437CD8" />
 
-            <SolidColorBrush x:Key="ToastNotificationForeground" Color="#FFFFFFFF"/>
-            <SolidColorBrush x:Key="ToastNotificationBackground" Color="#FF094AB2" />
-            <SolidColorBrush x:Key="ToastNotificationBorderBrush" Color="#FF437CD8" />
+        <SolidColorBrush x:Key="CloseButtonForeground" Color="{Binding Color, Source={StaticResource ToastNotificationForeground}}" />
 
-            <SolidColorBrush x:Key="CloseButtonForeground" Color="{Binding Color, Source={StaticResource ToastNotificationForeground}}" />
+        <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="CloseButtonBackgroundMouseOver" Color="#FF1858BE" />
+        <SolidColorBrush x:Key="CloseButtonBackgroundPressed" Color="#FF5A8CDF" />
+        
+        <!--#endregion-->
 
-            <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
-            <SolidColorBrush x:Key="CloseButtonBackgroundMouseOver" Color="#FF1858BE" />
-            <SolidColorBrush x:Key="CloseButtonBackgroundPressed" Color="#FF5A8CDF" />
-
-            <Style x:Key="CloseButtonStyle" TargetType="Button">
-                <Setter Property="IsTabStop" Value="False" />
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
-                <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Content" Value="✖"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" 
+        <!--#region Styles -->
+        
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
+            <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Content" Value="✖"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" 
                                                   VerticalAlignment="Center"
                                                   Focusable="False"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundMouseOver}"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundPressed}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundMouseOver}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource CloseButtonBackgroundPressed}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="FontFamily" Value="Segoe UI" />
-            </Style>
+        <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
 
-            <Style x:Key="ContentTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBox_TextBlockSelection}">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontWeight" Value="Normal" />
-                <Setter Property="FontFamily" Value="Segoe UI" />
-            </Style>
+        <Style x:Key="ContentTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBox_TextBlockSelection}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
+        
+        <!--#endregion-->
+        
+        <!--#region Storyboards -->
 
-            <Storyboard x:Key="FadeOutStoryboard"
+        <Storyboard x:Key="FadeOutStoryboard"
                         Completed="OnFadeOutStoryboardCompleted">
-                <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+            <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
                                  From="1.0" To="0.0" 
                                  Duration="0:0:1.5" 
                                  BeginTime="0:0:3.5"
                                  AutoReverse="False"
                                  FillBehavior="HoldEnd"/>
-            </Storyboard>
+        </Storyboard>
 
-            <Storyboard x:Key="FadeOutResetStoryboard">
-                <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+        <Storyboard x:Key="FadeOutResetStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
                                  To="1" Duration="0:0:0.0" 
                                  FillBehavior="HoldEnd"/>
-            </Storyboard>
-
-        </ResourceDictionary>
+        </Storyboard>
+        
+        <!--#endregion-->     
     </Window.Resources>
 
     <Window.Style>

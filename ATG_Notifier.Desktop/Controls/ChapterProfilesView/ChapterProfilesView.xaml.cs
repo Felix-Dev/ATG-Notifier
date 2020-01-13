@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace ATG_Notifier.Desktop.WPF.Controls
+namespace ATG_Notifier.Desktop.Controls
 {
     internal partial class ChapterProfilesView : UserControl
     {

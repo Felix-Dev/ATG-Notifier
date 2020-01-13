@@ -8,7 +8,7 @@ using System.Windows.Input;
 using ATG_Notifier.ViewModels.Helpers.Extensions;
 using ATG_Notifier.Desktop.Helpers;
 
-namespace ATG_Notifier.Desktop.WPF.Controls
+namespace ATG_Notifier.Desktop.Controls
 {
     internal partial class ChapterProfileList : UserControl
     {

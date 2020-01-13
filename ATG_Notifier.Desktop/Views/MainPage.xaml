@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
-      xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
+      xmlns:controls="clr-namespace:ATG_Notifier.Desktop.Controls"
       x:ClassModifier="internal"
       mc:Ignorable="d" 
       Name="MainAppPage"
@@ -12,25 +12,18 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Loaded="OnLoaded">
     <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/MenuItem.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+        <!--#region Brushes -->
 
-            <!--#region Brushes -->
+        <SolidColorBrush x:Key="MainViewBackgroundLight" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="MainViewBackgroundDark" Color="#FF303030"/>
 
-            <SolidColorBrush x:Key="MainViewBackgroundLight" Color="#FFFFFFFF"/>
-            <SolidColorBrush x:Key="MainViewBackgroundDark" Color="#FF303030"/>
+        <SolidColorBrush x:Key="MenuBackgroundLight" Color="#FFF0F0F0" />
+        <SolidColorBrush x:Key="MenuBackgroundDark" Color="#FF484848" />
 
-            <SolidColorBrush x:Key="MenuBackgroundLight" Color="#FFF0F0F0" />
-            <SolidColorBrush x:Key="MenuBackgroundDark" Color="#FF484848" />
+        <SolidColorBrush x:Key="MenuForegroundLight" Color="#FF000000"/>
+        <SolidColorBrush x:Key="MenuForegroundDark" Color="#FFD0D0D0"/>
 
-            <SolidColorBrush x:Key="MenuForegroundLight" Color="#FF000000"/>
-            <SolidColorBrush x:Key="MenuForegroundDark" Color="#FFD0D0D0"/>
-
-            <!--#endregion-->
-
-        </ResourceDictionary>
+        <!--#endregion-->
     </Page.Resources>
 
     <Grid Background="{StaticResource MainViewBackgroundLight}">

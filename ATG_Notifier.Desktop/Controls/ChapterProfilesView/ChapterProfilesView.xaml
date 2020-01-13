@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="ATG_Notifier.Desktop.WPF.Controls.ChapterProfilesView"
+﻿<UserControl x:Class="ATG_Notifier.Desktop.Controls.ChapterProfilesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="clr-namespace:ATG_Notifier.Desktop.WPF.Controls"
-             xmlns:converters="clr-namespace:ATG_Notifier.Desktop.WPF.Converters"
+             xmlns:controls="clr-namespace:ATG_Notifier.Desktop.Controls"
+             xmlns:converters="clr-namespace:ATG_Notifier.Desktop.Converters"
              xmlns:modernWPFUI="http://schemas.modernwpf.com/2019"
              x:ClassModifier="internal"
              mc:Ignorable="d" 
@@ -17,9 +17,9 @@
 
         <!--#region Converters-->
 
-            <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
+        <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
 
-            <!--#endregion-->
+        <!--#endregion-->
             
         <!--#region Icons -->
             

@@ -1,72 +1,65 @@
-﻿<UserControl x:Class="ATG_Notifier.Desktop.WPF.Controls.ChapterProfileCard"
+﻿<UserControl x:Class="ATG_Notifier.Desktop.Controls.ChapterProfileCard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:converters="clr-namespace:ATG_Notifier.Desktop.WPF.Converters"
+             xmlns:converters="clr-namespace:ATG_Notifier.Desktop.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ATG-Notifier;component/WPF/Themes/TextBox.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            
-            <!--#region Brushes -->
+        <!--#region Brushes -->
 
-            <SolidColorBrush x:Key="ChapterProfileCardForegorund" Color="DarkGray" />
-            <SolidColorBrush x:Key="ChapterProfileCardForegroundAlert" Color="#FFFF0000" />
+        <SolidColorBrush x:Key="ChapterProfileCardForegorund" Color="DarkGray" />
+        <SolidColorBrush x:Key="ChapterProfileCardForegroundAlert" Color="#FFFF0000" />
 
-            <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="Transparent" />
 
-            <SolidColorBrush x:Key="CloseButtonForeground" Color="#FFA9A9A9" />
-            <SolidColorBrush x:Key="CloseButtonForegroundMouseOver" Color="#FFFF0000" />
-            <SolidColorBrush x:Key="CloseButtonForegroundPressed" Color="#FFA00000" />
-            
-            <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="CloseButtonForeground" Color="#FFA9A9A9" />
+        <SolidColorBrush x:Key="CloseButtonForegroundMouseOver" Color="#FFFF0000" />
+        <SolidColorBrush x:Key="CloseButtonForegroundPressed" Color="#FFA00000" />
 
-            <!--#endregion-->
-            
-            <!--#region Converters -->
-            
-            <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
-            
-            <!--#endregion-->
-            
-            <!--#region Styles -->
+        <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
 
-            <Style x:Key="CloseButtonStyle" TargetType="Button">
-                <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
-                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                <Setter Property="Content" Value="✖"/>
-                <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
-                <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+        <!--#endregion-->
+
+        <!--#region Converters -->
+
+        <converters:WordCountReleaseTimeToStringConverter x:Key="WordCountReleaseTimeToStringConverter" />
+
+        <!--#endregion-->
+
+        <!--#region Styles -->
+
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
+            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+            <Setter Property="Content" Value="✖"/>
+            <Setter Property="Background" Value="{StaticResource CloseButtonBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource CloseButtonForeground}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                   Focusable="{TemplateBinding Focusable}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundMouseOver}" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundPressed}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            
-            <!--#endregion-->
-            
-        </ResourceDictionary>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundMouseOver}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource CloseButtonForegroundPressed}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--#endregion-->
     </UserControl.Resources>
 
     <Grid Background="{StaticResource ChapterProfileCardBackground}">

@@ -26,10 +26,14 @@
 
         <!--#endregion-->
 
+        <!--#region Styles -->
+        
         <Style x:Key="MessageDialogButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource ButtonPanelForeground}"/>
         </Style>
+        
+        <!--#endregion-->
     </Window.Resources>
     <Grid Background="{StaticResource MessageBackground}"
           MinWidth="150"

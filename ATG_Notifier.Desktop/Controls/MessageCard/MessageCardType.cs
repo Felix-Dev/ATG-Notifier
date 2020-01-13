@@ -1,4 +1,4 @@
-﻿namespace ATG_Notifier.Desktop.WPF.Controls
+﻿namespace ATG_Notifier.Desktop.Controls
 {
     internal enum MessageCardType
     {

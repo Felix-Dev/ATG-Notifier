@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ATG_Notifier.Desktop.WPF.Controls
+namespace ATG_Notifier.Desktop.Controls
 {
     internal partial class MessageBoard : UserControl
     {

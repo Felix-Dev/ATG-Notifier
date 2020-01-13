@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ATG_Notifier.Desktop.WPF.Converters
+namespace ATG_Notifier.Desktop.Converters
 {
     internal class CollectionCountToVisibilityConverter : IValueConverter
     {

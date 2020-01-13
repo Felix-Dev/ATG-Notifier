@@ -1,11 +1,9 @@
 ﻿using ATG_Notifier.Desktop.Native.Win32;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace ATG_Notifier.Desktop.WPF.Helpers.Extensions
+namespace ATG_Notifier.Desktop.Helpers.Extensions
 {
     internal static class WindowExtensions
     {

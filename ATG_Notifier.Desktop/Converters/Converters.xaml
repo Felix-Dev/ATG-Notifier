@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:ATG_Notifier.Desktop.WPF.Converters">
+                    xmlns:local="clr-namespace:ATG_Notifier.Desktop.Converters">
     <local:BoolToVisibilityConverter x:Key="BoolToVisibilityVisibleCollapsedConverter"
                                      TrueVisibility="Visible"
                                      FalseVisibility="Collapsed"/>
