@@ -94,8 +94,8 @@ namespace ATG_Notifier.Desktop.Services.Serialization
                 Directory.CreateDirectory(dir);
             }
 
-            // serialize the specified insttance and write the resulting data to the specified file
-            string jsonString = JsonSerializer.Serialize(model);
+            // serialize the specified instance and write the resulting data to the specified file
+            string jsonString = JsonSerializer.Serialize(model, this.JsonOptions);
             File.WriteAllText(fullPath, jsonString);
         }
 

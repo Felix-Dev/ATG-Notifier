@@ -70,7 +70,7 @@ namespace ATG_Notifier.Desktop
         {
             base.OnStartup(e);
 
-            await AppInitialization.InitializeAsync(e.Args);
+            this.appShell = await AppInitialization.InitializeAsync(e.Args);
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();

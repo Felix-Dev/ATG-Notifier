@@ -13,7 +13,7 @@ namespace ATG_Notifier.Desktop
         private static IUpdateService updateService = null!;
         private static AppState appState = null!;
 
-        public static async Task InitializeAsync(string[] args)
+        public static async Task<AppShell> InitializeAsync(string[] args)
         {
             await ServiceLocator.ConfigureAsync();
 
@@ -35,6 +35,8 @@ namespace ATG_Notifier.Desktop
 
             // start the update service
             StartUpdateService();
+
+            return appShell;
         }
 
         private static bool ShouldStartMinimized(string[] args)
