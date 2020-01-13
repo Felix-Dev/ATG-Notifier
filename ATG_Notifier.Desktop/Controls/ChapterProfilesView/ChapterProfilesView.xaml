@@ -298,8 +298,8 @@
                             <StackPanel>
                                 <ContentPresenter Content="{StaticResource IconMostRecentUpdate}"/>
                                 <Popup x:Name="LatestChapterPopup"
-                                       Placement="Bottom"
-                                       VerticalOffset="12"
+                                       Placement="Center"
+                                       VerticalOffset="40"
                                        StaysOpen="False"
                                        PopupAnimation="Slide"
                                        SnapsToDevicePixels="True">
