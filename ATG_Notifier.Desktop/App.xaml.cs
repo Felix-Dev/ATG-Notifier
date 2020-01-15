@@ -179,13 +179,9 @@ namespace ATG_Notifier.Desktop
 
         private void RequestRestart()
         {
-            int appType;
-
 #if DesktopPackage
             string restarterPath = Path.Combine(Package.Current.InstalledLocation.Path, @"ATG_Notifier.Restarter\ATG_Notifier.Restarter.exe");
             string notifierStartString = Package.Current.Id.FamilyName;
-
-            appType = 1;
 #else
             string notifierPath = Assembly.GetExecutingAssembly().Location;
 
@@ -198,13 +194,12 @@ namespace ATG_Notifier.Desktop
 
             string restarterPath = Path.Combine(notifierDir, @"Restarter\ATG_Notifier.Restarter.exe");
             string notifierStartString = notifierPath.Replace(".dll", ".exe");
-            appType = 0;
 #endif
             var currentProcess = Process.GetCurrentProcess();
 
             var restarterProcess = new Process();
             restarterProcess.StartInfo.FileName = restarterPath;
-            restarterProcess.StartInfo.Arguments = $"{currentProcess.Id};{appType};{notifierStartString}";
+            restarterProcess.StartInfo.Arguments = $"{currentProcess.Id};{notifierStartString}";
 
             bool started = restarterProcess.Start();
             if (!started)
