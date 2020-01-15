@@ -14,6 +14,7 @@
     <Version>1.1.0</Version>
     <PackageId>ATG-Notifier.Restarter</PackageId>
     <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -32,6 +33,10 @@
     <PublishedTrimmed>true</PublishedTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
+    <DefineConstants>TRACE;DesktopPackage</DefineConstants>
   </PropertyGroup>
 
 </Project>

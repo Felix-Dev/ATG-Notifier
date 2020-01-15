@@ -7,27 +7,29 @@ namespace ATG_Notifier.Restarter
     internal class Program
     {
         [STAThread]
-        internal static void Main(string[] args)
+        public static void Main(string[] args)
         {
             if (args.Length >= 1)
             {
                 Console.WriteLine($"Started restarter with argument: {args[0]}");
 
                 string[] argumentData = args[0].Split(';', StringSplitOptions.RemoveEmptyEntries);
-                if (argumentData.Length < 3)
+                if (argumentData.Length < 2)
                 {
                     Console.WriteLine("Error: Restarter was not supplied with the relevant data needed to perform the Notifier restart!");
                 }
-                else if (!int.TryParse(argumentData[0], out int procId) || !int.TryParse(argumentData[1], out int appType))
+                else if (!int.TryParse(argumentData[0], out int procId))
                 {
-                    Console.WriteLine("Error: process ID and/or appType have invalid values!");
+                    Console.WriteLine("Error: process ID is invalid!");
                 }
                 else
                 {
-                    Process notifProcess = null;
+                    // Attempt to retrieve the current notifier process and wait for it to stop.
+                    // If the notifier process is no longer running, we will directly start it again.
+                    Process? currentNotifierProcess = null;
                     try
                     {
-                        notifProcess = Process.GetProcessById(procId);
+                        currentNotifierProcess = Process.GetProcessById(procId);
                     }
                     catch (ArgumentException)
                     {
@@ -37,46 +39,65 @@ namespace ATG_Notifier.Restarter
                     Console.Write($"Waiting for the Notifier to close...");
 
                     // Wait for calling Notifier process to exit
-                    notifProcess?.WaitForExit();
+                    currentNotifierProcess?.WaitForExit();
 
                     Console.WriteLine("OK!");
 
                     Console.Write("Attempting to restart the Notifier...");
 
                     bool restartSuccess = false;
-                    if (appType == 0)
+
+                    // Launch a new notifier process.
+
+#if DesktopPackage
+                    restartSuccess = RestartPackagedApp(argumentData[1], out string? errorMessage);
+#else
+                    restartSuccess = RestartApp(argumentData[1], out string? errorMessage);
+#endif
+
+                    if (!restartSuccess)
                     {
-                        var process = new Process();
-                        process.StartInfo.FileName = argumentData[2];
-                        process.StartInfo.Arguments = "restart";
-
-                        try
-                        {
-                            restartSuccess = process.Start();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Failed! Could not start process {argumentData[2]}. Technical details: {ex.Message}");
-                        }
-                        
+                        Console.WriteLine(errorMessage);
                     }
-                    else if (appType == 1)
-                    {
-                        var appActivationManager = new ApplicationActivationManager();
-                        var result = appActivationManager.ActivateApplication($"{argumentData[2]}!App", "Requested Restart", ActivateOptions.None, out _);
-
-                        restartSuccess = result.ToInt32() == 0;
-                        if (!restartSuccess)
-                        {
-                            Console.WriteLine($"Failed! See error {result.ToInt32().ToString()} for more details!");
-                        }
-                    }
-
-                    if (restartSuccess)
+                    else
                     {
                         Console.WriteLine("OK!");
                         return;
                     }
+
+                    //if (appType == 0)
+                    //{
+                    //    var process = new Process();
+                    //    process.StartInfo.FileName = argumentData[2];
+                    //    process.StartInfo.Arguments = "restart";
+
+                    //    try
+                    //    {
+                    //        restartSuccess = process.Start();
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        Console.WriteLine($"Failed! Could not start process {argumentData[2]}. Technical details: {ex.Message}");
+                    //    }
+                        
+                    //}
+                    //else if (appType == 1)
+                    //{
+                    //    var appActivationManager = new ApplicationActivationManager();
+                    //    var result = appActivationManager.ActivateApplication($"{argumentData[2]}!App", "Requested Restart", ActivateOptions.None, out _);
+
+                    //    restartSuccess = result.ToInt32() == 0;
+                    //    if (!restartSuccess)
+                    //    {
+                    //        Console.WriteLine($"Failed! See error {result.ToInt32().ToString()} for more details!");
+                    //    }
+                    //}
+
+                    //if (restartSuccess)
+                    //{
+                    //    Console.WriteLine("OK!");
+                    //    return;
+                    //}
                 }
             }
             else
@@ -86,6 +107,57 @@ namespace ATG_Notifier.Restarter
 
             Console.Write("Press any key to exit...");
             Console.ReadKey();
+        }
+
+        private static bool RestartPackagedApp(string appId, out string? errorMessage)
+        {
+            var appActivationManager = new ApplicationActivationManager();
+
+            bool success;
+            errorMessage = null;
+            try
+            {
+                var result = appActivationManager.ActivateApplication($"{appId}!App", "Requested Restart", ActivateOptions.None, out _);
+
+                success = result.ToInt32() == 0;
+                if (!success)
+                {
+                    errorMessage = $"Failed! See error {result.ToInt32().ToString()} for more details!";
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Failed! Could not start application {appId}.\nTechnical details: {ex.Message}";
+                return false;
+            }
+
+            return success;
+        }
+
+        private static bool RestartApp(string appPath, out string? errorMessage)
+        {
+            var process = new Process();
+            process.StartInfo.FileName = appPath;
+            process.StartInfo.Arguments = "restart";
+
+            bool success;
+            errorMessage = null;
+            try
+            {
+                success = process.Start();
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Failed! Could not start process {appPath}.\nTechnical details: {ex.Message}";
+                return false;
+            }
+
+            if (!success)
+            {
+                errorMessage = "A new process instance was not started. Perhaps the process is already running?";
+            }
+
+            return success;
         }
     }
 }
