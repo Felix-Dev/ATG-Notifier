@@ -13,6 +13,7 @@
     <Authors>Felix-Dev</Authors>
     <Version>1.1.0</Version>
     <PackageId>ATG-Notifier.Restarter</PackageId>
+    <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -24,6 +25,13 @@
     <PublishedTrimmed>true</PublishedTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishedTrimmed>true</PublishedTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
 
 </Project>

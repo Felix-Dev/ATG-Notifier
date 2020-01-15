@@ -11,7 +11,7 @@
     <AssemblyName>ATG-Notifier</AssemblyName>
     <Authors>Felix-Dev</Authors>
     <RootNamespace>ATG_Notifier.Desktop</RootNamespace>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x86;x64</Platforms>
     <Configurations>Debug;Release;DesktopPackage</Configurations>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
     <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
@@ -31,7 +31,6 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishedTrimmed>true</PublishedTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
