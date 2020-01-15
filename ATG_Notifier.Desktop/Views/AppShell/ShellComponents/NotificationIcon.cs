@@ -31,14 +31,6 @@ namespace ATG_Notifier.Desktop.Views.Shell
             this.notifyIcon.MouseUp += OnMouseUp;
         }
 
-        private void OnMouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                App.Current.Activate();
-            } 
-        }
-
         public void Show()
         {
             this.notifyIcon.Visible = true;
@@ -143,9 +135,31 @@ namespace ATG_Notifier.Desktop.Views.Shell
             this.isDisposed = true;
         }
 
+        private void OnMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ActivateApp();
+            }
+        }
+
         private ContextMenuStrip GetContextMenu()
         {
             var contextMenu = new ContextMenuStrip();
+
+            // Open app
+            var menuItemOpen = new ToolStripMenuItem()
+            {
+                Text = "Open",
+            };
+            menuItemOpen.Click += OnMenuItemOpenClick;
+
+            contextMenu.Items.Add(menuItemOpen);
+
+            // separator
+            var separator = new ToolStripSeparator();
+
+            contextMenu.Items.Add(separator);
 
             // Sound
             var menuItemSound = new BindableToolStripMenuItem
@@ -156,11 +170,6 @@ namespace ATG_Notifier.Desktop.Views.Shell
             menuItemSound.Click += OnMenuItemSoundClick;
 
             contextMenu.Items.Add(menuItemSound);
-
-            // separator
-            var separator = new ToolStripSeparator();
-
-            contextMenu.Items.Add(separator);
 
             // Focus mode
             var menuItemFocus = new BindableToolStripMenuItem
@@ -189,6 +198,11 @@ namespace ATG_Notifier.Desktop.Views.Shell
             return contextMenu;
         }
 
+        private void OnMenuItemOpenClick(object? sender, EventArgs e)
+        {
+            ActivateApp();
+        }
+
         private void OnMenuItemExitClick(object? sender, EventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -208,6 +222,11 @@ namespace ATG_Notifier.Desktop.Views.Shell
             {
                 menuItem.Checked = !menuItem.Checked;
             }
+        }
+
+        private void ActivateApp()
+        {
+            App.Current.Activate();
         }
     }
 }
