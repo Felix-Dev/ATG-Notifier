@@ -302,30 +302,37 @@
                                        VerticalOffset="40"
                                        StaysOpen="False"
                                        PopupAnimation="Slide"
-                                       SnapsToDevicePixels="True">
+                                       SnapsToDevicePixels="True"
+                                       Closed="OnLatestChapterPopupClosed">
                                     <Border BorderBrush="{StaticResource ToolbarPopupBorderBrush}"
                                             BorderThickness="1"
                                             Background="{StaticResource ToolbarPopupBackground}"
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
-                                            <TextBlock Text="{Binding SettingsViewModel.LatestUpdateProfile.NumberAndTitle}"
-                                                       HorizontalAlignment="Center" TextAlignment="Center"
-                                                       FontSize="12"
-                                                       Foreground="{StaticResource ToolbarPopupForeground}"
-                                                       TextWrapping="Wrap"/>
-                                            <TextBlock Margin="0,5,0,0" 
-                                                       HorizontalAlignment="Center"
-                                                       TextAlignment="Center"
-                                                       TextWrapping="Wrap"
-                                                       FontSize="11"
-                                                       Foreground="{StaticResource ToolbarPopupForeground}">
-                                                <TextBlock.Text>
+                                            <TextBox x:Name="LastChapterProfileNumberAndTitleTextBox" 
+                                                     Text="{Binding SettingsViewModel.LatestUpdateProfile.NumberAndTitle}"
+                                                     HorizontalAlignment="Center" TextAlignment="Center"
+                                                     FontSize="12"
+                                                     Foreground="{StaticResource ToolbarPopupForeground}"
+                                                     TextWrapping="Wrap"
+                                                     Style="{StaticResource TextBox_TextBlockSelection}"
+                                                     MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"/>
+                                            <TextBox x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
+                                                     Margin="0,5,0,0" 
+                                                     HorizontalAlignment="Center"
+                                                     TextAlignment="Center"
+                                                     TextWrapping="Wrap"
+                                                     FontSize="11"
+                                                     Foreground="{StaticResource ToolbarPopupForeground}"
+                                                     Style="{StaticResource TextBox_TextBlockSelection}"
+                                                     MouseDoubleClick="OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick">
+                                                <TextBox.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                                                         <Binding Path="SettingsViewModel.LatestUpdateProfile.WordCount"/>
                                                         <Binding Path="SettingsViewModel.LatestUpdateProfile.ReleaseTime"/>
                                                     </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
+                                                </TextBox.Text>
+                                            </TextBox>
                                         </StackPanel>
                                     </Border>
                                 </Popup>

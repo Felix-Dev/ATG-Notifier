@@ -65,5 +65,36 @@ namespace ATG_Notifier.Desktop.Controls
         {
             await this.ViewModel.LoadAsync();
         }
+
+        private void OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // clear selection of any content 
+
+            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionStart = 0;
+            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionLength = 0;
+
+            this.LastChapterProfileNumberAndTitleTextBox.SelectAll();
+        }
+
+        private void OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // clear selection of any content 
+
+            this.LastChapterProfileNumberAndTitleTextBox.SelectionStart = 0;
+            this.LastChapterProfileNumberAndTitleTextBox.SelectionLength = 0;
+
+            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectAll();
+        }
+
+        private void OnLatestChapterPopupClosed(object sender, System.EventArgs e)
+        {
+            // clear any popup content selection
+
+            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionStart = 0;
+            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionLength = 0;
+
+            this.LastChapterProfileNumberAndTitleTextBox.SelectionStart = 0;
+            this.LastChapterProfileNumberAndTitleTextBox.SelectionLength = 0;
+        }
     }
 }
