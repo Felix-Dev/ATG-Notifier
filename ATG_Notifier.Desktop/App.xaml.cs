@@ -104,7 +104,7 @@ namespace ATG_Notifier.Desktop
         {
             this.logService.Log(LogType.Fatal, (e.ExceptionObject as Exception)?.ToString() + "\r\n" + (e.ExceptionObject as Exception)?.Message);
 
-            // Stop the update service
+            // Stop the update service.
             StopUpdateService();
 
             // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention.
@@ -138,7 +138,7 @@ namespace ATG_Notifier.Desktop
 
             CommonHelpers.RunOnUIThread(() => AppShell.Current?.SaveAndCleanup());
 
-            // save user preferences and app state
+            // Save user preferences and app state.
             SaveUserPreferencesAndAppState();
 
             // Process the reply of the user about whether or not to restart the notifier app.
@@ -214,7 +214,6 @@ namespace ATG_Notifier.Desktop
                     $"Restarter args: [{restarterProcess.StartInfo.Arguments}]");
             }
 
-            //Application.Current.Shutdown();
             Environment.Exit(1);
         }
     }

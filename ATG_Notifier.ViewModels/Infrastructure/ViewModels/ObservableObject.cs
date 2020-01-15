@@ -11,7 +11,7 @@ namespace ATG_Notifier.ViewModels.Infrastructure
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// Notify changes for all properties
+        /// Notify changes for all properties.
         /// </summary>
         public void NotifyChanges()
         {

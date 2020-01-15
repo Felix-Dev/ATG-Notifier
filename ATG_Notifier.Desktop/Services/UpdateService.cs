@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    // TODO: Design the update service mre flexible by
-    //      - passing the current cource chapter Id to it instead of querrying the AppState
+    // TODO: Design the update service more flexible by
+    //      - passing it the current source chapter Id instead of querrying the AppState
     //      - make the update interval configurable
     internal class UpdateService : IUpdateService
     {
@@ -152,11 +152,11 @@ namespace ATG_Notifier.Desktop.Services
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:
-            //            await Task.Delay(7000);
+//            await Task.Delay(7000);
 
-            //#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            //            string? s = null; int i = s.Length;
-            //#pragma warning restore CS8602 // Dereference of a possibly null reference.
+//#pragma warning disable CS8602 // Dereference of a possibly null reference.
+//            string? s = null; int i = s.Length;
+//#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             lock (this.timerLock)
             {

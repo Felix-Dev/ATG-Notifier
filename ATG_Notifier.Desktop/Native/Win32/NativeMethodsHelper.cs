@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
 
 namespace ATG_Notifier.Desktop.Native.Win32
 {
@@ -33,7 +31,7 @@ namespace ATG_Notifier.Desktop.Native.Win32
             IntPtr functionPointer = GetProcAddress(hModule, methodName);
 
             FreeLibrary(hModule);
-            return (functionPointer != IntPtr.Zero);
+            return functionPointer != IntPtr.Zero;
         }
     }
 }

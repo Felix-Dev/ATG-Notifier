@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ATG_Notifier.Desktop.Native.Win32
 {
@@ -34,36 +35,36 @@ namespace ATG_Notifier.Desktop.Native.Win32
         /// <devdoc>https://msdn.microsoft.com/en-us/library/windows/desktop/ms679347(v=vs.85).aspx</devdoc>
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+        public static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
+        public static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern int SendMessage(IntPtr hWnd, int wMsg, int wParam, IntPtr lParam);
+        public static extern int SendMessage(IntPtr hWnd, int wMsg, int wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        internal static extern int RegisterWindowMessage(string? msgName);
+        public static extern int RegisterWindowMessage(string? msgName);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
+        public static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetActiveWindow();
+        public static extern IntPtr GetActiveWindow();
 
         /// <devdoc>https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdpiforwindow</devdoc>
         [DllImport("user32.dll")]
-        internal static extern int GetDpiForWindow(IntPtr hWnd);
+        public static extern int GetDpiForWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern bool SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
+        public static extern bool SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
          int x, int y, int width, int height, uint flags);
 
         [DllImport("user32.dll")]
-        internal static extern int GetWindowLong(IntPtr hwnd, int index);
+        public static extern int GetWindowLong(IntPtr hwnd, int index);
 
         [DllImport("user32.dll")]
-        internal static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+        public static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
 
         #endregion // Window
 
@@ -72,15 +73,15 @@ namespace ATG_Notifier.Desktop.Native.Win32
         /// <devdoc>http://msdn.microsoft.com/en-us/library/dd144901%28v=VS.85%29.aspx</devdoc>
         [DllImport("user32", EntryPoint = "GetMonitorInfoW", ExactSpelling = true, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetMonitorInfo([In] IntPtr hMonitor, [Out] MONITORINFO lpmi);
+        public static extern bool GetMonitorInfo([In] IntPtr hMonitor, [Out] MONITORINFO lpmi);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/dd145064%28v=VS.85%29.aspx</devdoc>
         [DllImport("user32")]
-        internal static extern IntPtr MonitorFromWindow([In] IntPtr handle, [In] int flags);
+        public static extern IntPtr MonitorFromWindow([In] IntPtr handle, [In] int flags);
 
         /// <devdoc>https://docs.microsoft.com/en-us/windows/win32/api/shellscalingapi/nf-shellscalingapi-getdpiformonitor</devdoc>
         [DllImport("shcore.dll")]
-        internal static extern uint GetDpiForMonitor(IntPtr hmonitor, MonitorDpiType dpiType, out uint dpiX, out uint dpiY);
+        public static extern uint GetDpiForMonitor(IntPtr hmonitor, MonitorDpiType dpiType, out uint dpiX, out uint dpiY);
 
         #endregion // Monitor Window
 
@@ -88,20 +89,20 @@ namespace ATG_Notifier.Desktop.Native.Win32
 
         /// <devdoc>https://msdn.microsoft.com/en-us/library/bb762242(VS.85).aspx</devdoc>
         [DllImport("shell32.dll")]
-        internal static extern int SHQueryUserNotificationState(out QUERY_USER_NOTIFICATION_STATE pquns);
+        public static extern int SHQueryUserNotificationState(out QUERY_USER_NOTIFICATION_STATE pquns);
 
         #endregion // Notifications
 
         #region Menus
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        public static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
 
         [DllImport("user32.dll")]
-        internal static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+        public static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr DestroyMenu(IntPtr hWnd);
+        public static extern IntPtr DestroyMenu(IntPtr hWnd);
 
         #endregion // Menus
     }
