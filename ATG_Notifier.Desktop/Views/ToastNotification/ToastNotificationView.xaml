@@ -159,6 +159,7 @@
                 <TextBox x:Name="ChapterNumberAndTitleTextBox" 
                          Grid.Row="2" 
                          Grid.ColumnSpan="2"
+                         AutoWordSelection="True"
                          Margin="11,5,11,0"
                          HorizontalAlignment="Left"
                          Foreground="{StaticResource ToastNotificationForeground}"                  

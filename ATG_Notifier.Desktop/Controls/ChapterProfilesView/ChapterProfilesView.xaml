@@ -310,6 +310,7 @@
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
                                             <TextBox x:Name="LastChapterProfileNumberAndTitleTextBox" 
+                                                     AutoWordSelection="True"
                                                      Text="{Binding SettingsViewModel.LatestUpdateProfile.NumberAndTitle}"
                                                      HorizontalAlignment="Center" TextAlignment="Center"
                                                      FontSize="12"
@@ -318,6 +319,7 @@
                                                      Style="{StaticResource TextBox_TextBlockSelection}"
                                                      MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"/>
                                             <TextBox x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
+                                                     AutoWordSelection="True"
                                                      Margin="0,5,0,0" 
                                                      HorizontalAlignment="Center"
                                                      TextAlignment="Center"
