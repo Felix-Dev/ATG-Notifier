@@ -12,13 +12,16 @@ namespace ATG_Notifier.Desktop.Views.Shell
     {
         private bool isDisposed = false;
 
+        private readonly Icon baseIcon;
         private NotifyIcon notifyIcon;
 
-        private readonly SettingsViewModel settingsViewModel;
+        private readonly SettingsViewModel settingsViewModel;  
 
         public NotificationIcon(Icon icon, string tooltipText)
         {
             this.settingsViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();
+
+            this.baseIcon = icon;
 
             var components = new System.ComponentModel.Container();
             this.notifyIcon = new NotifyIcon(components)
@@ -56,7 +59,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
             canvas.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             //canvas.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-            canvas.DrawIcon(this.notifyIcon.Icon, 0, 0);
+            canvas.DrawIcon(this.baseIcon, 0, 0);
 
             // draw badge if number is positive
             if (number > 0)
