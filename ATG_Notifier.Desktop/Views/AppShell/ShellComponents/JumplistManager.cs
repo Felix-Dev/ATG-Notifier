@@ -12,7 +12,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
             {
                 Title = "Quit",
                 Arguments = App.AppExitCmd,
-                IconResourcePath = Assembly.GetEntryAssembly()?.CodeBase ?? "",
+                IconResourceIndex = -1,
                 ApplicationPath = Assembly.GetEntryAssembly()?.CodeBase?.Replace(".dll", ".exe") ?? "",
             };
 
