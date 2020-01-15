@@ -10,7 +10,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
         {
             JumpTask task = new JumpTask
             {
-                Title = "Exit",
+                Title = "Quit",
                 Arguments = App.AppExitCmd,
                 IconResourcePath = Assembly.GetEntryAssembly()?.CodeBase ?? "",
                 ApplicationPath = Assembly.GetEntryAssembly()?.CodeBase?.Replace(".dll", ".exe") ?? "",

@@ -189,7 +189,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
             // Exit
             var menuItemExit = new ToolStripMenuItem
             {
-                Text = "Exit"
+                Text = "Quit"
             };
             menuItemExit.Click += (s, e) => System.Windows.Application.Current.Shutdown();
 
