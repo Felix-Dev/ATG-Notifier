@@ -1,12 +1,8 @@
-﻿using ATG_Notifier.Desktop.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Shell;
 
-namespace ATG_Notifier.Desktop.Components
+namespace ATG_Notifier.Desktop.Views.Shell
 {
     internal static class JumplistManager
     {
