@@ -1,4 +1,0 @@
-﻿[*.cs]
-
-# SA1208: System using directives should be placed before other using directives
-dotnet_diagnostic.SA1208.severity = none
