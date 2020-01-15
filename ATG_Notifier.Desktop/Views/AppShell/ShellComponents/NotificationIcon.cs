@@ -152,7 +152,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
             {
                 Text = "Open",
             };
-            menuItemOpen.Click += OnMenuItemOpenClick;
+            menuItemOpen.Click += (s, e) => ActivateApp();
 
             contextMenu.Items.Add(menuItemOpen);
 
@@ -164,20 +164,20 @@ namespace ATG_Notifier.Desktop.Views.Shell
             // Sound
             var menuItemSound = new BindableToolStripMenuItem
             {
-                Text = "Play Notification Sound"
+                Text = "Play Notification Sound",
+                CheckOnClick = true,
             };
             menuItemSound.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsSoundEnabled), true, DataSourceUpdateMode.OnPropertyChanged));
-            menuItemSound.Click += OnMenuItemSoundClick;
 
             contextMenu.Items.Add(menuItemSound);
 
             // Focus mode
             var menuItemFocus = new BindableToolStripMenuItem
             {
-                Text = "Do Not Disturb"
+                Text = "Do Not Disturb",
+                CheckOnClick = true,
             };
             menuItemFocus.DataBindings.Add(new Binding(nameof(BindableToolStripMenuItem.Checked), this.settingsViewModel, nameof(this.settingsViewModel.IsFocusModeEnabled), true, DataSourceUpdateMode.OnPropertyChanged));
-            menuItemFocus.Click += OnMenuItemFocusClick;
 
             contextMenu.Items.Add(menuItemFocus);
 
@@ -191,37 +191,11 @@ namespace ATG_Notifier.Desktop.Views.Shell
             {
                 Text = "Exit"
             };
-            menuItemExit.Click += OnMenuItemExitClick;
+            menuItemExit.Click += (s, e) => System.Windows.Application.Current.Shutdown();
 
             contextMenu.Items.Add(menuItemExit);
 
             return contextMenu;
-        }
-
-        private void OnMenuItemOpenClick(object? sender, EventArgs e)
-        {
-            ActivateApp();
-        }
-
-        private void OnMenuItemExitClick(object? sender, EventArgs e)
-        {
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        private void OnMenuItemFocusClick(object? sender, EventArgs e)
-        {
-            if (sender is BindableToolStripMenuItem menuItem)
-            {
-                menuItem.Checked = !menuItem.Checked;
-            }
-        }
-
-        private void OnMenuItemSoundClick(object? sender, EventArgs e)
-        {
-            if (sender is BindableToolStripMenuItem menuItem)
-            {
-                menuItem.Checked = !menuItem.Checked;
-            }
         }
 
         private void ActivateApp()
