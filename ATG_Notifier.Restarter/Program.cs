@@ -64,40 +64,6 @@ namespace ATG_Notifier.Restarter
                         Console.WriteLine("OK!");
                         return;
                     }
-
-                    //if (appType == 0)
-                    //{
-                    //    var process = new Process();
-                    //    process.StartInfo.FileName = argumentData[2];
-                    //    process.StartInfo.Arguments = "restart";
-
-                    //    try
-                    //    {
-                    //        restartSuccess = process.Start();
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-                    //        Console.WriteLine($"Failed! Could not start process {argumentData[2]}. Technical details: {ex.Message}");
-                    //    }
-                        
-                    //}
-                    //else if (appType == 1)
-                    //{
-                    //    var appActivationManager = new ApplicationActivationManager();
-                    //    var result = appActivationManager.ActivateApplication($"{argumentData[2]}!App", "Requested Restart", ActivateOptions.None, out _);
-
-                    //    restartSuccess = result.ToInt32() == 0;
-                    //    if (!restartSuccess)
-                    //    {
-                    //        Console.WriteLine($"Failed! See error {result.ToInt32().ToString()} for more details!");
-                    //    }
-                    //}
-
-                    //if (restartSuccess)
-                    //{
-                    //    Console.WriteLine("OK!");
-                    //    return;
-                    //}
                 }
             }
             else
