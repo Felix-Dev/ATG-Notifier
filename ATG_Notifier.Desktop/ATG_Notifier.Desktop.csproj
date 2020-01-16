@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
-    <Version>1.4.0.4</Version>
+    <Version>1.4.5.0</Version>
     <Company />
     <Product>ATG-Notifier</Product>
     <AssemblyName>ATG-Notifier</AssemblyName>
