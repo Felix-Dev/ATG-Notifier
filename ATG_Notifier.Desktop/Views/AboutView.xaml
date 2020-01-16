@@ -16,7 +16,8 @@
         <SolidColorBrush x:Key="WindowBackground" Color="#FFF0F0F0" />
     </Window.Resources>
 
-    <Grid Background="{StaticResource WindowBackground}">
+    <Grid Background="{StaticResource WindowBackground}"
+          MouseLeftButtonUp="OnGridMouseLeftButtonUp">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -25,11 +26,24 @@
                     Margin="20"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-            <TextBlock Text="{x:Static configuration:AppConfiguration.AppId}" />
+            <TextBox x:Name="AppIdTextBox" 
+                     AutoWordSelection="True"
+                     HorizontalAlignment="Left"
+                     Style="{StaticResource TextBox_TextBlockSelection}"
+                     MouseDoubleClick="OnAppIdTextBoxMouseDoubleClick"
+                     LostFocus="OnAppIdTextBoxLostFocus"/>
+            <TextBox x:Name="AppVersionTextBox"
+                     AutoWordSelection="True"
+                     HorizontalAlignment="Left"
+                     Style="{StaticResource TextBox_TextBlockSelection}"
+                     MouseDoubleClick="OnAppVersionTextBoxMouseDoubleClick"
+                     LostFocus="OnAppVersionTextBoxLostFocus"/>
+            <!--<TextBlock Text="{x:Static configuration:AppConfiguration.AppId}" />
+            <
             <TextBlock>
                 <Run Text="Version"/>
                 <Run Text="{x:Static configuration:AppConfiguration.AppVersion}" />
-            </TextBlock>
+            </TextBlock>-->
             <TextBlock Margin="0,10,0,0">
                 <Run Text="Source code available on"/>      
                 <Hyperlink x:Name="SourceCodeHyperlink"
