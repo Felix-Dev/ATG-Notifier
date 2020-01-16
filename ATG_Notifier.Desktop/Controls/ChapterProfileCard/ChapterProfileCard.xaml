@@ -104,7 +104,7 @@
                 Click="OnCloseButtonClick"
                 PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
         <!-- Chapter number and title textbox -->
-        <TextBox x:Name="ChapterNumberAndTitleTextBox"
+        <TextBox x:Name="NumberAndTitleTextBox"
                  Grid.Row="1" 
                  Grid.Column="1" Grid.ColumnSpan="2"
                  AutoWordSelection="True"
@@ -117,19 +117,27 @@
                  TextWrapping="Wrap"
                  Focusable="True"
                  IsTabStop="False"
-                 MouseDoubleClick="OnChapterTitleTextBoxPreviewMouseDoubleClick"/>
-        <!-- Chapter word count and release time textblock -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-                   Margin="0,0,3,1"
-                   Foreground="{StaticResource ChapterProfileCardForegorund}" 
-                   FontSize="11"                                      
-                   HorizontalAlignment="Left" VerticalAlignment="Center">
-            <TextBlock.Text>
+                 MouseDoubleClick="OnNumberAndTitleTextBoxMouseDoubleClick"
+                 LostKeyboardFocus="OnNumberAndTitleTextBoxLostKeyboardFocus"/>
+        <!-- Chapter word count and release time textbox -->
+        <TextBox x:Name="WordCountAndReleaseTimeTextBox" 
+                 Grid.Row="2" 
+                 Grid.Column="1" Grid.ColumnSpan="2"
+                 AutoWordSelection="True"
+                 Margin="0,0,3,1"
+                 Foreground="{StaticResource ChapterProfileCardForegorund}" 
+                 FontSize="11"                                      
+                 HorizontalAlignment="Left"
+                 Style="{StaticResource TextBox_TextBlockSelection}"
+                 VerticalAlignment="Center"
+                 MouseDoubleClick="OnWordCountAndReleaseTimeTextBoxMouseDoubleClick"
+                 LostKeyboardFocus="OnWordCountAndReleaseTimeTextBoxLostKeyboardFocus">
+            <TextBox.Text>
                 <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                     <Binding Path="WordCount"/>
                     <Binding Path="ReleaseTime"/>
                 </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
+            </TextBox.Text>
+        </TextBox>
     </Grid>
 </UserControl>

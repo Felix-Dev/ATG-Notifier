@@ -56,10 +56,28 @@ namespace ATG_Notifier.Desktop.Controls
             }   
         }
 
-        private void OnChapterTitleTextBoxPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            this.ChapterNumberAndTitleTextBox.SelectAll();
+            this.NumberAndTitleTextBox.SelectAll();
             e.Handled = true;
+        }
+
+        private void OnWordCountAndReleaseTimeTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.WordCountAndReleaseTimeTextBox.SelectAll();
+            e.Handled = true;
+        }
+
+        private void OnNumberAndTitleTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            this.NumberAndTitleTextBox.SelectionStart = 0;
+            this.NumberAndTitleTextBox.SelectionLength = 0;
+        }
+
+        private void OnWordCountAndReleaseTimeTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            this.WordCountAndReleaseTimeTextBox.SelectionStart = 0;
+            this.WordCountAndReleaseTimeTextBox.SelectionLength = 0;
         }
     }
 }

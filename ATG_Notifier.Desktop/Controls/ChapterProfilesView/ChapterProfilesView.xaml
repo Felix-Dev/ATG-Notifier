@@ -302,8 +302,7 @@
                                        VerticalOffset="40"
                                        StaysOpen="False"
                                        PopupAnimation="Slide"
-                                       SnapsToDevicePixels="True"
-                                       Closed="OnLatestChapterPopupClosed">
+                                       SnapsToDevicePixels="True">
                                     <Border BorderBrush="{StaticResource ToolbarPopupBorderBrush}"
                                             BorderThickness="1"
                                             Background="{StaticResource ToolbarPopupBackground}"
@@ -317,7 +316,8 @@
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
                                                      TextWrapping="Wrap"
                                                      Style="{StaticResource TextBox_TextBlockSelection}"
-                                                     MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"/>
+                                                     MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"
+                                                     LostKeyboardFocus="OnLastChapterProfileNumberAndTitleTextBoxLostKeyboardFocus"/>
                                             <TextBox x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
                                                      AutoWordSelection="True"
                                                      Margin="0,5,0,0" 
@@ -327,7 +327,8 @@
                                                      FontSize="11"
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
                                                      Style="{StaticResource TextBox_TextBlockSelection}"
-                                                     MouseDoubleClick="OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick">
+                                                     MouseDoubleClick="OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick"
+                                                     LostKeyboardFocus="OnLastChapterProfileWordCountAndReleaseDateTextBoxLostKeyboardFocus">
                                                 <TextBox.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                                                         <Binding Path="SettingsViewModel.LatestUpdateProfile.WordCount"/>
