@@ -11,6 +11,8 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace ATG_Notifier.Desktop.Views
 {
@@ -318,6 +320,17 @@ namespace ATG_Notifier.Desktop.Views
             if (!this.appSettings.IsFocusModeEnabled)
             {
                 this.notificationManager.Show(NotificationTitle, e.ChapterProfileViewModel);
+            }
+        }
+
+        private void OnWindowMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.FocusedElement is TextBox textBox && textBox.IsSelectionActive)
+            {
+                textBox.SelectionStart = 0;
+                textBox.SelectionLength = 0;
+                //textBox.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
+                //Keyboard.ClearFocus();
             }
         }
     }

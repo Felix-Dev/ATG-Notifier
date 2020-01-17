@@ -76,16 +76,32 @@ namespace ATG_Notifier.Desktop.Controls
             this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectAll();
         }
 
-        private void OnLastChapterProfileNumberAndTitleTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnLastChapterProfileNumberAndTitleTextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            ClearNumberAndTitleTextBoxSelection();
+        }
+
+        private void ClearNumberAndTitleTextBoxSelection()
         {
             this.LastChapterProfileNumberAndTitleTextBox.SelectionStart = 0;
             this.LastChapterProfileNumberAndTitleTextBox.SelectionLength = 0;
         }
 
-        private void OnLastChapterProfileWordCountAndReleaseDateTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnLastChapterProfileWordCountAndReleaseDateTextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            ClearWordCountAndReleaseDateTextBoxSelection();
+        }
+
+        private void ClearWordCountAndReleaseDateTextBoxSelection()
         {
             this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionStart = 0;
             this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionLength = 0;
+        }
+
+        private void OnLatestChapterPopupMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ClearNumberAndTitleTextBoxSelection();
+            ClearWordCountAndReleaseDateTextBoxSelection();
         }
     }
 }

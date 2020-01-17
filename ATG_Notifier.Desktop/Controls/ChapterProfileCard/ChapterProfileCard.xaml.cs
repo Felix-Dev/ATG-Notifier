@@ -68,13 +68,13 @@ namespace ATG_Notifier.Desktop.Controls
             e.Handled = true;
         }
 
-        private void OnNumberAndTitleTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnNumberAndTitleTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             this.NumberAndTitleTextBox.SelectionStart = 0;
             this.NumberAndTitleTextBox.SelectionLength = 0;
         }
 
-        private void OnWordCountAndReleaseTimeTextBoxLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnWordCountAndReleaseTimeTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             this.WordCountAndReleaseTimeTextBox.SelectionStart = 0;
             this.WordCountAndReleaseTimeTextBox.SelectionLength = 0;

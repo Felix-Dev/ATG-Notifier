@@ -35,7 +35,9 @@
 
         <!-- Top-level app menu -->
         <Menu Grid.Row="0" 
-              Background="{StaticResource MenuBackgroundLight}">
+              Background="{StaticResource MenuBackgroundLight}"
+              PreviewMouseLeftButtonUp="OnMenuPreviewMouseLeftButtonUp"
+              PreviewMouseLeftButtonDown="OnMenuPreviewMouseLeftButtonDown">
             <!-- App Options -->
             <MenuItem Header="Options"
                       TabIndex="0">

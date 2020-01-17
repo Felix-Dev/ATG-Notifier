@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
-        xmlns:configuration="clr-namespace:ATG_Notifier.Desktop.Configuration"
         x:ClassModifier="internal"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
@@ -38,12 +37,6 @@
                      Style="{StaticResource TextBox_TextBlockSelection}"
                      MouseDoubleClick="OnAppVersionTextBoxMouseDoubleClick"
                      LostFocus="OnAppVersionTextBoxLostFocus"/>
-            <!--<TextBlock Text="{x:Static configuration:AppConfiguration.AppId}" />
-            <
-            <TextBlock>
-                <Run Text="Version"/>
-                <Run Text="{x:Static configuration:AppConfiguration.AppVersion}" />
-            </TextBlock>-->
             <TextBlock Margin="0,10,0,0">
                 <Run Text="Source code available on"/>      
                 <Hyperlink x:Name="SourceCodeHyperlink"

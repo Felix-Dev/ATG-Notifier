@@ -159,5 +159,28 @@ namespace ATG_Notifier.Desktop.Views
         {
             WebUtility.OpenWebsite(AppConfiguration.FeedbackUri);
         }
+
+        private void OnMenuPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.FocusedElement is TextBox textBox && textBox.IsSelectionActive)
+            {
+                textBox.SelectionStart = 0;
+                textBox.SelectionLength = 0;
+                //textBox.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
+                //Keyboard.ClearFocus();
+            }
+        }
+
+        private void OnMenuPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Source is MenuItem menuItem && menuItem.Role == MenuItemRole.TopLevelHeader
+                && Keyboard.FocusedElement is TextBox textBox && textBox.IsSelectionActive)
+            {
+                textBox.SelectionStart = 0;
+                textBox.SelectionLength = 0;
+                //textBox.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
+                //Keyboard.ClearFocus();
+            }
+        }
     }
 }

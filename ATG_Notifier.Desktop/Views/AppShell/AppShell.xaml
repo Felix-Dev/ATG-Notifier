@@ -12,7 +12,8 @@
         MinWidth="225" MinHeight="300"
         WindowStartupLocation="Manual"
         Initialized="OnInitialized"
-        Loaded="OnLoaded">
+        Loaded="OnLoaded"
+        MouseLeftButtonUp="OnWindowMouseLeftButtonUp">
     <Grid>
         <Frame x:Name="ContentFrame" 
                IsTabStop="False"/>
