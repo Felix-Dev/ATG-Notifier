@@ -34,7 +34,7 @@ namespace ATG_Notifier.Desktop.Services
         private const int Padding = 5;
 
         private readonly object notificationCounterLock = new object();
-        private readonly Semaphore notificationSema;
+        private readonly SemaphoreSlim notificationSema;
 
         private readonly int[] displaySlots;
 
@@ -46,7 +46,7 @@ namespace ATG_Notifier.Desktop.Services
             int diffPositions = Enum.GetValues(typeof(DisplayPosition)).Length;
             this.displaySlots = new int[diffPositions];
 
-            this.notificationSema = new Semaphore(MaxDisplayedPopups, MaxDisplayedPopups);
+            this.notificationSema = new SemaphoreSlim(MaxDisplayedPopups, MaxDisplayedPopups);
 
             this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
 
@@ -94,7 +94,7 @@ namespace ATG_Notifier.Desktop.Services
              * Incoming notifications have to wait until a "notification spot" has become 
              * available.
              */
-            notificationSema.WaitOne();
+            notificationSema.Wait();
 
             var position = this.appSettings.NotificationDisplayPosition;
 
