@@ -57,14 +57,13 @@ namespace ATG_Notifier.Desktop.ViewModels
                 //Add(new ChapterProfileViewModel(model));
                 CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
 
-
                 if (!model.IsRead)
                 {
                     this.chapterProfilesUnreadCount++;
                 }
             }
 
-            this.ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
+            //this.ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
         }
 
         public async Task DeleteChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)

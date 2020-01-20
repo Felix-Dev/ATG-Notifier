@@ -13,6 +13,8 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Input;
 using System.Windows.Controls;
+using ATG_Notifier.Desktop.ViewModels;
+using System.Windows.Data;
 
 namespace ATG_Notifier.Desktop.Views
 {
@@ -35,7 +37,6 @@ namespace ATG_Notifier.Desktop.Views
         private readonly TaskbarButtonService taskbarButtonService;
         private readonly IUpdateService updateService;
 
-        private bool startAsMinimized;
         private bool canCancel = true;
 
         private NotificationIcon notificationIcon = null!;
@@ -65,12 +66,38 @@ namespace ATG_Notifier.Desktop.Views
 
         public static AppShell? Current { get; private set; }
 
-        public Task InitializeAsync(bool showMinimized)
+        public async Task InitializeAsync(bool showMinimized)
         {
-            this.startAsMinimized = showMinimized;
+            // build the jumplist for the app's taskbar button
+            JumplistManager.BuildJumplist();
+
+            // show program icon in Windows notification area
+            this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
 
             if (showMinimized)
             {
+                var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
+                var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
+
+                int unreadChapterCount = 0;
+                foreach (var chapterProfile in chapterProfiles)
+                {
+                    if (!chapterProfile.IsRead)
+                    {
+                        unreadChapterCount++;
+                    }
+                }
+
+                this.notificationIcon.UpdateBadge(unreadChapterCount);
+            }
+
+            //this.notificationIcon.UpdateBadge(this.appState.UnreadChapters);
+
+            this.notificationIcon.Show();
+
+            if (showMinimized)
+            {
+                // hide the app shell
                 this.WindowState = WindowState.Minimized;
                 Hide();
             }
@@ -79,7 +106,10 @@ namespace ATG_Notifier.Desktop.Views
                 Show();
             }
 
-            return Task.CompletedTask;
+            // start listening for chapter updates so we can notify the user
+            this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
+
+            return;
         }
 
         public new bool BringIntoView()
@@ -157,38 +187,6 @@ namespace ATG_Notifier.Desktop.Views
         {
             SaveWindowPosition();
             Cleanup();
-        }
-
-        private async void OnInitialized(object sender, EventArgs e)
-        {           
-            // build the jumplist for the app's taskbar button
-            JumplistManager.BuildJumplist();
-
-            // show program icon in Windows notification area
-            this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
-
-            // load database number of unread chapters
-            if (this.startAsMinimized)
-            {
-                var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
-                var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
-
-                int unreadChapterCount = 0;
-                foreach (var chapterProfile in chapterProfiles)
-                {
-                    if (!chapterProfile.IsRead)
-                    {
-                        unreadChapterCount++;
-                    }
-                }
-
-                this.notificationIcon.UpdateBadge(unreadChapterCount);
-            }
-
-            this.notificationIcon.Show();
-
-            // start listening for chapter updates so we can notify the user
-            this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

@@ -29,6 +29,8 @@ namespace ATG_Notifier.Desktop.Services
             this.jsonService = new JsonService();
         }
 
+        public event EventHandler<SavingAppStateEventArgs>? SavingAppState;
+
         public async Task<AppSettings> GetAppSettingsAsync()
         {
             return await this.jsonService.ReadJsonFileAsync<AppSettings>(this.appSettingsFilePath).ConfigureAwait(false)
@@ -53,11 +55,15 @@ namespace ATG_Notifier.Desktop.Services
 
         public void SaveAppState(AppState state)
         {
+            SavingAppState?.Invoke(this, new SavingAppStateEventArgs(state));
+
             this.jsonService.WriteJsonFile(this.appStateFilePath, state);
         }
 
         public async Task SaveAppStateAsync(AppState state)
         {
+            SavingAppState?.Invoke(this, new SavingAppStateEventArgs(state));
+
             await this.jsonService.WriteJsonFileAsync(this.appStateFilePath, state).ConfigureAwait(false);
         }
     }
