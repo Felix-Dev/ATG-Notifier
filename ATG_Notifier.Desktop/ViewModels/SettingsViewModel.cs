@@ -60,6 +60,19 @@ namespace ATG_Notifier.Desktop.ViewModels
             }
         }
 
+        public bool IsStartMinimizedEnabled
+        {
+            get => this.appSettings.IsStartMinimizedEnabled;
+            set
+            {
+                if (value != this.appSettings.IsStartMinimizedEnabled)
+                {
+                    this.appSettings.IsStartMinimizedEnabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public bool KeepRunningOnClose
         {
             get => this.appSettings.KeepRunningOnClose;

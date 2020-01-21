@@ -1,5 +1,7 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
+using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Models;
 using ATG_Notifier.ViewModels.Services;
@@ -20,16 +22,20 @@ namespace ATG_Notifier.Desktop.ViewModels
         private readonly IChapterProfileService chapterProfileService;
         private readonly IUpdateService updateService;
 
+        private readonly ChapterProfileServicePoint chapterProfileServicePoint;
+
         //private readonly object itemsLock = new object();
 
-        private int chapterProfilesUnreadCount;
+        private bool hasUnreadChapters;
 
         public ChapterProfilesListViewModel(IChapterProfileService chapterProfileService, IUpdateService updateService)
         {
             this.chapterProfileService = chapterProfileService;
             this.updateService = updateService;
 
-            this.AppSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
+            this.chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
+
+            var appState = ServiceLocator.Current.GetService<AppState>();
 
             this.Items = new ObservableCollection<ChapterProfileViewModel>();
             //BindingOperations.EnableCollectionSynchronization(this.Items, this.itemsLock);
@@ -37,33 +43,40 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
 
             this.updateService.ChapterUpdated += OnChapterUpdate;
-            ChapterProfilesUnreadCountChanged += (s, e) => NotifyPropertyChanged(nameof(HasUnreadChapters));
+
+            this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
+
+            this.HasUnreadChapters = appState.UnreadChapters > 0;
+
+            //ChapterProfilesUnreadCountChanged += (s, e) => NotifyPropertyChanged(nameof(HasUnreadChapters));
         }
 
-        public bool HasUnreadChapters => this.chapterProfilesUnreadCount > 0;
+        private void OnChapterProfilesUnreadCountChanged(object? sender, Services.ChapterProfilesUnreadCountChangedEventArgs e)
+        {
+            this.HasUnreadChapters = e.Count > 0;
+        }
 
-        public event EventHandler<ChapterProfilesUnreadCountChangedEventArgs>? ChapterProfilesUnreadCountChanged;
-
-        public SettingsViewModel AppSettings { get; private set; }
+        public bool HasUnreadChapters
+        {
+            get => this.hasUnreadChapters;
+            set => Set(ref this.hasUnreadChapters, value);
+        }
 
         public ICommand SetListAsReadCommand { get; }
 
         public async Task LoadAsync()
         {
-            IList<ChapterProfileModel> chapterProfileModels = await this.chapterProfileService.GetChapterProfilesAsync();
+            IList<ChapterProfileModel> chapterProfileModels = await this.chapterProfileServicePoint.GetChapterProfilesAsync();
 
             foreach (var model in chapterProfileModels)
             {
-                //Add(new ChapterProfileViewModel(model));
-                CommonHelpers.RunOnUIThread(() => Add(new ChapterProfileViewModel(model)), System.Windows.Threading.DispatcherPriority.Loaded);
-
-                if (!model.IsRead)
-                {
-                    this.chapterProfilesUnreadCount++;
-                }
+                Add(new ChapterProfileViewModel(model));
             }
 
-            //this.ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
+            if (this.SelectedItem != null)
+            {
+                NotifyPropertyChanged(nameof(this.SelectedItem));
+            }
         }
 
         public async Task DeleteChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
@@ -73,60 +86,41 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         protected override async void OnClear()
         {
-            await this.chapterProfileService.DeleteChapterProfileRangeAsync(this.Items.Select(viewModel => viewModel.ChapterProfileModel).ToList());
+            await this.chapterProfileServicePoint.DeleteAllChapterProfilesAsync();
 
             base.OnClear();
-
-            this.chapterProfilesUnreadCount = 0;
-            ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
         }
 
         private async void OnSetListAsRead()
         {
-            foreach (var chapterProfile in this.Items)
+            foreach (var chapterProfileViewModel in this.Items)
             {
-                chapterProfile.IsRead = true;
+                chapterProfileViewModel.IsRead = true;
             }
 
-            this.chapterProfilesUnreadCount = 0;
-            ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
+            await this.chapterProfileServicePoint.UpdateChapterProfilesAsync(this.Items);
 
-            await this.chapterProfileService.UpdateChapterProfilesAsync(this.Items.Select(vm => vm.ChapterProfileModel).ToList());
+            //this.chapterProfilesUnreadCount = 0;
+            //ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
+
+            //await this.chapterProfileService.UpdateChapterProfilesAsync(this.Items.Select(vm => vm.ChapterProfileModel).ToList());
         }
 
         private void OnChapterUpdate(object? sender, ChapterUpdateEventArgs e)
         {
-            //Add(e.ChapterProfile);
             CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfileViewModel));
-
-            this.chapterProfilesUnreadCount++;
-            ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
         }
 
-        protected override async void OnRemove(ChapterProfileViewModel model)
+        protected override async void OnRemove(ChapterProfileViewModel viewModel)
         {
-            base.OnRemove(model);
+            base.OnRemove(viewModel);
 
-            await this.chapterProfileService.DeleteChapterProfileAsync(model.ChapterProfileModel);
-
-            if (!model.IsRead)
-            {
-                this.chapterProfilesUnreadCount--;
-                ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
-            }
+            await this.chapterProfileServicePoint.DeleteChapterProfileAsync(viewModel);
         }
 
         public async Task UpdateChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
         {
-            ChapterProfileModel? chapterProfileModel = await this.chapterProfileService.GetChapterProfileAsync(chapterProfileViewModel.ChapterProfileId).ConfigureAwait(false);
-            if (chapterProfileModel != null 
-                && chapterProfileViewModel.IsRead && !chapterProfileModel.IsRead)
-            {
-                this.chapterProfilesUnreadCount--;
-                ChapterProfilesUnreadCountChanged?.Invoke(this, new ChapterProfilesUnreadCountChangedEventArgs(this.chapterProfilesUnreadCount));
-            }
-
-            await this.chapterProfileService.UpdateChapterProfileAsync(chapterProfileViewModel.ChapterProfileModel).ConfigureAwait(false);
+            await this.chapterProfileServicePoint.UpdateChapterProfileAsync(chapterProfileViewModel);
         }
     }
 }

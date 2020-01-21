@@ -41,7 +41,9 @@ namespace ATG_Notifier.Desktop
 
         private static bool ShouldStartMinimized(string[] args)
         {
-            return false;
+            var appSettings = ServiceLocator.Current.GetService<AppSettings>();
+
+            return appSettings.IsStartMinimizedEnabled;
         }
 
         private static void StartUpdateService()

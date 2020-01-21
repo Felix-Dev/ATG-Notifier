@@ -41,6 +41,11 @@
             <!-- App Options -->
             <MenuItem Header="Options"
                       TabIndex="0">
+                <MenuItem Header="Start app minimized"
+                          IsCheckable="True"
+                          IsChecked="{Binding SettingsViewModel.IsStartMinimizedEnabled, Mode=TwoWay}"/>
+                <!-- Separator -->
+                <Separator />
                 <!-- Keep app running on close-->
                 <MenuItem Header="Keep Running on Close"
                           IsCheckable="True"

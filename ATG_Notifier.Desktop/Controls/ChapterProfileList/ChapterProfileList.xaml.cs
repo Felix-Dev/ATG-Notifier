@@ -128,7 +128,8 @@ namespace ATG_Notifier.Desktop.Controls
 
         private void OnChapterListMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (this.ChapterList.SelectedItem is ChapterProfileViewModel chapterProfileViewModel)
+            var item = ItemsControl.ContainerFromElement(this.ChapterList, e.OriginalSource as DependencyObject);
+            if (item is ListBoxItem lbItem && lbItem.DataContext is ChapterProfileViewModel chapterProfileViewModel)
             {
                 this.ItemClickCommand.TryExecute(chapterProfileViewModel);
             }

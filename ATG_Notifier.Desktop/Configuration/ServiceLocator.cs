@@ -34,10 +34,11 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();
+            serviceCollection.AddSingleton<ChapterProfileServicePoint>();
             serviceCollection.AddSingleton<ChapterUpdateListeningService>();
 
             serviceCollection.AddSingleton<DialogService>();
-            serviceCollection.AddSingleton<ToastNotificationManager>();
+            serviceCollection.AddSingleton<ToastNotificationService>();
             serviceCollection.AddSingleton(TaskbarButtonService.GetForApp());
 
             var appSettings = await settingsService.GetAppSettingsAsync();

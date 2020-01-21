@@ -23,6 +23,11 @@ namespace ATG_Notifier.Data.DataContexts
             modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications);
         }
 
+        public int DeleteChapterProfiles()
+        {
+            return this.Database.ExecuteSqlRaw("DELETE FROM [ChapterProfiles]");
+        }
+
         public DbSet<DbVersion> DbVersion { get; set; } = null!;
 
         public DbSet<ChapterProfile> ChapterProfiles { get; set; } = null!;

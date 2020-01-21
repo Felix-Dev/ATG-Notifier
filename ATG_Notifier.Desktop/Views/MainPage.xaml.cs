@@ -54,17 +54,8 @@ namespace ATG_Notifier.Desktop.Views
             }
         }
 
-        /// <summary>
-        /// Load chapters from database and start the update service.
-        /// </summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // TODO: Rethink the loading process and if the updater should have to wait until the database file has been loaded.
-
-            var chapterProfilesViewModel = ServiceLocator.Current.GetService<ChapterProfilesViewModel>();
-            chapterProfilesViewModel.ListViewModel.ChapterProfilesUnreadCountChanged += (s, e) => AppShell.Current?.UpdateBadge(e.UnreadCount);
         }
 
         private void OnMenuItemCloseClick(object sender, RoutedEventArgs e)

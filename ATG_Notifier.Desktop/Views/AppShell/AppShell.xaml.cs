@@ -33,7 +33,8 @@ namespace ATG_Notifier.Desktop.Views
 #endif
 
         private readonly DialogService dialogService;
-        private readonly ToastNotificationManager notificationManager;
+        private readonly ChapterProfileServicePoint chapterProfileServicePoint;
+        private readonly ToastNotificationService notificationManager;
         private readonly TaskbarButtonService taskbarButtonService;
         private readonly IUpdateService updateService;
 
@@ -52,9 +53,12 @@ namespace ATG_Notifier.Desktop.Views
             Current = this;
 
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
-            this.notificationManager = ServiceLocator.Current.GetService<ToastNotificationManager>();
+            this.notificationManager = ServiceLocator.Current.GetService<ToastNotificationService>();
             this.taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
+
             this.updateService = ServiceLocator.Current.GetService<IUpdateService>();
+
+            this.chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
 
             this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
             this.appState = ServiceLocator.Current.GetService<AppState>();
@@ -74,24 +78,24 @@ namespace ATG_Notifier.Desktop.Views
             // show program icon in Windows notification area
             this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
 
-            if (showMinimized)
-            {
-                var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
-                var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
+            //if (showMinimized)
+            //{
+            //    var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
+            //    var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
 
-                int unreadChapterCount = 0;
-                foreach (var chapterProfile in chapterProfiles)
-                {
-                    if (!chapterProfile.IsRead)
-                    {
-                        unreadChapterCount++;
-                    }
-                }
+            //    int unreadChapterCount = 0;
+            //    foreach (var chapterProfile in chapterProfiles)
+            //    {
+            //        if (!chapterProfile.IsRead)
+            //        {
+            //            unreadChapterCount++;
+            //        }
+            //    }
 
-                this.notificationIcon.UpdateBadge(unreadChapterCount);
-            }
+            //    this.notificationIcon.UpdateBadge(unreadChapterCount);
+            //}
 
-            //this.notificationIcon.UpdateBadge(this.appState.UnreadChapters);
+            this.notificationIcon.UpdateBadge(this.appState.UnreadChapters);
 
             this.notificationIcon.Show();
 
@@ -108,6 +112,8 @@ namespace ATG_Notifier.Desktop.Views
 
             // start listening for chapter updates so we can notify the user
             this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
+
+            this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
 
             return;
         }
@@ -133,16 +139,6 @@ namespace ATG_Notifier.Desktop.Views
             base.Close();
 
             this.canCancel = true;
-        }
-
-        /// <summary>
-        /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
-        /// unread chapter profiles in the app changes.
-        /// </summary>
-        public void UpdateBadge(int number)
-        {
-            // TODO: This code might throw a NullReference exception for this.notificationIcon when the timing is bad.
-            CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
         }
 
         public void SetTaskbarButtonMode(AppTaskbarButtonMode mode, TaskbarButtonResetMode resetMode = TaskbarButtonResetMode.AppActivated)
@@ -189,6 +185,16 @@ namespace ATG_Notifier.Desktop.Views
             Cleanup();
         }
 
+        /// <summary>
+        /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
+        /// unread chapter profiles in the app changes.
+        /// </summary>
+        private void UpdateBadge(int number)
+        {
+            // TODO: This code might throw a NullReference exception for this.notificationIcon when the timing is bad.
+            CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             this.ContentFrame.Navigate(new Uri("Views/MainPage.xaml", UriKind.Relative));
@@ -231,6 +237,11 @@ namespace ATG_Notifier.Desktop.Views
                 Hide();
 
                 e.Cancel = true;
+            }
+            else
+            {
+                this.updateService.ChapterUpdated -= OnUpdateServiceChapterUpdated;
+                this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged -= OnChapterProfilesUnreadCountChanged;
             }
 
             SaveWindowPosition();
@@ -319,6 +330,11 @@ namespace ATG_Notifier.Desktop.Views
             {
                 this.notificationManager.Show(NotificationTitle, e.ChapterProfileViewModel);
             }
+        }
+
+        private void OnChapterProfilesUnreadCountChanged(object? sender, ChapterProfilesUnreadCountChangedEventArgs e)
+        {
+            UpdateBadge(e.Count);
         }
 
         private void OnWindowMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

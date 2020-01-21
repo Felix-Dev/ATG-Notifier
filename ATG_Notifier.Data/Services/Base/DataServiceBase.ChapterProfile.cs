@@ -62,5 +62,12 @@ namespace ATG_Notifier.Data.Services
             this.dataSource.ChapterProfiles.RemoveRange(chapterProfiles);
             return await this.dataSource.SaveChangesAsync().ConfigureAwait(false);
         }
+
+        public Task<int> DeleteAllChapterProfilesAsync()
+        {
+            int deletedEntries = this.dataSource.DeleteChapterProfiles();
+
+            return Task.FromResult(deletedEntries);
+        }
     }
 }

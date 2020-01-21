@@ -86,7 +86,14 @@ namespace ATG_Notifier.Desktop
         {
             base.OnExit(e);
 
+            var chapterUpdateListeningService = ServiceLocator.Current.GetService<ChapterUpdateListeningService>();
+            var chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
+
             StopUpdateService();
+
+            chapterUpdateListeningService.WaitAndStop();
+            chapterProfileServicePoint.WaitAndStop();
+
             SaveUserPreferencesAndAppState();
         }
 

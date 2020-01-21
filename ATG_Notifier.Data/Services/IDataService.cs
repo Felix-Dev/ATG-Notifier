@@ -17,5 +17,7 @@ namespace ATG_Notifier.Data.Services
         Task<int> UpdateChapterProfilesAsync(params ChapterProfile[] chapterProfiles);
 
         Task<int> DeleteChapterProfilesAsync(params ChapterProfile[] chapterProfiles);
+
+        Task<int> DeleteAllChapterProfilesAsync();
     }
 }

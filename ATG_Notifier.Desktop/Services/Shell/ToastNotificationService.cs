@@ -11,10 +11,11 @@ using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using ATG_Notifier.Desktop.Models;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    internal class ToastNotificationManager
+    internal class ToastNotificationService
     {
         private const int MaxDisplayedPopups = 3;
 
@@ -38,17 +39,17 @@ namespace ATG_Notifier.Desktop.Services
 
         private readonly int[] displaySlots;
 
-        private readonly SettingsViewModel appSettings;
+        private readonly AppSettings appSettings;
         private readonly StaTaskScheduler taskScheduler;
 
-        public ToastNotificationManager()
+        public ToastNotificationService()
         {
             int diffPositions = Enum.GetValues(typeof(DisplayPosition)).Length;
             this.displaySlots = new int[diffPositions];
 
             this.notificationSema = new SemaphoreSlim(MaxDisplayedPopups, MaxDisplayedPopups);
 
-            this.appSettings = ServiceLocator.Current.GetService<SettingsViewModel>();
+            this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
 
             this.taskScheduler = new StaTaskScheduler(MaxDisplayedPopups);
         }       

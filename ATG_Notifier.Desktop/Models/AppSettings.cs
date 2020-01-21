@@ -10,6 +10,8 @@ namespace ATG_Notifier.Desktop.Models
 
         public bool IsSoundEnabled { get; set; } = true;
 
+        public bool IsStartMinimizedEnabled { get; set; } = false;
+
         public bool KeepRunningOnClose { get; set; } = true;
 
         public DisplayPosition NotificationDisplayPosition { get; set; } = DisplayPosition.TopRight;

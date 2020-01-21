@@ -13,8 +13,6 @@ namespace ATG_Notifier.ViewModels.Services
         private readonly IDataServiceFactory dataServiceFactory;
         private readonly ILogService logService;
 
-        static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-
         public ChapterProfileService(IDataServiceFactory dataServiceFactory, ILogService logService)
         {
             this.dataServiceFactory = dataServiceFactory;
@@ -23,16 +21,12 @@ namespace ATG_Notifier.ViewModels.Services
 
         public async Task<ChapterProfileModel?> GetChapterProfileAsync(long id)
         {
-            await semaphoreSlim.WaitAsync();
-
             ChapterProfile? chapterProfile = null;
 
             using (var dataService = await this.dataServiceFactory.CreateDataServiceAsync())
             {
                 chapterProfile = await dataService.GetChapterProfileAsync(id).ConfigureAwait(false);
             }
-
-            semaphoreSlim.Release();
 
             return chapterProfile != null
                 ? CreateChapterProfileModel(chapterProfile)
@@ -41,15 +35,11 @@ namespace ATG_Notifier.ViewModels.Services
 
         public async Task<IList<ChapterProfileModel>> GetChapterProfilesAsync()
         {
-            await semaphoreSlim.WaitAsync();
-
             IList<ChapterProfile> chapterProfiles = new List<ChapterProfile>();
             using (var dataService = await this.dataServiceFactory.CreateDataServiceAsync().ConfigureAwait(false))
             {
                 chapterProfiles = await dataService.GetChapterProfilesAsync().ConfigureAwait(false);
             }
-
-            semaphoreSlim.Release();
 
             return chapterProfiles
                 .Select(profile => CreateChapterProfileModel(profile))
@@ -62,8 +52,6 @@ namespace ATG_Notifier.ViewModels.Services
             {
                 throw new ArgumentNullException(nameof(model));
             }
-
-            await semaphoreSlim.WaitAsync();
 
             long id = model.ChapterProfileId;
             using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
@@ -80,8 +68,6 @@ namespace ATG_Notifier.ViewModels.Services
                     UpdateModelFromChapterProfile(model, chapterProfile);
                 }
 
-                semaphoreSlim.Release();
-
                 return 0;
             }
         }
@@ -92,8 +78,6 @@ namespace ATG_Notifier.ViewModels.Services
             {
                 throw new ArgumentNullException(nameof(models));
             }
-
-            await semaphoreSlim.WaitAsync();
 
             using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
@@ -121,8 +105,6 @@ namespace ATG_Notifier.ViewModels.Services
                 }  
             }
 
-            semaphoreSlim.Release();
-
             return 0;
         }
 
@@ -133,16 +115,10 @@ namespace ATG_Notifier.ViewModels.Services
                 throw new ArgumentNullException(nameof(model));
             }
 
-            await semaphoreSlim.WaitAsync();
-
             var chapterProfile = new ChapterProfile { ChapterProfileId = model.ChapterProfileId };
             using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
-                int result = await dataService.DeleteChapterProfilesAsync(chapterProfile).ConfigureAwait(false);
-
-                semaphoreSlim.Release();
-
-                return result;
+                return await dataService.DeleteChapterProfilesAsync(chapterProfile).ConfigureAwait(false);
             }
         }
 
@@ -152,8 +128,6 @@ namespace ATG_Notifier.ViewModels.Services
             {
                 throw new ArgumentNullException(nameof(models));
             }
-
-            await semaphoreSlim.WaitAsync();
 
             using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
             {
@@ -168,11 +142,15 @@ namespace ATG_Notifier.ViewModels.Services
                     }                    
                 }
 
-                int result = await dataService.DeleteChapterProfilesAsync(chapterProfiles.ToArray()).ConfigureAwait(false);
+                return await dataService.DeleteChapterProfilesAsync(chapterProfiles.ToArray()).ConfigureAwait(false);
+            }
+        }
 
-                semaphoreSlim.Release();
-
-                return result;
+        public async Task<int> DeleteAllChapterProfilesAsync()
+        {
+            using (var dataService = await dataServiceFactory.CreateDataServiceAsync())
+            {
+                return await dataService.DeleteAllChapterProfilesAsync();
             }
         }
 

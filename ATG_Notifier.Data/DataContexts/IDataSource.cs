@@ -15,6 +15,8 @@ namespace ATG_Notifier.Data.DataContexts
 
         DbSet<ChapterProfile> ChapterProfiles { get; }
 
+        int DeleteChapterProfiles();
+
         EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();

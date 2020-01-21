@@ -19,5 +19,7 @@ namespace ATG_Notifier.ViewModels.Services
         Task<int> DeleteChapterProfileAsync(ChapterProfileModel model);
 
         Task<int> DeleteChapterProfileRangeAsync(IList<ChapterProfileModel> models);
+
+        Task<int> DeleteAllChapterProfilesAsync();
     }
 }
