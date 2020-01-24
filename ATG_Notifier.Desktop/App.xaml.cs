@@ -1,9 +1,12 @@
+using ATG_Notifier.Desktop.Activation;
 using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Controls;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Models;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.Views;
+using ATG_Notifier.Desktop.Views.Shell;
 using ATG_Notifier.ViewModels.Services;
 using System;
 using System.Diagnostics;
@@ -23,7 +26,12 @@ namespace ATG_Notifier.Desktop
 {
     internal partial class App : Application
     {
+        private static string applicationWindowName = AppConfiguration.AppId;
+
         private ILogService logService = null!;
+
+        private ActivationService activationService;
+
         private DialogService dialogService = null!;
         private SettingsService settingsService = null!;
 
@@ -34,15 +42,9 @@ namespace ATG_Notifier.Desktop
 
         public const string AppExitCmd = "Exit";
 
-        // TODO: Implement IDisposable?
-        private readonly AutoResetEvent appActivatedResetEvent;
-
         public App()
         {
-            this.appActivatedResetEvent = new AutoResetEvent(false);
-
-            this.Activated += (s, e) => this.appActivatedResetEvent.Set();
-            this.Deactivated += (s, e) => this.appActivatedResetEvent.Reset();
+            this.activationService = CreateActivationService();
 
             InitializeComponent();
         }
@@ -61,18 +63,47 @@ namespace ATG_Notifier.Desktop
             }
         }
 
-        public void Activate()
+        public static bool RequestActivateRunningInstance()
         {
-            AppShell.Current?.BringIntoView();
+            return WindowWin32InteropHelper.RequestActivateWindow(applicationWindowName);
+        }
+
+        public static bool RequestCloseRunningInstance()
+        {
+            return WindowWin32InteropHelper.RequestCloseWindow(applicationWindowName);
+        }
+
+        public async Task ActivateAsync(IActivatedEventArgs args)
+        {
+            await this.activationService.ActivateAsync(args);
+        }
+
+        private ActivationService CreateActivationService()
+        {
+            var shellArgs = new ShellArgs(typeof(MainPage));
+            return new ActivationService(new Lazy<ApplicationWindow>(CreateApplicationWindow), shellArgs);
+        }
+
+        private ApplicationWindow CreateApplicationWindow()
+        {
+            return new AppShell()
+            {
+                Title = App.applicationWindowName,
+            };
         }
 
         protected async override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            this.appShell = await AppInitialization.InitializeAsync(e.Args);
+            await activationService.ActivateAsync(new LaunchActivatedEventArgs(e.Args));
+
+            this.appShell = (AppShell)Application.Current.MainWindow;
 
             this.logService = ServiceLocator.Current.GetService<ILogService>();
+
+            //this.navigationService = ServiceLocator.Current.GetService<INavigationService>();
+
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
             this.settingsService = ServiceLocator.Current.GetService<SettingsService>();
 
@@ -101,7 +132,14 @@ namespace ATG_Notifier.Desktop
         {
             AppShell.Current?.SaveAndCleanup();
 
+            var chapterUpdateListeningService = ServiceLocator.Current.GetService<ChapterUpdateListeningService>();
+            var chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
+
             StopUpdateService();
+
+            chapterUpdateListeningService.WaitAndStop();
+            chapterProfileServicePoint.WaitAndStop();
+
             SaveUserPreferencesAndAppState();
 
             Environment.Exit(0);
@@ -123,7 +161,9 @@ namespace ATG_Notifier.Desktop
             this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.Error, TaskbarButtonResetMode.AppActivated);
 
             // Wait for the notifier app to enter the foreground.
-            this.appActivatedResetEvent.WaitOne();
+            this.appShell.WaitUntilIsActivated();
+
+            //this.appActivatedResetEvent.WaitOne();
 
             // Show our error message as soon as we are the foreground app.
 

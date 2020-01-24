@@ -2,7 +2,6 @@
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Native.Win32;
 using ATG_Notifier.Desktop.Utilities;
-using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.Views;
 using ATG_Notifier.Desktop.Views.ToastNotification;
 using ATG_Notifier.Desktop.Helpers.Extensions;
@@ -12,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using ATG_Notifier.Desktop.Models;
+using ATG_Notifier.Desktop.Activation;
 
 namespace ATG_Notifier.Desktop.Services
 {
@@ -125,8 +125,7 @@ namespace ATG_Notifier.Desktop.Services
             {
                 if (e.Reason == CloseReason.Click)
                 {
-                    ServiceLocator.Current.GetService<ChapterProfilesViewModel>().ListViewModel.SelectedItem = chapterProfileViewModel;
-                    CommonHelpers.RunOnUIThread(() => App.Current.Activate());
+                    CommonHelpers.RunOnUIThread(async () => App.Current.ActivateAsync(new ToastNotificationActivatedEventArgs(chapterProfileViewModel)));
                 }
 
                 ReleaseDisplaySlot(position, displaySlot);

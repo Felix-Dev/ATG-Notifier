@@ -26,7 +26,7 @@ namespace ATG_Notifier.Desktop.Controls
             {
                 throw new InvalidOperationException("Error: ChapterProfileList does not have a ScrollViewer.");
             }
-        }          
+        }
 
         public ChapterProfilesListViewModel? ViewModel => this.DataContext as ChapterProfilesListViewModel;
 

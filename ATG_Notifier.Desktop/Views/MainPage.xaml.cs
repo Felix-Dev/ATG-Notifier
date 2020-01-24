@@ -1,15 +1,17 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
+using ATG_Notifier.Desktop.Controls;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
+using ATG_Notifier.ViewModels.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    internal partial class MainPage : Page
+    internal partial class MainPage : NavigationPage
     {
         private readonly DialogService dialogService;
         //private readonly NetworkService networkService;
@@ -34,6 +36,18 @@ namespace ATG_Notifier.Desktop.Views
         public MainPageViewModel ViewModel => this.viewModel;
 
         public SettingsViewModel SettingsViewModel => this.settingsViewModel;
+
+        protected override void OnNavigatedTo(NavigationEventArgs2 args)
+        {
+            if (args.Parameter is MainPageArgs mArgs)
+            {
+                this.ChapterProfilesViewControl.SetPayload(new ChapterProfileListArgs() { ChapterProfileViewModel = mArgs.ChapterProfileViewModel });
+            }
+            else
+            {
+                this.ChapterProfilesViewControl.SetPayload(ChapterProfileListArgs.CreateDefault());
+            }
+        }
 
         private void InitializeNotificationDisplayPositionMenu()
         {

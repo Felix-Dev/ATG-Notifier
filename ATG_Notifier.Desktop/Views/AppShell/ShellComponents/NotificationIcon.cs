@@ -1,4 +1,5 @@
-﻿using ATG_Notifier.Desktop.Configuration;
+﻿using ATG_Notifier.Desktop.Activation;
+using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.Desktop.WinForms;
@@ -203,7 +204,8 @@ namespace ATG_Notifier.Desktop.Views.Shell
 
         private void ActivateApp()
         {
-            App.Current.Activate();
+            // TODO: Add SaveFireAndForget task handler?
+            App.Current.ActivateAsync(new NotificationAreaActivatedEventArgs());
         }
     }
 }

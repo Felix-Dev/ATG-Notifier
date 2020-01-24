@@ -15,13 +15,13 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using ATG_Notifier.Desktop.ViewModels;
 using System.Windows.Data;
+using ATG_Notifier.Desktop.Activation;
+using ATG_Notifier.Desktop.Controls;
+using System.Threading;
 
 namespace ATG_Notifier.Desktop.Views
 {
-    // TODO: 
-    //      - Listen to notification unread amount changes (and stop listening when we shutdown the app shell)
-    //        (perhaps we can use a weak event handling system for notification unread changes?)
-    internal partial class AppShell : Window
+    internal partial class AppShell : ApplicationWindow
     {
         private const int SurfaceAreaMinWidth = 100;
         private const int SurfaceAreaMinHeight = 100;
@@ -38,6 +38,8 @@ namespace ATG_Notifier.Desktop.Views
         private readonly TaskbarButtonService taskbarButtonService;
         private readonly IUpdateService updateService;
 
+        private INavigationService navigationService;
+
         private bool canCancel = true;
 
         private NotificationIcon notificationIcon = null!;
@@ -48,6 +50,10 @@ namespace ATG_Notifier.Desktop.Views
         private readonly AppSettings appSettings;
         private readonly AppState appState;
 
+        private readonly ManualResetEventSlim shellActivatedResetEvent;
+
+        private ShellArgs shellArgs = null!;
+
         public AppShell()
         {
             Current = this;
@@ -56,6 +62,8 @@ namespace ATG_Notifier.Desktop.Views
             this.notificationManager = ServiceLocator.Current.GetService<ToastNotificationService>();
             this.taskbarButtonService = ServiceLocator.Current.GetService<TaskbarButtonService>();
 
+            this.navigationService = ServiceLocator.Current.GetService<INavigationService>();
+
             this.updateService = ServiceLocator.Current.GetService<IUpdateService>();
 
             this.chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
@@ -63,60 +71,17 @@ namespace ATG_Notifier.Desktop.Views
             this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
             this.appState = ServiceLocator.Current.GetService<AppState>();
 
+            this.shellActivatedResetEvent = new ManualResetEventSlim(false);
+
             InitializeComponent();
+            InitializeNavigation();
 
             SetWindowsPosition();
         }
 
         public static AppShell? Current { get; private set; }
 
-        public async Task InitializeAsync(bool showMinimized)
-        {
-            // build the jumplist for the app's taskbar button
-            JumplistManager.BuildJumplist();
-
-            // show program icon in Windows notification area
-            this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
-
-            //if (showMinimized)
-            //{
-            //    var chapterProfileService = ServiceLocator.Current.GetService<IChapterProfileService>();
-            //    var chapterProfiles = await chapterProfileService.GetChapterProfilesAsync();
-
-            //    int unreadChapterCount = 0;
-            //    foreach (var chapterProfile in chapterProfiles)
-            //    {
-            //        if (!chapterProfile.IsRead)
-            //        {
-            //            unreadChapterCount++;
-            //        }
-            //    }
-
-            //    this.notificationIcon.UpdateBadge(unreadChapterCount);
-            //}
-
-            this.notificationIcon.UpdateBadge(this.appState.UnreadChapters);
-
-            this.notificationIcon.Show();
-
-            if (showMinimized)
-            {
-                // hide the app shell
-                this.WindowState = WindowState.Minimized;
-                Hide();
-            }
-            else
-            {
-                Show();
-            }
-
-            // start listening for chapter updates so we can notify the user
-            this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
-
-            this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
-
-            return;
-        }
+        public override Frame ContentFrame => this.ContentFrame2;
 
         public new bool BringIntoView()
         {
@@ -139,6 +104,11 @@ namespace ATG_Notifier.Desktop.Views
             base.Close();
 
             this.canCancel = true;
+        }
+
+        public void WaitUntilIsActivated()
+        {
+            this.shellActivatedResetEvent.Wait();
         }
 
         public void SetTaskbarButtonMode(AppTaskbarButtonMode mode, TaskbarButtonResetMode resetMode = TaskbarButtonResetMode.AppActivated)
@@ -195,30 +165,27 @@ namespace ATG_Notifier.Desktop.Views
             CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        protected override void OnLaunching(ApplicationWindowLaunchingEventArgs e)
         {
-            this.ContentFrame.Navigate(new Uri("Views/MainPage.xaml", UriKind.Relative));
-        }
+            base.OnLaunching(e);
 
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
+            // build the jumplist for the app's taskbar button
+            JumplistManager.BuildJumplist();
 
-            if (PresentationSource.FromVisual(this) is HwndSource source)
-            {
-                source.AddHook(WndProc);
+            // show program icon in Windows notification area
+            this.notificationIcon = new NotificationIcon(new Icon(Properties.Resources.AppLogo, 16, 16), AppConfiguration.AppId);
+            this.notificationIcon.UpdateBadge(this.appState.UnreadChapters);
+            this.notificationIcon.Show();
 
-                // Don't show the app icon in the titlebar. This mimics the behavior of UWP apps.
-                WindowWin32InteropHelper.HideIcon(source.Handle);
-            }
-            else
-            {
-                throw new InvalidOperationException("Critical error: AppShell is not in a valid state! The AppShell window might not exist.");
-            }
+            // start listening for chapter updates so we can notify the user
+            this.updateService.ChapterUpdated += OnUpdateServiceChapterUpdated;
+            this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
         }
 
         protected override void OnActivated(EventArgs e)
         {
+            this.shellActivatedResetEvent.Set();
+
             if (this.currentTaskbarButtonResetMode == TaskbarButtonResetMode.AppActivated
                 && (this.currentTaskbarButtonMode == AppTaskbarButtonMode.Paused || this.currentTaskbarButtonMode == AppTaskbarButtonMode.Error))
             {
@@ -227,6 +194,13 @@ namespace ATG_Notifier.Desktop.Views
             }
 
             base.OnActivated(e);
+        }
+
+        protected override void OnDeactivated(EventArgs e)
+        {
+            this.shellActivatedResetEvent.Reset();
+
+            base.OnDeactivated(e);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -252,6 +226,12 @@ namespace ATG_Notifier.Desktop.Views
             Cleanup();
         }
 
+        private void InitializeNavigation()
+        {
+            this.navigationService = ServiceLocator.Current.GetService<INavigationService>();
+            this.navigationService.Initialize(this.ContentFrame);
+        }
+
         private void Cleanup()
         {
             this.updateService.ChapterUpdated -= OnUpdateServiceChapterUpdated;
@@ -266,19 +246,13 @@ namespace ATG_Notifier.Desktop.Views
             this.notificationIcon = null!;
         }
 
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        protected override IntPtr OnWndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
         {
             if (msg == WindowWin32InteropHelper.WM_EXIT)
             {
                 Close(false);
                 return new IntPtr(1);
             }
-            else if (msg == WindowWin32InteropHelper.WM_SHOWINSTANCE)
-            {
-                BringIntoView();
-                return new IntPtr(1);
-            }
-
             return IntPtr.Zero;
         }
 

@@ -15,7 +15,7 @@ namespace ATG_Notifier.Desktop.Services
     //      - make the update interval configurable
     internal class UpdateService : IUpdateService
     {
-#if DEBUG || DesktopPackage
+#if DEBUG
         private const int RawSourcePollingInterval = 1 * 15 * 1000;
 #else
         private const int RawSourcePollingInterval = 1* 30 * 1000;
@@ -112,7 +112,7 @@ namespace ATG_Notifier.Desktop.Services
 
         private async void OnTimerEllapsed(object? state)
         {
-#if DEBUG || DesktopPackage
+#if DEBUG
             var chapterProfileModel = new ChapterProfileModel()
             {
                 Number = 1600,
@@ -152,7 +152,7 @@ namespace ATG_Notifier.Desktop.Services
             }
 #endif
             // TODO: Crashing code below to test unexpected error handling:
-//            await Task.Delay(7000);
+//            await Task.Delay(10000);
 
 //#pragma warning disable CS8602 // Dereference of a possibly null reference.
 //            string? s = null; int i = s.Length;

@@ -1,6 +1,7 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,10 @@ namespace ATG_Notifier.Desktop.Controls
 {
     internal partial class ChapterProfilesView : UserControl
     {
+        private bool firstLoad = false;
+
+        private ChapterProfileListArgs chapterProfileListArgs;
+
         public ChapterProfilesView()
         {
             this.DataContext = this;
@@ -26,6 +31,11 @@ namespace ATG_Notifier.Desktop.Controls
         public ChapterProfilesViewModel ViewModel { get; }
 
         public SettingsViewModel SettingsViewModel { get; }
+
+        public void SetPayload(ChapterProfileListArgs args)
+        {
+            this.chapterProfileListArgs = args;
+        }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -63,7 +73,18 @@ namespace ATG_Notifier.Desktop.Controls
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            await this.ViewModel.LoadAsync();
+            if (!this.firstLoad)
+            {
+                this.firstLoad = true;
+                await this.ViewModel.LoadAsync(this.chapterProfileListArgs);
+
+                if (this.chapterProfileListArgs.ChapterProfileViewModel != null)
+                {
+                    this.ViewModel.ListViewModel.SelectedItem = this.ViewModel.ListViewModel.Items
+                        .Where(item => item.ChapterProfileId == this.chapterProfileListArgs.ChapterProfileViewModel.ChapterProfileId)
+                        .FirstOrDefault();
+                }
+            }
         }
 
         private void OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)

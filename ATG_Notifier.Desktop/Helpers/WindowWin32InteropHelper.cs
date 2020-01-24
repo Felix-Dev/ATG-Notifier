@@ -16,9 +16,17 @@ namespace ATG_Notifier.Desktop.Helpers
             WM_SHOWINSTANCE = NativeMethods.RegisterWindowMessage(nameof(WM_SHOWINSTANCE));
         }
 
-        public static IntPtr GetHwnd(Window window)
+        public static IntPtr GetHwnd(Window window, bool createIfNotExists = false)
         {
-            return new WindowInteropHelper(window).Handle;
+            var windowInteropHelper = new WindowInteropHelper(window);
+
+            IntPtr handle = windowInteropHelper.Handle;
+            if (createIfNotExists && handle == IntPtr.Zero)
+            {
+                handle = windowInteropHelper.EnsureHandle();
+            }
+
+            return handle;
         }
 
         public static void DisableCloseButton(Window window)
@@ -46,12 +54,27 @@ namespace ATG_Notifier.Desktop.Helpers
             int extendedStyle = NativeMethods.GetWindowLong(hWnd, NativeMethods.GWL_EXSTYLE);
             NativeMethods.SetWindowLong(hWnd, NativeMethods.GWL_EXSTYLE, extendedStyle | NativeMethods.WS_EX_DLGMODALFRAME);
 
-            NativeMethods.SendMessage(hWnd, (int)WM.SETICON, NativeMethods.ICON_SMALL, IntPtr.Zero);
-            NativeMethods.SendMessage(hWnd, (int)WM.SETICON, NativeMethods.ICON_BIG, IntPtr.Zero);
+            NativeMethods.SendMessage(hWnd, NativeMethods.WM_SETICON, NativeMethods.ICON_SMALL, IntPtr.Zero);
+            NativeMethods.SendMessage(hWnd, NativeMethods.WM_SETICON, NativeMethods.ICON_BIG, IntPtr.Zero);
 
             // Update the window's non-client area to reflect the changes
             NativeMethods.SetWindowPos(hWnd, IntPtr.Zero, 0, 0, 0, 0,
                 NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_FRAMECHANGED);
+        }
+
+        public static bool RequestActivateWindow(string windowName)
+        {
+            return SendMessage(windowName, WM_SHOWINSTANCE);
+        }
+
+        public static bool RequestCloseWindow(string windowName)
+        {
+            return SendMessage(windowName, WM_EXIT);
+        }
+
+        public static void DeactivateWindow(string windowName)
+        {
+            SendMessage(windowName, NativeMethods.WM_ACTIVATE);
         }
 
         public static bool SendMessage(string windowTitle, int msgId)

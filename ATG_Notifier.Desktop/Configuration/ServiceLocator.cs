@@ -31,6 +31,7 @@ namespace ATG_Notifier.Desktop.Configuration
             var settingsService = new SettingsService(AppConfiguration.ConfigurationDirectory);
             serviceCollection.AddSingleton(settingsService);
 
+            serviceCollection.AddSingleton<INavigationService, NavigationService>();
             serviceCollection.AddSingleton<IWebService, WebService>();
             serviceCollection.AddSingleton<IUpdateService, UpdateService>();
             serviceCollection.AddSingleton<IChapterProfileService, ChapterProfileService>();

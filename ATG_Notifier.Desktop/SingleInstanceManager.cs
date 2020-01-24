@@ -51,7 +51,7 @@ namespace ATG_Notifier.Desktop
                     switch (args[0])
                     {
                         case App.AppExitCmd:
-                            return WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_EXIT);
+                            return App.RequestCloseRunningInstance();
                     }
                 }
 
@@ -60,7 +60,7 @@ namespace ATG_Notifier.Desktop
 
             public bool RequestAppActivation()
             {
-                return WindowWin32InteropHelper.SendMessage(AppConfiguration.AppId, WindowWin32InteropHelper.WM_SHOWINSTANCE);
+                return App.RequestActivateRunningInstance();
             }
         }
     }

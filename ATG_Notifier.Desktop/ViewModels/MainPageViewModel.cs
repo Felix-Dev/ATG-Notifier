@@ -2,11 +2,23 @@
 using ATG_Notifier.Desktop.Controls;
 using ATG_Notifier.ViewModels.Infrastructure;
 using ATG_Notifier.ViewModels.Services;
+using ATG_Notifier.ViewModels.ViewModels;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
+    internal class MainPageArgs
+    {
+        public MainPageArgs(ChapterProfileViewModel chapterProfileViewModel)
+        {
+            this.ChapterProfileViewModel = chapterProfileViewModel;
+        }
+
+        public ChapterProfileViewModel ChapterProfileViewModel { get; }
+    }
+
     // TODO:
     //      - Re-enable network checks (metered connection, etc...) once we are working on the Windows 10 version
     internal class MainPageViewModel : ObservableObject
@@ -62,7 +74,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         //            AppShell.Current?.SetTaskbarButtonMode(AppTaskbarButtonMode.Paused);
         //        }
-                
+
         //        this.Messages.Add(new MessageBoardMessage(
         //            MessageIdMeteredConnection, 
         //            MessageCardType.Info,

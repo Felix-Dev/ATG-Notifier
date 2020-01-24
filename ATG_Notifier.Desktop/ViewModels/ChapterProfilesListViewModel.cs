@@ -16,10 +16,16 @@ using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
-    // TODO: Perhaps add an IsLoaded Property the View can bind to?
+
+    internal class ChapterProfileListArgs
+    {
+        public ChapterProfileViewModel? ChapterProfileViewModel { get; set; }
+
+        public static ChapterProfileListArgs CreateDefault() => new ChapterProfileListArgs() { ChapterProfileViewModel = null };
+    }
+
     internal class ChapterProfilesListViewModel : GenericListViewModel<ChapterProfileViewModel>
     {
-        private readonly IChapterProfileService chapterProfileService;
         private readonly IUpdateService updateService;
 
         private readonly ChapterProfileServicePoint chapterProfileServicePoint;
@@ -30,7 +36,6 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public ChapterProfilesListViewModel(IChapterProfileService chapterProfileService, IUpdateService updateService)
         {
-            this.chapterProfileService = chapterProfileService;
             this.updateService = updateService;
 
             this.chapterProfileServicePoint = ServiceLocator.Current.GetService<ChapterProfileServicePoint>();
@@ -43,17 +48,9 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.SetListAsReadCommand = new RelayCommand(OnSetListAsRead);
 
             this.updateService.ChapterUpdated += OnChapterUpdate;
-
             this.chapterProfileServicePoint.ChapterProfilesUnreadCountChanged += OnChapterProfilesUnreadCountChanged;
 
             this.HasUnreadChapters = appState.UnreadChapters > 0;
-
-            //ChapterProfilesUnreadCountChanged += (s, e) => NotifyPropertyChanged(nameof(HasUnreadChapters));
-        }
-
-        private void OnChapterProfilesUnreadCountChanged(object? sender, Services.ChapterProfilesUnreadCountChangedEventArgs e)
-        {
-            this.HasUnreadChapters = e.Count > 0;
         }
 
         public bool HasUnreadChapters
@@ -64,6 +61,14 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         public ICommand SetListAsReadCommand { get; }
 
+        public ChapterProfileListArgs CreateArgs()
+        {
+            return new ChapterProfileListArgs
+            {
+                ChapterProfileViewModel = null,
+            };
+        }
+
         public async Task LoadAsync()
         {
             IList<ChapterProfileModel> chapterProfileModels = await this.chapterProfileServicePoint.GetChapterProfilesAsync();
@@ -72,11 +77,24 @@ namespace ATG_Notifier.Desktop.ViewModels
             {
                 Add(new ChapterProfileViewModel(model));
             }
+        }
 
-            if (this.SelectedItem != null)
+        public async Task LoadAsync(ChapterProfileListArgs args)
+        {
+            IList<ChapterProfileModel> chapterProfileModels = await this.chapterProfileServicePoint.GetChapterProfilesAsync();
+
+            foreach (var model in chapterProfileModels)
             {
-                NotifyPropertyChanged(nameof(this.SelectedItem));
+                Add(new ChapterProfileViewModel(model));
             }
+
+            //if (args.ChapterProfileViewModel != null)
+            //{
+            //    this.SelectedItem =
+            //        this.Items.
+            //        Where(item => item.ChapterProfileId == args.ChapterProfileViewModel!.ChapterProfileId)
+            //        .FirstOrDefault();
+            //}
         }
 
         public async Task DeleteChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
@@ -121,6 +139,11 @@ namespace ATG_Notifier.Desktop.ViewModels
         public async Task UpdateChapterProfileAsync(ChapterProfileViewModel chapterProfileViewModel)
         {
             await this.chapterProfileServicePoint.UpdateChapterProfileAsync(chapterProfileViewModel);
+        }
+
+        private void OnChapterProfilesUnreadCountChanged(object? sender, Services.ChapterProfilesUnreadCountChangedEventArgs e)
+        {
+            this.HasUnreadChapters = e.Count > 0;
         }
     }
 }

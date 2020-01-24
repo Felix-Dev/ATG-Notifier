@@ -30,6 +30,15 @@ namespace ATG_Notifier.Desktop.Native.Win32
             SWP_NOZORDER = 0x0004,
             SWP_FRAMECHANGED = 0x0020;
 
+        // WA constants (https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-activate#parameters)
+        public const int WA_INACTIVE = 0x0,
+            WA_ACTIVE = 0x1,
+            WA_CLICKATIVE = 0x2;
+
+        // WM constants ()
+        public const int WM_ACTIVATE = 0x0006, // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-activate
+            WM_SETICON = 0x0080; // https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-seticon
+
         #region Window 
 
         /// <devdoc>https://msdn.microsoft.com/en-us/library/windows/desktop/ms679347(v=vs.85).aspx</devdoc>

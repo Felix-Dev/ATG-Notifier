@@ -67,6 +67,13 @@ namespace ATG_Notifier.Desktop.ViewModels
             this.IsLoaded = true;
         }
 
+        public async Task LoadAsync(ChapterProfileListArgs args)
+        {
+            await this.ListViewModel.LoadAsync(args);
+
+            this.IsLoaded = true;
+        }
+
         private void OnChangeChapterUpdateMode()
         {
             if (this.updateService.IsRunning)
