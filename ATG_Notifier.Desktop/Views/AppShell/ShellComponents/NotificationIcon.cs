@@ -195,7 +195,16 @@ namespace ATG_Notifier.Desktop.Views.Shell
             {
                 Text = "Quit"
             };
-            menuItemExit.Click += (s, e) => System.Windows.Application.Current.Shutdown();
+
+            // TODO: 
+            // We are using a Hotfix here: Previously, we called Application.Current.Shutdown()
+            // but this call failed to terminate the app correctly when the app was started minimized 
+            // and then brought to the foreground. The app windows would close and cleanup would be performed
+            // yet the app process would still be running (visible in TaskManager).
+            //
+            // As a Hotfix, we are now using a slightly indirect App shutdown request call (i.e. we are sending
+            // a custom shutdown message to the app window). This works as intended in the above case.
+            menuItemExit.Click += (s, e) => App.RequestCloseRunningInstance();
 
             contextMenu.Items.Add(menuItemExit);
 
