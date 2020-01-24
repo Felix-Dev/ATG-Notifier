@@ -40,7 +40,8 @@ namespace ATG_Notifier.Desktop.Services
         private readonly int[] displaySlots;
 
         private readonly AppSettings appSettings;
-        private readonly StaTaskScheduler taskScheduler;
+
+        //private readonly StaTaskScheduler taskScheduler;
 
         public ToastNotificationService()
         {
@@ -51,7 +52,7 @@ namespace ATG_Notifier.Desktop.Services
 
             this.appSettings = ServiceLocator.Current.GetService<AppSettings>();
 
-            this.taskScheduler = new StaTaskScheduler(MaxDisplayedPopups);
+            //this.taskScheduler = new StaTaskScheduler(MaxDisplayedPopups);
         }       
 
         public void Show(string title, ChapterProfileViewModel chapterProfileViewModel) 
@@ -155,7 +156,7 @@ namespace ATG_Notifier.Desktop.Services
             //notificationSema.Release();
         }
 
-        private void OnToastLoaded(object sender, System.Windows.RoutedEventArgs e)
+        private void OnToastLoaded(object sender, RoutedEventArgs e)
         {
             if (this.appSettings.IsSoundEnabled)
             {

@@ -11,7 +11,7 @@ namespace ATG_Notifier.Desktop.Helpers
     // TODO: Rethink exception handling 
     internal static class CommonHelpers
     {
-        private static ILogService logService;
+        private static readonly ILogService logService;
 
         //public static void RunOnUIThread(Action action)
         //{

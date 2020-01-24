@@ -155,16 +155,6 @@ namespace ATG_Notifier.Desktop.Views
             Cleanup();
         }
 
-        /// <summary>
-        /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
-        /// unread chapter profiles in the app changes.
-        /// </summary>
-        private void UpdateBadge(int number)
-        {
-            // TODO: This code might throw a NullReference exception for this.notificationIcon when the timing is bad.
-            CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
-        }
-
         protected override void OnLaunching(ApplicationWindowLaunchingEventArgs e)
         {
             base.OnLaunching(e);
@@ -226,12 +216,6 @@ namespace ATG_Notifier.Desktop.Views
             Cleanup();
         }
 
-        private void InitializeNavigation()
-        {
-            this.navigationService = ServiceLocator.Current.GetService<INavigationService>();
-            this.navigationService.Initialize(this.ContentFrame);
-        }
-
         private void Cleanup()
         {
             this.updateService.ChapterUpdated -= OnUpdateServiceChapterUpdated;
@@ -244,6 +228,22 @@ namespace ATG_Notifier.Desktop.Views
             this.notificationIcon.Dispose();
 
             this.notificationIcon = null!;
+        }
+
+        private void InitializeNavigation()
+        {
+            this.navigationService = ServiceLocator.Current.GetService<INavigationService>();
+            this.navigationService.Initialize(this.ContentFrame);
+        }
+
+        /// <summary>
+        /// Updates the badge counter of the app's icon in Window's notification area whenever the number of 
+        /// unread chapter profiles in the app changes.
+        /// </summary>
+        private void UpdateBadge(int number)
+        {
+            // TODO: This code might throw a NullReference exception for this.notificationIcon when the timing is bad.
+            CommonHelpers.RunOnUIThread(() => this.notificationIcon.UpdateBadge(number));
         }
 
         protected override IntPtr OnWndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)

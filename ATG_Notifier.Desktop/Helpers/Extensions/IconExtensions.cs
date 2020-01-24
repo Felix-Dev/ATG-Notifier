@@ -9,7 +9,7 @@ namespace ATG_Notifier.Desktop.Helpers.Extensions
 {
     internal static class IconExtensions
     {
-        internal static ImageSource ToImageSource(this Icon icon)
+        public static ImageSource ToImageSource(this Icon icon)
         {
             if (icon is null)
             {
