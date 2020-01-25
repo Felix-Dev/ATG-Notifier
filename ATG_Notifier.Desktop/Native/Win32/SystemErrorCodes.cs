@@ -9,6 +9,6 @@
         public const int Success = 0,
                          InsuffientBuffer = 122,
                          AppModelErrorNoPackage = 15700,
-                         AppmodelErrorNoApplication = 15703;
+                         AppModelErrorNoApplication = 15703;
     }
 }

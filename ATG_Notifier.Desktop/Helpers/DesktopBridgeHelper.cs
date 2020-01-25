@@ -41,7 +41,7 @@ namespace ATG_Notifier.Desktop.Helpers
                 int result = GetCurrentApplicationUserModelId(ref bufferSize, buffer);
                 switch (result)
                 {
-                    case SystemErrorCodes.AppmodelErrorNoApplication:
+                    case SystemErrorCodes.AppModelErrorNoApplication:
                         return false;
                     case SystemErrorCodes.Success:
                     case SystemErrorCodes.InsuffientBuffer:
