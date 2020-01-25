@@ -39,11 +39,17 @@
               PreviewMouseLeftButtonUp="OnMenuPreviewMouseLeftButtonUp"
               PreviewMouseLeftButtonDown="OnMenuPreviewMouseLeftButtonDown">
             <!-- App Options -->
-            <MenuItem Header="Options"
+            <MenuItem x:Name="OptionsMenuItem" 
+                      Header="Options"
                       TabIndex="0">
-                <MenuItem Header="Start app minimized"
+                <MenuItem Header="Start minimized"
                           IsCheckable="True"
                           IsChecked="{Binding SettingsViewModel.IsStartMinimizedEnabled, Mode=TwoWay}"/>
+                <MenuItem x:Name="StartAtLoginMenuItem" 
+                          Header="Start at log-in"
+                          IsCheckable="True"
+                          Command="{Binding ViewModel.ChangeStartupSetting}"
+                          CommandParameter="{Binding IsChecked, ElementName=StartAtLoginMenuItem}"/>
                 <!-- Separator -->
                 <Separator />
                 <!-- Keep app running on close-->

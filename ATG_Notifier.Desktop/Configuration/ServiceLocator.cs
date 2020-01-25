@@ -58,6 +58,7 @@ namespace ATG_Notifier.Desktop.Configuration
 #if DesktopPackage
             //serviceCollection.AddSingleton<NetworkService>();
 #endif
+            serviceCollection.AddSingleton<StartupService>();
 
             rootServiceProvider = serviceCollection.BuildServiceProvider();
         }

@@ -163,8 +163,6 @@ namespace ATG_Notifier.Desktop
             // Wait for the notifier app to enter the foreground.
             this.appShell.WaitUntilIsActivated();
 
-            //this.appActivatedResetEvent.WaitOne();
-
             // Show our error message as soon as we are the foreground app.
 
             string message = "ATG-Notifier encountered a critical error and cannot continue. Do you want to restart the app? Press Yes for restart, or No to shutdown the notifier.";

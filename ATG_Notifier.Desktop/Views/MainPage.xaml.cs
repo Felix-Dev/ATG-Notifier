@@ -1,5 +1,6 @@
 ﻿using ATG_Notifier.Desktop.Configuration;
 using ATG_Notifier.Desktop.Controls;
+using ATG_Notifier.Desktop.Helpers;
 using ATG_Notifier.Desktop.Services;
 using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.ViewModels;
@@ -8,12 +9,15 @@ using ATG_Notifier.ViewModels.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Windows.ApplicationModel;
 
 namespace ATG_Notifier.Desktop.Views
 {
     internal partial class MainPage : NavigationPage
     {
         private readonly DialogService dialogService;
+        private readonly StartupService startupService;
+
         //private readonly NetworkService networkService;
 
         private readonly MainPageViewModel viewModel;
@@ -22,6 +26,8 @@ namespace ATG_Notifier.Desktop.Views
         public MainPage()
         {
             this.dialogService = ServiceLocator.Current.GetService<DialogService>();
+            this.startupService = ServiceLocator.Current.GetService<StartupService>();
+
             //this.networkService = ServiceLocator.Current.GetService<NetworkService>();
 
             this.viewModel = ServiceLocator.Current.GetService<MainPageViewModel>();
@@ -31,6 +37,13 @@ namespace ATG_Notifier.Desktop.Views
 
             InitializeComponent();
             InitializeNotificationDisplayPositionMenu();
+
+#if DesktopPackage
+            this.StartAtLoginMenuItem.Visibility = Visibility.Visible;
+            this.OptionsMenuItem.SubmenuOpened += OnOptionsMenuItemSubmenuOpened;
+#else
+            this.StartAtLoginMenuItem.Visibility = Visibility.Collapsed;
+#endif
         }
 
         public MainPageViewModel ViewModel => this.viewModel;
@@ -185,6 +198,19 @@ namespace ATG_Notifier.Desktop.Views
                 textBox.SelectionLength = 0;
                 //textBox.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
                 //Keyboard.ClearFocus();
+            }
+        }
+
+        private async void OnOptionsMenuItemSubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            StartupTaskState state = await this.startupService.GetStartupStateAsync();
+            if (state == StartupTaskState.Enabled || state == StartupTaskState.EnabledByPolicy)
+            {
+                this.StartAtLoginMenuItem.IsChecked = true;
+            }
+            else
+            {
+                this.StartAtLoginMenuItem.IsChecked = false;
             }
         }
     }
