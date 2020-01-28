@@ -6,6 +6,8 @@ using ATG_Notifier.Desktop.Utilities;
 using ATG_Notifier.Desktop.ViewModels;
 using ATG_Notifier.ViewModels.Services;
 using ATG_Notifier.ViewModels.ViewModels;
+using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +17,6 @@ namespace ATG_Notifier.Desktop.Views
 {
     internal partial class MainPage : NavigationPage
     {
-        private readonly DialogService dialogService;
         private readonly StartupService startupService;
 
         //private readonly NetworkService networkService;
@@ -25,7 +26,6 @@ namespace ATG_Notifier.Desktop.Views
 
         public MainPage()
         {
-            this.dialogService = ServiceLocator.Current.GetService<DialogService>();
             this.startupService = ServiceLocator.Current.GetService<StartupService>();
 
             //this.networkService = ServiceLocator.Current.GetService<NetworkService>();

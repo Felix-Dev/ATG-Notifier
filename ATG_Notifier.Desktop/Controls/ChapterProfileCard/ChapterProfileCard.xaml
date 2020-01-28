@@ -124,6 +124,7 @@
                  Foreground="{StaticResource ChapterProfileCardCaptionForeground}" 
                  FontSize="11"                                      
                  HorizontalAlignment="Left"
+                 IsTabStop="False"
                  Style="{StaticResource LabelTextBoxStyle}"
                  VerticalAlignment="Center"
                  MouseDoubleClick="OnWordCountAndReleaseTimeTextBoxMouseDoubleClick"
