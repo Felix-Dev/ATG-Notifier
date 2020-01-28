@@ -28,13 +28,13 @@
             <TextBox x:Name="AppIdTextBox" 
                      AutoWordSelection="True"
                      HorizontalAlignment="Left"
-                     Style="{StaticResource TextBox_TextBlockSelection}"
+                     Style="{StaticResource LabelTextBoxStyle}"
                      MouseDoubleClick="OnAppIdTextBoxMouseDoubleClick"
                      LostFocus="OnAppIdTextBoxLostFocus"/>
             <TextBox x:Name="AppVersionTextBox"
                      AutoWordSelection="True"
                      HorizontalAlignment="Left"
-                     Style="{StaticResource TextBox_TextBlockSelection}"
+                     Style="{StaticResource LabelTextBoxStyle}"
                      MouseDoubleClick="OnAppVersionTextBoxMouseDoubleClick"
                      LostFocus="OnAppVersionTextBoxLostFocus"/>
             <TextBlock Margin="0,10,0,0">

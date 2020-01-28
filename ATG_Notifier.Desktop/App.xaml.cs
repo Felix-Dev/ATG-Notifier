@@ -128,8 +128,10 @@ namespace ATG_Notifier.Desktop
             SaveUserPreferencesAndAppState();
         }
 
-        private void OnSessionEnding(object? sender, SessionEndingCancelEventArgs e)
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
         {
+            base.OnSessionEnding(e);
+
             AppShell.Current?.SaveAndCleanup();
 
             var chapterUpdateListeningService = ServiceLocator.Current.GetService<ChapterUpdateListeningService>();

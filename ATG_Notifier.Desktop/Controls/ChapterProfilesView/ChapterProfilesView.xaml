@@ -320,7 +320,7 @@
                                                      FontSize="12"
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
                                                      TextWrapping="Wrap"
-                                                     Style="{StaticResource TextBox_TextBlockSelection}"
+                                                     Style="{StaticResource LabelTextBoxStyle}"
                                                      MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"
                                                      LostFocus="OnLastChapterProfileNumberAndTitleTextBoxLostFocus"/>
                                             <TextBox x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
@@ -331,7 +331,7 @@
                                                      TextWrapping="Wrap"
                                                      FontSize="11"
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
-                                                     Style="{StaticResource TextBox_TextBlockSelection}"
+                                                     Style="{StaticResource LabelTextBoxStyle}"
                                                      MouseDoubleClick="OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick"
                                                      LostFocus="OnLastChapterProfileWordCountAndReleaseDateTextBoxLostFocus">
                                                 <TextBox.Text>

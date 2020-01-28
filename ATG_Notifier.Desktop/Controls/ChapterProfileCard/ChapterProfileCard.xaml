@@ -9,16 +9,18 @@
     <UserControl.Resources>
         <!--#region Brushes -->
 
-        <SolidColorBrush x:Key="ChapterProfileCardForegorund" Color="DarkGray" />
-        <SolidColorBrush x:Key="ChapterProfileCardForegroundAlert" Color="#FFFF0000" />
+        <SolidColorBrush x:Key="ChapterProfileCardHeaderForeground" Color="#FF505050" />
+        <SolidColorBrush x:Key="ChapterProfileCardHeaderForegroundAlert" Color="#FFFF4E51" />
+        
+        <SolidColorBrush x:Key="ChapterProfileCardCaptionForeground" Color="#FF929292" />
 
-        <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="#FFFFFFFF" />
 
         <SolidColorBrush x:Key="CloseButtonForeground" Color="#FFA9A9A9" />
         <SolidColorBrush x:Key="CloseButtonForegroundMouseOver" Color="#FFFF0000" />
         <SolidColorBrush x:Key="CloseButtonForegroundPressed" Color="#FFA00000" />
 
-        <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="CloseButtonBackground" Color="#FFFFFF" />
 
         <!--#endregion-->
 
@@ -66,30 +68,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <!-- Unread chapter indicator -->
-        <TextBlock x:Name="NewTextBlock" 
-                   Grid.Row="0" Grid.Column="1"
-                   Foreground="{StaticResource ChapterProfileCardForegroundAlert}" 
-                   FontSize="11" FontWeight="Bold"
-                   Margin="0,8,0,0"
-                   Text="NEW!">
-            <TextBlock.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsRead}" Value="True">
-                            <Setter Property="TextBlock.Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
         <!-- Delete chapter profile button -->
         <Button x:Name="CloseButton" 
                 Grid.Row="0" Grid.Column="2"
@@ -101,34 +85,46 @@
                 ToolTipService.ShowDuration="2000"
                 IsTabStop="False"
                 Focusable="False"
+                VerticalAlignment="Top"
                 Click="OnCloseButtonClick"
                 PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
         <!-- Chapter number and title textbox -->
         <TextBox x:Name="NumberAndTitleTextBox"
-                 Grid.Row="1" 
-                 Grid.Column="1" Grid.ColumnSpan="2"
+                 Grid.Row="0" 
+                 Grid.Column="1"
                  AutoWordSelection="True"
-                 Margin="0,0,6,0" Padding="0"
-                 Style="{StaticResource TextBox_TextBlockSelection}"
-                 Foreground="{StaticResource ChapterProfileCardForegorund}" 
-                 FontSize="14" FontWeight="Bold"
+                 Margin="0,10,6,0" Padding="0"
+                 FontSize="14"
                  HorizontalAlignment="Left"
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
                  TextWrapping="Wrap"
                  Focusable="True"
                  IsTabStop="False"
                  MouseDoubleClick="OnNumberAndTitleTextBoxMouseDoubleClick"
-                 LostFocus="OnNumberAndTitleTextBoxLostFocus"/>
+                 LostFocus="OnNumberAndTitleTextBoxLostFocus">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource LabelTextBoxStyle}">
+                    <Setter Property="Foreground" Value="{StaticResource ChapterProfileCardHeaderForegroundAlert}" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsRead}" Value="True">
+                            <Setter Property="TextBox.FontWeight" Value="Normal" />
+                            <Setter Property="TextBox.Foreground" Value="{StaticResource ChapterProfileCardHeaderForeground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
         <!-- Chapter word count and release time textbox -->
         <TextBox x:Name="WordCountAndReleaseTimeTextBox" 
-                 Grid.Row="2" 
+                 Grid.Row="1" 
                  Grid.Column="1" Grid.ColumnSpan="2"
                  AutoWordSelection="True"
-                 Margin="0,0,3,1"
-                 Foreground="{StaticResource ChapterProfileCardForegorund}" 
+                 Margin="0,0,3,0"
+                 Foreground="{StaticResource ChapterProfileCardCaptionForeground}" 
                  FontSize="11"                                      
                  HorizontalAlignment="Left"
-                 Style="{StaticResource TextBox_TextBlockSelection}"
+                 Style="{StaticResource LabelTextBoxStyle}"
                  VerticalAlignment="Center"
                  MouseDoubleClick="OnWordCountAndReleaseTimeTextBoxMouseDoubleClick"
                  LostFocus="OnWordCountAndReleaseTimeTextBoxLostFocus">

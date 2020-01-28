@@ -16,7 +16,7 @@ namespace ATG_Notifier.Desktop.Services
     internal class UpdateService : IUpdateService
     {
 #if DEBUG
-        private const int RawSourcePollingInterval = 1 * 15 * 1000;
+        private const int RawSourcePollingInterval = 1 * 10 * 1000;
 #else
         private const int RawSourcePollingInterval = 1* 30 * 1000;
 #endif

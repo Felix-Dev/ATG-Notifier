@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:ATG_Notifier.Desktop"
              x:ClassModifier="internal"
              mc:Ignorable="d"
-             SessionEnding="OnSessionEnding"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
