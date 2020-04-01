@@ -34,7 +34,7 @@ namespace ATG_Notifier.ViewModels.Networking
                 data = await webService.DownloadRawContentAsync(ATGRawSourcePollingUrl, 0);
             }
             catch (Exception ex) when (ex is AggregateException || ex is WebException || ex is HttpRequestException || ex is InvalidOperationException
-                                       || ex is TaskCanceledException)
+                                       || ex is OperationCanceledException)
             {
                 throw new SourceCheckerOperationFailedException("The request could not be handled. One or more (network) errors occured.", ex);
             }
