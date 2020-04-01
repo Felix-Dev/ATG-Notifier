@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ATG_Notifier.Desktop.Activation
 {
-    internal class LaunchActivatedEventArgs : IActivatedEventArgs
+    internal class LaunchActivatedEventArgs : EventArgs, IActivatedEventArgs
     {
         public LaunchActivatedEventArgs(params string[] args)
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ATG_Notifier.Desktop.Activation
 {
-    internal class ToastNotificationActivatedEventArgs : IActivatedEventArgs
+    internal class ToastNotificationActivatedEventArgs : EventArgs, IActivatedEventArgs
     {
         public ToastNotificationActivatedEventArgs(ChapterProfileViewModel chapterProfileViewModel)
         {

@@ -1,6 +1,8 @@
-﻿namespace ATG_Notifier.Desktop.Services
+﻿using System;
+
+namespace ATG_Notifier.Desktop.Services
 {
-    internal class ChapterProfilesUnreadCountChangedEventArgs
+    internal class ChapterProfilesUnreadCountChangedEventArgs : EventArgs
     {
         public ChapterProfilesUnreadCountChangedEventArgs(int count)
         {

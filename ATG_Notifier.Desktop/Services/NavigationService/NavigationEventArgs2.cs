@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ATG_Notifier.Desktop.Services
 {
-    internal class NavigationEventArgs2
+    internal class NavigationEventArgs2 : EventArgs
     {
         public NavigationEventArgs2(Uri uri, object content, object parameter, Type sourcePageType)
         {

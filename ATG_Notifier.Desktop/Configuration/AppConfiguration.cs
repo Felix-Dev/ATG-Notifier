@@ -47,7 +47,7 @@ namespace ATG_Notifier.Desktop.Configuration
         /// <summary>The path to the database file directory.</summary>
         private static string? databaseDirectoy = null;
 
-        /// <summary>The path to the logfile directory.</summary>
+        /// <summary>The path to the database directory.</summary>
         public static string DatabaseDirectory => databaseDirectoy ??= GetDatabaseDirectoryPath();
 
         /// <summary>The path to the database file.</summary>
