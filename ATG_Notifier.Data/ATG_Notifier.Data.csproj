@@ -5,7 +5,7 @@
     <RootNamespace>ATG_Notifier.Data</RootNamespace>
     <AssemblyName>ATG-Notifier.Data</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;DesktopPackage</Configurations>
+    <Configurations>Debug;Release;DesktopPackage;DesktopPackageDebug</Configurations>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>

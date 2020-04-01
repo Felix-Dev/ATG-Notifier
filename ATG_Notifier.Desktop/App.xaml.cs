@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
 using Windows.ApplicationModel;
 #endif
 
@@ -226,7 +226,7 @@ namespace ATG_Notifier.Desktop
 
         private void RequestRestart()
         {
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             string restarterPath = Path.Combine(Package.Current.InstalledLocation.Path, @"ATG_Notifier.Restarter\ATG_Notifier.Restarter.exe");
             string notifierStartString = Package.Current.Id.FamilyName;
 #else

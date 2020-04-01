@@ -20,7 +20,7 @@ namespace ATG_Notifier.Data.Services
                 return new SQLiteDataService(db);
             }).ConfigureAwait(false);
             
-            
+          
         }
     }
 }

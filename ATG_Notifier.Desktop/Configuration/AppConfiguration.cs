@@ -71,7 +71,7 @@ namespace ATG_Notifier.Desktop.Configuration
         private static string GetConfigurationFilesDirectoryPath()
         {
             string basePath;
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             basePath = ApplicationData.Current.LocalFolder.Path;
 #else
             basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRelativePath);
@@ -82,7 +82,7 @@ namespace ATG_Notifier.Desktop.Configuration
         private static string GetDatabaseDirectoryPath()
         {
             string basePath;
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             basePath = ApplicationData.Current.LocalFolder.Path;
 #else
             basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRelativePath);
@@ -93,7 +93,7 @@ namespace ATG_Notifier.Desktop.Configuration
         private static string GetLogFilesDirectoryPath()
         {
             string basePath;
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             basePath = ApplicationData.Current.LocalCacheFolder.Path;
 #else
             basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppDataRelativePath);

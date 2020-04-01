@@ -12,7 +12,7 @@
     <Authors>Felix-Dev</Authors>
     <RootNamespace>ATG_Notifier.Desktop</RootNamespace>
     <Platforms>AnyCPU;x86;x64</Platforms>
-    <Configurations>Debug;Release;DesktopPackage</Configurations>
+    <Configurations>Debug;Release;DesktopPackage;DesktopPackageDebug</Configurations>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
     <RuntimeIdentifiers>win-x86;win-x64;</RuntimeIdentifiers>
     <Nullable>enable</Nullable>
@@ -27,6 +27,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
     <DefineConstants>TRACE;DesktopPackage</DefineConstants>
     <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|x64'">
+    <DefineConstants>TRACE;DesktopPackageDebug</DefineConstants>
+    <DocumentationFile />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

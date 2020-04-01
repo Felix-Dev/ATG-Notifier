@@ -7,7 +7,7 @@
     <AssemblyName>ATG_Notifier.Restarter</AssemblyName>
     <ApplicationIcon />
     <StartupObject />
-    <Configurations>Debug;Release;DesktopPackage</Configurations>
+    <Configurations>Debug;Release;DesktopPackage;DesktopPackageDebug</Configurations>
     <Product>ATG-Notifier</Product>
     <Company />
     <Authors>Felix-Dev</Authors>
@@ -36,6 +36,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
+    <DefineConstants>TRACE;DesktopPackage</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|x64'">
     <DefineConstants>TRACE;DesktopPackage</DefineConstants>
   </PropertyGroup>
 

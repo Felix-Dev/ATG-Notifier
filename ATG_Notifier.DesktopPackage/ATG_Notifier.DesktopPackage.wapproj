@@ -8,6 +8,26 @@
       <Configuration>Debug</Configuration>
       <Platform>x86</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="DesktopPackageDebug|AnyCPU">
+      <Configuration>DesktopPackageDebug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DesktopPackageDebug|ARM">
+      <Configuration>DesktopPackageDebug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DesktopPackageDebug|ARM64">
+      <Configuration>DesktopPackageDebug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DesktopPackageDebug|x64">
+      <Configuration>DesktopPackageDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DesktopPackageDebug|x86">
+      <Configuration>DesktopPackageDebug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="DesktopPackage|AnyCPU">
       <Configuration>DesktopPackage</Configuration>
       <Platform>AnyCPU</Platform>
@@ -96,10 +116,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x64'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|x64'">
+    <AppxBundle>Auto</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|ARM'">
+    <AppxBundle>Auto</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|ARM'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -114,6 +140,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|AnyCPU'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|AnyCPU'">
+    <AppxBundle>Auto</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
@@ -123,10 +152,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|ARM64'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|ARM64'">
+    <AppxBundle>Auto</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackage|x86'">
+    <AppxBundle>Auto</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DesktopPackageDebug|x86'">
     <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <ItemGroup>

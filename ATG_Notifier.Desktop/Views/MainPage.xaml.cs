@@ -38,7 +38,7 @@ namespace ATG_Notifier.Desktop.Views
             InitializeComponent();
             InitializeNotificationDisplayPositionMenu();
 
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             this.StartAtLoginMenuItem.Visibility = Visibility.Visible;
             this.OptionsMenuItem.SubmenuOpened += OnOptionsMenuItemSubmenuOpened;
 #else

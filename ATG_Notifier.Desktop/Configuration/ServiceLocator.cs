@@ -55,7 +55,7 @@ namespace ATG_Notifier.Desktop.Configuration
             serviceCollection.AddSingleton<MainPageViewModel>();
 
             //serviceCollection.AddSingleton<NetworkService>();
-#if DesktopPackage
+#if DesktopPackage || DesktopPackageDebug
             //serviceCollection.AddSingleton<NetworkService>();
 #endif
             serviceCollection.AddSingleton<StartupService>();
