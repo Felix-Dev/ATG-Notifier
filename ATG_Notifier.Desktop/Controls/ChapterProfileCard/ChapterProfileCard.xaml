@@ -14,13 +14,13 @@
         
         <SolidColorBrush x:Key="ChapterProfileCardCaptionForeground" Color="#FF929292" />
 
-        <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ChapterProfileCardBackground" Color="Transparent" />
 
         <SolidColorBrush x:Key="CloseButtonForeground" Color="#FFA9A9A9" />
         <SolidColorBrush x:Key="CloseButtonForegroundMouseOver" Color="#FFFF0000" />
         <SolidColorBrush x:Key="CloseButtonForegroundPressed" Color="#FFA00000" />
 
-        <SolidColorBrush x:Key="CloseButtonBackground" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="CloseButtonBackground" Color="Transparent" />
 
         <!--#endregion-->
 
