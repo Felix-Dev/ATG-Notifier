@@ -34,26 +34,6 @@ namespace ATG_Notifier.Desktop.Views
             WebUtility.OpenWebsite(AppConfiguration.SourceCodeUri);
         }
 
-        private void OnAppIdTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.AppIdTextBox.SelectAll();
-        }
-
-        private void OnAppVersionTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.AppVersionTextBox.SelectAll();
-        }
-
-        private void OnAppIdTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            ClearAppIdTextBoxSelection();
-        }
-
-        private void OnAppVersionTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            ClearAppVersionTextBoxSelection();
-        }
-
         private void OnGridMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ClearAppIdTextBoxSelection();

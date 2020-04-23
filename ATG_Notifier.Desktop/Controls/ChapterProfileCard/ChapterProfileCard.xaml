@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:ATG_Notifier.Desktop.Converters"
+             xmlns:controls="clr-namespace:ATG_Notifier.Desktop.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -89,7 +90,7 @@
                 Click="OnCloseButtonClick"
                 PreviewKeyDown="OnCloseButtonPreviewKeyDown"/>
         <!-- Chapter number and title textbox -->
-        <TextBox x:Name="NumberAndTitleTextBox"
+        <controls:TextBoxEx x:Name="NumberAndTitleTextBox"
                  Grid.Row="0" 
                  Grid.Column="1"
                  AutoWordSelection="True"
@@ -99,10 +100,8 @@
                  Text="{Binding NumberAndTitleDisplayString, Mode=OneWay}" 
                  TextWrapping="Wrap"
                  Focusable="True"
-                 IsTabStop="False"
-                 MouseDoubleClick="OnNumberAndTitleTextBoxMouseDoubleClick"
-                 LostFocus="OnNumberAndTitleTextBoxLostFocus">
-            <TextBox.Style>
+                 IsTabStop="False">
+            <controls:TextBoxEx.Style>
                 <Style TargetType="TextBox" BasedOn="{StaticResource LabelTextBoxStyle}">
                     <Setter Property="Foreground" Value="{StaticResource ChapterProfileCardHeaderForegroundAlert}" />
                     <Setter Property="FontWeight" Value="Bold" />
@@ -113,10 +112,10 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </controls:TextBoxEx.Style>
+        </controls:TextBoxEx>
         <!-- Chapter word count and release time textbox -->
-        <TextBox x:Name="WordCountAndReleaseTimeTextBox" 
+        <controls:TextBoxEx x:Name="WordCountAndReleaseTimeTextBox" 
                  Grid.Row="1" 
                  Grid.Column="1" Grid.ColumnSpan="2"
                  AutoWordSelection="True"
@@ -126,15 +125,13 @@
                  HorizontalAlignment="Left"
                  IsTabStop="False"
                  Style="{StaticResource LabelTextBoxStyle}"
-                 VerticalAlignment="Center"
-                 MouseDoubleClick="OnWordCountAndReleaseTimeTextBoxMouseDoubleClick"
-                 LostFocus="OnWordCountAndReleaseTimeTextBoxLostFocus">
-            <TextBox.Text>
+                 VerticalAlignment="Center">
+            <controls:TextBoxEx.Text>
                 <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                     <Binding Path="WordCount"/>
                     <Binding Path="ReleaseTime"/>
                 </MultiBinding>
-            </TextBox.Text>
-        </TextBox>
+            </controls:TextBoxEx.Text>
+        </controls:TextBoxEx>
     </Grid>
 </UserControl>

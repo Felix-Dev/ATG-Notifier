@@ -87,19 +87,10 @@ namespace ATG_Notifier.Desktop.Controls
             }
         }
 
-        private void OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.LastChapterProfileNumberAndTitleTextBox.SelectAll();
-        }
-
-        private void OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectAll();
-        }
-
-        private void OnLastChapterProfileNumberAndTitleTextBoxLostFocus(object sender, RoutedEventArgs e)
+        private void OnLatestChapterPopupMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ClearNumberAndTitleTextBoxSelection();
+            ClearWordCountAndReleaseDateTextBoxSelection();
         }
 
         private void ClearNumberAndTitleTextBoxSelection()
@@ -108,21 +99,10 @@ namespace ATG_Notifier.Desktop.Controls
             this.LastChapterProfileNumberAndTitleTextBox.SelectionLength = 0;
         }
 
-        private void OnLastChapterProfileWordCountAndReleaseDateTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            ClearWordCountAndReleaseDateTextBoxSelection();
-        }
-
         private void ClearWordCountAndReleaseDateTextBoxSelection()
         {
             this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionStart = 0;
             this.LastChapterProfileWordCountAndReleaseDateTextBox.SelectionLength = 0;
-        }
-
-        private void OnLatestChapterPopupMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ClearNumberAndTitleTextBoxSelection();
-            ClearWordCountAndReleaseDateTextBoxSelection();
         }
     }
 }

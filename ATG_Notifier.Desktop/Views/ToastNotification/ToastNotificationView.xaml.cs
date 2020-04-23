@@ -37,14 +37,6 @@ namespace ATG_Notifier.Desktop.Views
             Close();
         }
 
-        private void OnChapterNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.ChapterNumberAndTitleTextBox.SelectAll();
-            }
-        }
-
         private void OnFadeOutStoryboardCompleted(object sender, EventArgs e)
         {
             if (this.Opacity - 0.1 <= 0)

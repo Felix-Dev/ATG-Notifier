@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ATG_Notifier.Desktop.Views"
+        xmlns:controls="clr-namespace:ATG_Notifier.Desktop.Controls"
         x:ClassModifier="internal"
         mc:Ignorable="d"
         ShowActivated="False"
@@ -156,15 +157,14 @@
                            TextTrimming="CharacterEllipsis"
                            Style="{StaticResource TitleTextBlockStyle}"
                            Foreground="{StaticResource ToastNotificationForeground}"/>
-                <TextBox x:Name="ChapterNumberAndTitleTextBox" 
+                <controls:TextBoxEx x:Name="ChapterNumberAndTitleTextBox" 
                          Grid.Row="2" 
                          Grid.ColumnSpan="2"
                          AutoWordSelection="True"
                          Margin="11,5,11,0"
                          HorizontalAlignment="Left"
                          Foreground="{StaticResource ToastNotificationForeground}"                  
-                         Style="{StaticResource ContentTextBoxStyle}"
-                         MouseDoubleClick="OnChapterNumberAndTitleTextBoxMouseDoubleClick"/>
+                         Style="{StaticResource ContentTextBoxStyle}"/>
             </Grid>
         </Border>
     </Grid>

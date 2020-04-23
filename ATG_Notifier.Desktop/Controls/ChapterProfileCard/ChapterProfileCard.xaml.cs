@@ -55,29 +55,5 @@ namespace ATG_Notifier.Desktop.Controls
                 e.Handled = true;
             }   
         }
-
-        private void OnNumberAndTitleTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.NumberAndTitleTextBox.SelectAll();
-            e.Handled = true;
-        }
-
-        private void OnWordCountAndReleaseTimeTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.WordCountAndReleaseTimeTextBox.SelectAll();
-            e.Handled = true;
-        }
-
-        private void OnNumberAndTitleTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            this.NumberAndTitleTextBox.SelectionStart = 0;
-            this.NumberAndTitleTextBox.SelectionLength = 0;
-        }
-
-        private void OnWordCountAndReleaseTimeTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            this.WordCountAndReleaseTimeTextBox.SelectionStart = 0;
-            this.WordCountAndReleaseTimeTextBox.SelectionLength = 0;
-        }
     }
 }

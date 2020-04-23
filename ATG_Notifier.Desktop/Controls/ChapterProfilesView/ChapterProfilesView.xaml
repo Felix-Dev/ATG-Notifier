@@ -313,17 +313,15 @@
                                             Background="{StaticResource ToolbarPopupBackground}"
                                             Padding="10,5,10,5">
                                         <StackPanel MaxWidth="250">
-                                            <TextBox x:Name="LastChapterProfileNumberAndTitleTextBox" 
+                                            <controls:TextBoxEx x:Name="LastChapterProfileNumberAndTitleTextBox" 
                                                      AutoWordSelection="True"
                                                      Text="{Binding SettingsViewModel.LatestUpdateProfile.NumberAndTitle}"
                                                      HorizontalAlignment="Center" TextAlignment="Center"
                                                      FontSize="12"
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
                                                      TextWrapping="Wrap"
-                                                     Style="{StaticResource LabelTextBoxStyle}"
-                                                     MouseDoubleClick="OnLastChapterProfileNumberAndTitleTextBoxMouseDoubleClick"
-                                                     LostFocus="OnLastChapterProfileNumberAndTitleTextBoxLostFocus"/>
-                                            <TextBox x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
+                                                     Style="{StaticResource LabelTextBoxStyle}"/>
+                                            <controls:TextBoxEx x:Name="LastChapterProfileWordCountAndReleaseDateTextBox" 
                                                      AutoWordSelection="True"
                                                      Margin="0,5,0,0" 
                                                      HorizontalAlignment="Center"
@@ -331,16 +329,14 @@
                                                      TextWrapping="Wrap"
                                                      FontSize="11"
                                                      Foreground="{StaticResource ToolbarPopupForeground}"
-                                                     Style="{StaticResource LabelTextBoxStyle}"
-                                                     MouseDoubleClick="OnLastChapterProfileWordCountAndReleaseDateTextBoxMouseDoubleClick"
-                                                     LostFocus="OnLastChapterProfileWordCountAndReleaseDateTextBoxLostFocus">
-                                                <TextBox.Text>
+                                                     Style="{StaticResource LabelTextBoxStyle}">
+                                                <controls:TextBoxEx.Text>
                                                     <MultiBinding Converter="{StaticResource WordCountReleaseTimeToStringConverter}" ConverterParameter="g">
                                                         <Binding Path="SettingsViewModel.LatestUpdateProfile.WordCount"/>
                                                         <Binding Path="SettingsViewModel.LatestUpdateProfile.ReleaseTime"/>
                                                     </MultiBinding>
-                                                </TextBox.Text>
-                                            </TextBox>
+                                                </controls:TextBoxEx.Text>
+                                            </controls:TextBoxEx>
                                         </StackPanel>
                                     </Border>
                                 </Popup>

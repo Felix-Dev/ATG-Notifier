@@ -10,7 +10,7 @@
   <Identity
     Name="ATG-Notifier.Desktop"
     Publisher="CN=Felix"
-    Version="1.4.13.0" />
+    Version="1.4.14.0" />
 
   <Properties>
     <DisplayName>ATG-Notifier.Desktop</DisplayName>
