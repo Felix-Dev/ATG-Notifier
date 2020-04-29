@@ -126,7 +126,7 @@ namespace ATG_Notifier.Desktop.Services
             {
                 if (e.Reason == CloseReason.Click)
                 {
-                    CommonHelpers.RunOnUIThread(async () => App.Current.ActivateAsync(new ToastNotificationActivatedEventArgs(chapterProfileViewModel)));
+                    DispatcherHelper.ExecuteOnUIThread(async () => App.Current.ActivateAsync(new ToastNotificationActivatedEventArgs(chapterProfileViewModel)));
                 }
 
                 ReleaseDisplaySlot(position, displaySlot);
@@ -207,7 +207,7 @@ namespace ATG_Notifier.Desktop.Services
         private Point GetScreenPosition(DisplayPosition position, int displaySlot, ToastNotificationView toastNotification)
         {
             Rect? currentScreenBoundsRef = null;
-            CommonHelpers.RunOnUIThread(() => currentScreenBoundsRef = Application.Current.MainWindow.GetScreenBounds());
+            DispatcherHelper.ExecuteOnUIThread(() => currentScreenBoundsRef = Application.Current.MainWindow.GetScreenBounds());
 
             if (!currentScreenBoundsRef.HasValue)
             {

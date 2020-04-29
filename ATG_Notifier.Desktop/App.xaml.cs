@@ -157,7 +157,7 @@ namespace ATG_Notifier.Desktop
             // Show the taskbar icon and set it to error mode to indicate to the user an error occured demanding their attention.
             if (!this.appShell.IsVisible)
             {
-                CommonHelpers.RunOnUIThread(() => this.appShell.Show());
+                DispatcherHelper.ExecuteOnUIThread(() => this.appShell.Show());
             }
 
             this.appShell.SetTaskbarButtonMode(AppTaskbarButtonMode.Error, TaskbarButtonResetMode.AppActivated);
@@ -183,7 +183,7 @@ namespace ATG_Notifier.Desktop
                 Process.Start(psi);
             }
 
-            CommonHelpers.RunOnUIThread(() => AppShell.Current?.SaveAndCleanup());
+            DispatcherHelper.ExecuteOnUIThread(() => AppShell.Current?.SaveAndCleanup());
 
             // Save user preferences and app state.
             SaveUserPreferencesAndAppState();

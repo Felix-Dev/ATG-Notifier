@@ -34,7 +34,7 @@ namespace ATG_Notifier.Desktop.Services
             {
                 if (this.ownerWindow == null)
                 {
-                    CommonHelpers.RunOnUIThread(() => this.ownerWindow = Application.Current.MainWindow);              
+                    DispatcherHelper.ExecuteOnUIThread(() => this.ownerWindow = Application.Current.MainWindow);              
                 }
 
                 return this.ownerWindow;
@@ -50,7 +50,7 @@ namespace ATG_Notifier.Desktop.Services
                     var ownerWindow = this.OwnerWindow;
                     if (ownerWindow != null )
                     {
-                        CommonHelpers.RunOnUIThread(() => this.ownerHandle = new WindowInteropHelper(ownerWindow).Handle);
+                        DispatcherHelper.ExecuteOnUIThread(() => this.ownerHandle = new WindowInteropHelper(ownerWindow).Handle);
                     }
                 }
 
@@ -64,7 +64,7 @@ namespace ATG_Notifier.Desktop.Services
         /// <param name="state">The new state of the taskbar button.</param>
         public void SetButtonState(TaskbarButtonState state)
         {
-            CommonHelpers.RunOnUIThread(() =>
+            DispatcherHelper.ExecuteOnUIThread(() =>
             {
                 TaskbarItemInfo taskbarItemInfo = GetTaskbarItemInfoInstance() ?? throw new InvalidOperationException("The window has not yet been initialized!");
 

@@ -16,7 +16,6 @@ using System.Windows.Input;
 
 namespace ATG_Notifier.Desktop.ViewModels
 {
-
     internal class ChapterProfileListArgs
     {
         public ChapterProfileViewModel? ChapterProfileViewModel { get; set; }
@@ -126,7 +125,7 @@ namespace ATG_Notifier.Desktop.ViewModels
 
         private void OnChapterUpdate(object? sender, ChapterUpdateEventArgs e)
         {
-            CommonHelpers.RunOnUIThread(() => Add(e.ChapterProfileViewModel));
+            DispatcherHelper.ExecuteOnUIThread(() => Add(e.ChapterProfileViewModel));
         }
 
         protected override async void OnRemove(ChapterProfileViewModel viewModel)

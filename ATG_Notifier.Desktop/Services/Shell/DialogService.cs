@@ -7,7 +7,7 @@ namespace ATG_Notifier.Desktop.Services
     {
         public MessageDialogResult ShowDialog(string message, string title)
         {
-            return CommonHelpers.RunOnUIThread(() =>
+            return DispatcherHelper.ExecuteOnUIThread(() =>
             {
                 var dialog = new MessageDialog(message, title)
                 {
@@ -20,7 +20,7 @@ namespace ATG_Notifier.Desktop.Services
 
         public MessageDialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon = MessageDialogIcon.None)
         {
-            return CommonHelpers.RunOnUIThread(() =>
+            return DispatcherHelper.ExecuteOnUIThread(() =>
             {
                 var dialog = new MessageDialog(message, title, button, icon)
                 {
@@ -34,7 +34,7 @@ namespace ATG_Notifier.Desktop.Services
         public MessageDialogResult ShowDialog(string message, string title, MessageDialogButton button, MessageDialogIcon icon,
             string optionalActionText, bool initialOptionalActionState, out bool IsOptionalActionChecked)
         {
-            var (dialogResult, isOptionalActionChecked) = CommonHelpers.RunOnUIThread<(MessageDialogResult, bool)>(() =>
+            var (dialogResult, isOptionalActionChecked) = DispatcherHelper.ExecuteOnUIThread<(MessageDialogResult, bool)>(() =>
             {
                 var dialog = new MessageDialog(message, title, button, icon, optionalActionText, initialOptionalActionState)
                 {

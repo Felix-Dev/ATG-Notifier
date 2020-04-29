@@ -120,7 +120,7 @@ namespace ATG_Notifier.Desktop.Views.Shell
                 }
             }
 
-            CommonHelpers.RunOnUIThread(() => this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon()));
+            DispatcherHelper.ExecuteOnUIThread(() => this.notifyIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon()));
         }
 
         protected void Dispose(bool disposing)
