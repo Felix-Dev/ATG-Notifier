@@ -23,7 +23,7 @@ namespace ATG_Notifier.ViewModels.Infrastructure
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected virtual bool Set<T>(ref T field, T newValue = default, [CallerMemberName] string? propertyName = null)
+        protected virtual bool Set<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null)
         {
             if (!EqualityComparer<T>.Default.Equals(field, newValue))
             {
